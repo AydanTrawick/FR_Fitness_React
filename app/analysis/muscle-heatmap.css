@@ -1,0 +1,17 @@
+.muscle-views {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 24px;
+}
+.muscle-view { text-align: center; }
+.muscle-view .rbh-wrapper { width: 100%; }
+.muscle-view svg { max-height: 420px; }
+.muscle-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 20px; color: var(--muted); font-size: 12px; }
+.muscle-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.muscle-legend i { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
+.muscle-empty { text-align: center; margin: 12px 0; }
+.muscle-detail { margin-top: 20px; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-raised); }
+.muscle-detail .btn { float: right; }
+.muscle-detail ul { margin: 8px 0 0; padding-left: 20px; }
+@media (max-width: 700px) { .muscle-views { grid-template-columns: 1fr; } }

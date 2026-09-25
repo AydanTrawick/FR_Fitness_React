@@ -1,0 +1,2008 @@
+[
+  {
+    "id": "bench",
+    "name": "Barbell bench press",
+    "primary": "Chest",
+    "equipment": "Barbells",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Triceps",
+      "Shoulders"
+    ],
+    "images": [
+      "/exercises/bench.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Lie on a flat bench with feet supported on the floor and eyes below the bar. Use a closed grip slightly wider than shoulder width.",
+      "With a spotter, unrack the bar and position it above your chest with your wrists aligned over your forearms.",
+      "Lower the bar under control toward the middle of your chest, keeping your shoulders supported on the bench.",
+      "Press the bar upward while exhaling. After the final repetition, return it securely to the rack with assistance."
+    ],
+    "mistakes": [
+      "Bouncing the bar off the chest.",
+      "Lifting the hips from the bench or losing wrist alignment."
+    ],
+    "tips": [
+      "Choose a load you can control throughout the movement.",
+      "Use a spotter and appropriately positioned safety supports."
+    ],
+    "source": "https://www.nasm.org/resource-center/exercise-library/barbell-bench-press"
+  },
+  {
+    "id": "bbsquat",
+    "name": "Barbell back squat",
+    "primary": "Quadriceps",
+    "equipment": "Barbells",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Glutes",
+      "Core"
+    ],
+    "images": [
+      "/exercises/bbsquat.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Set a bar across your upper back, brace your trunk and stand with feet comfortably apart.",
+      "Bend your knees and hips together, keeping your feet planted; stand back up with control."
+    ],
+    "mistakes": [
+      "Avoid letting your knees collapse inward."
+    ],
+    "tips": [
+      "Use rack safeties and a depth you can control."
+    ]
+  },
+  {
+    "id": "adductor",
+    "name": "Seated hip adduction",
+    "primary": "Adductors",
+    "equipment": "Machines",
+    "difficulty": "Beginner",
+    "secondary": [],
+    "images": [
+      "/exercises/adductor.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Adjust the seat and pads so your inner thighs contact the pads and your back is supported.",
+      "Bring your legs together slowly, then allow them to open without dropping the stack."
+    ],
+    "mistakes": [
+      "Avoid forcing your legs into an uncomfortable starting width."
+    ],
+    "tips": [
+      "Keep your pelvis still."
+    ]
+  },
+  {
+    "id": "assault-bike",
+    "name": "Air bike",
+    "primary": "Full Body",
+    "equipment": "Machines",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Quadriceps"
+    ],
+    "images": [
+      "/exercises/assault-bike.png"
+    ],
+    "timed": true,
+    "instructions": [
+      "Adjust the saddle to allow a slight knee bend at the bottom of the pedal stroke.",
+      "Pedal while pushing and pulling the handles at a sustainable pace."
+    ],
+    "mistakes": [
+      "Avoid rocking your hips to reach the pedals."
+    ],
+    "tips": [
+      "Start gradually before increasing effort."
+    ]
+  },
+  {
+    "id": "battleropes",
+    "name": "Battle ropes",
+    "primary": "Full Body",
+    "equipment": "Battle Ropes",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Shoulders",
+      "Core"
+    ],
+    "images": [
+      "/exercises/battleropes.png"
+    ],
+    "timed": true,
+    "instructions": [
+      "Hold one rope end in each hand with knees softly bent and your trunk braced.",
+      "Alternate lifting and lowering your arms to create waves while keeping a stable stance."
+    ],
+    "mistakes": [
+      "Avoid leaning back or shrugging with every wave."
+    ],
+    "tips": [
+      "Use small controlled waves before increasing speed."
+    ]
+  },
+  {
+    "id": "bench-dip",
+    "name": "Bench dip",
+    "primary": "Triceps",
+    "equipment": "Bodyweight",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Shoulders"
+    ],
+    "images": [
+      "/exercises/bench-dip.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Place your hands on a secure bench beside your hips, with your feet on the floor.",
+      "Bend your elbows to lower a short, comfortable distance, then press through your hands to return."
+    ],
+    "mistakes": [
+      "Avoid sinking into a deep shoulder stretch."
+    ],
+    "tips": [
+      "Keep your hips close to the bench."
+    ]
+  },
+  {
+    "id": "bicyclecrunch",
+    "name": "Bicycle crunch",
+    "primary": "Core",
+    "equipment": "Bodyweight",
+    "difficulty": "Beginner",
+    "secondary": [],
+    "images": [
+      "/exercises/bicyclecrunch.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Lie on your back with knees bent and hands lightly supporting your head.",
+      "Rotate your trunk toward one knee as the other leg extends; alternate sides slowly."
+    ],
+    "mistakes": [
+      "Avoid pulling on your neck."
+    ],
+    "tips": [
+      "Move through your trunk rather than only your elbows."
+    ]
+  },
+  {
+    "id": "box-jump",
+    "name": "Box jump",
+    "primary": "Quadriceps",
+    "equipment": "Box",
+    "difficulty": "Advanced",
+    "secondary": [
+      "Glutes",
+      "Calves"
+    ],
+    "images": [
+      "/exercises/box-jump.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Stand in front of a stable box of a manageable height with a clear landing area.",
+      "Bend your knees, swing your arms and jump onto the box; land softly, stand tall and step down."
+    ],
+    "mistakes": [
+      "Avoid choosing a height that forces a deep, unstable landing."
+    ],
+    "tips": [
+      "Reset your stance before each jump."
+    ]
+  },
+  {
+    "id": "box-squat",
+    "name": "Box squat",
+    "primary": "Quadriceps",
+    "equipment": "Barbells",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Glutes"
+    ],
+    "images": [
+      "/exercises/box-squat.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Set a stable box inside a rack and position the bar across your upper back.",
+      "Sit back and down with control until you lightly contact the box, then stand without rocking."
+    ],
+    "mistakes": [
+      "Avoid dropping onto the box."
+    ],
+    "tips": [
+      "Keep your trunk braced during the pause."
+    ]
+  },
+  {
+    "id": "bulgariansplitsquat",
+    "name": "Bulgarian split squat",
+    "primary": "Quadriceps",
+    "equipment": "Dumbbells",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Glutes"
+    ],
+    "images": [
+      "/exercises/bulgariansplitsquat.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Hold dumbbells by your sides and rest your rear foot on a stable bench.",
+      "Bend your front knee to lower your body, then push through the front foot to stand."
+    ],
+    "mistakes": [
+      "Avoid pushing mainly with your rear leg."
+    ],
+    "tips": [
+      "Choose a stance that lets your front heel stay down."
+    ]
+  },
+  {
+    "id": "burpee",
+    "name": "Burpee",
+    "primary": "Full Body",
+    "equipment": "Bodyweight",
+    "difficulty": "Advanced",
+    "secondary": [
+      "Core"
+    ],
+    "images": [
+      "/exercises/burpee.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Stand with space around you, then lower your hands to the floor.",
+      "Step or jump your feet back into a plank, return them toward your hands and stand or jump upward."
+    ],
+    "mistakes": [
+      "Avoid letting your lower back sag in the plank."
+    ],
+    "tips": [
+      "Step through the movement to reduce impact."
+    ]
+  },
+  {
+    "id": "cable-curl",
+    "name": "Cable curl",
+    "primary": "Biceps",
+    "equipment": "Cables",
+    "difficulty": "Beginner",
+    "secondary": [],
+    "images": [
+      "/exercises/cable-curl.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Attach a handle to a low cable and stand upright with your elbow near your side.",
+      "Bend your elbow to curl the handle upward, then lower it slowly."
+    ],
+    "mistakes": [
+      "Avoid swinging your torso to lift the handle."
+    ],
+    "tips": [
+      "Keep your upper arm mostly still."
+    ]
+  },
+  {
+    "id": "cable-lateral-raise",
+    "name": "Cable lateral raise",
+    "primary": "Shoulders",
+    "equipment": "Cables",
+    "difficulty": "Beginner",
+    "secondary": [],
+    "images": [
+      "/exercises/cable-lateral-raise.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Stand beside a low cable with the handle in the outside hand and a slight elbow bend.",
+      "Raise your arm out to the side to a comfortable height, then lower with control."
+    ],
+    "mistakes": [
+      "Avoid shrugging or leaning to lift the load."
+    ],
+    "tips": [
+      "Lead with the elbow and keep your wrist relaxed."
+    ]
+  },
+  {
+    "id": "cable-pull-through",
+    "name": "Cable pull-through",
+    "primary": "Glutes",
+    "equipment": "Cables",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Hamstrings"
+    ],
+    "images": [
+      "/exercises/cable-pull-through.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Face away from a low cable with the rope between your legs and feet planted apart.",
+      "Push your hips backward with soft knees, then extend your hips to stand tall."
+    ],
+    "mistakes": [
+      "Avoid turning the movement into a deep squat."
+    ],
+    "tips": [
+      "Finish upright without leaning backward."
+    ]
+  },
+  {
+    "id": "cablecrossover",
+    "name": "Cable crossover",
+    "primary": "Chest",
+    "equipment": "Cables",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Shoulders"
+    ],
+    "images": [
+      "/exercises/cablecrossover.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Stand between cable handles with a stable stance and elbows slightly bent.",
+      "Bring your arms forward in an arc, then open them slowly within a comfortable shoulder range."
+    ],
+    "mistakes": [
+      "Avoid changing your elbow bend dramatically during the movement."
+    ],
+    "tips": [
+      "Keep your rib cage over your pelvis."
+    ]
+  },
+  {
+    "id": "cablewoodchop",
+    "name": "Cable woodchop",
+    "primary": "Core",
+    "equipment": "Cables",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Shoulders"
+    ],
+    "images": [
+      "/exercises/cablewoodchop.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Stand sideways to a high cable with both hands on the handle.",
+      "Guide the handle diagonally across your body while allowing a controlled turn through your hips and trunk."
+    ],
+    "mistakes": [
+      "Avoid twisting suddenly against a heavy load."
+    ],
+    "tips": [
+      "Keep the motion smooth in both directions."
+    ]
+  },
+  {
+    "id": "calfraise",
+    "name": "Standing dumbbell calf raise",
+    "primary": "Calves",
+    "equipment": "Dumbbells",
+    "difficulty": "Beginner",
+    "secondary": [],
+    "images": [
+      "/exercises/calfraise.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Stand upright holding dumbbells with your feet stable and parallel.",
+      "Rise onto the balls of your feet, pause, then lower your heels slowly."
+    ],
+    "mistakes": [
+      "Avoid bouncing at the bottom."
+    ],
+    "tips": [
+      "Use a support for balance if needed."
+    ]
+  },
+  {
+    "id": "chest-supported-row",
+    "name": "Chest-supported machine row",
+    "primary": "Back",
+    "equipment": "Machines",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Biceps"
+    ],
+    "images": [
+      "/exercises/chest-supported-row.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Adjust the machine so your chest rests comfortably against the pad and grasp the handles.",
+      "Pull the handles toward your torso, then extend your arms under control."
+    ],
+    "mistakes": [
+      "Avoid lifting your chest off the pad."
+    ],
+    "tips": [
+      "Let your shoulder blades move with the pull."
+    ]
+  },
+  {
+    "id": "chestfly",
+    "name": "Dumbbell chest fly",
+    "primary": "Chest",
+    "equipment": "Dumbbells",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Shoulders"
+    ],
+    "images": [
+      "/exercises/chestfly.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Lie on a flat bench with dumbbells above your chest and elbows slightly bent.",
+      "Open your arms in a controlled arc, then bring them back above your chest."
+    ],
+    "mistakes": [
+      "Avoid lowering beyond a comfortable shoulder stretch."
+    ],
+    "tips": [
+      "Use a light load and maintain the elbow bend."
+    ]
+  },
+  {
+    "id": "close-grip-bench-press",
+    "name": "Close-grip bench press",
+    "primary": "Triceps",
+    "equipment": "Barbells",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Chest",
+      "Shoulders"
+    ],
+    "images": [
+      "/exercises/close-grip-bench-press.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Lie on a bench with feet planted and take a closed grip around shoulder width.",
+      "Lower the bar toward your chest with elbows near your torso, then press upward under control."
+    ],
+    "mistakes": [
+      "Avoid bringing your hands so close that your wrists bend sharply."
+    ],
+    "tips": [
+      "Use a spotter and rack safeties."
+    ]
+  },
+  {
+    "id": "concentration-curl",
+    "name": "Concentration curl",
+    "primary": "Biceps",
+    "equipment": "Dumbbells",
+    "difficulty": "Beginner",
+    "secondary": [],
+    "images": [
+      "/exercises/concentration-curl.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Sit with feet apart and support the back of your upper arm against your inner thigh.",
+      "Curl the dumbbell toward your shoulder, then lower it slowly."
+    ],
+    "mistakes": [
+      "Avoid moving your whole shoulder to finish the repetition."
+    ],
+    "tips": [
+      "Keep your wrist aligned with your forearm."
+    ]
+  },
+  {
+    "id": "crunch",
+    "name": "Crunch",
+    "primary": "Core",
+    "equipment": "Bodyweight",
+    "difficulty": "Beginner",
+    "secondary": [],
+    "images": [
+      "/exercises/crunch.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Lie on your back with knees bent and feet on the floor.",
+      "Curl your shoulders slightly off the floor, then lower them with control."
+    ],
+    "mistakes": [
+      "Avoid pulling your head forward with your hands."
+    ],
+    "tips": [
+      "Exhale gently as you curl up."
+    ]
+  },
+  {
+    "id": "cycling",
+    "name": "Stationary cycling",
+    "primary": "Quadriceps",
+    "equipment": "Machines",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Glutes"
+    ],
+    "images": [
+      "/exercises/cycling.png"
+    ],
+    "timed": true,
+    "instructions": [
+      "Adjust the seat so your knee stays slightly bent at the bottom of the pedal stroke.",
+      "Pedal smoothly at a manageable resistance while keeping your upper body relaxed."
+    ],
+    "mistakes": [
+      "Avoid setting the saddle so low that your knees remain deeply bent."
+    ],
+    "tips": [
+      "Build pace gradually."
+    ]
+  },
+  {
+    "id": "dbcurl",
+    "name": "Dumbbell curl",
+    "primary": "Biceps",
+    "equipment": "Dumbbells",
+    "difficulty": "Beginner",
+    "secondary": [],
+    "images": [
+      "/exercises/dbcurl.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Stand tall holding dumbbells with palms facing forward and elbows near your sides.",
+      "Curl the weights toward your shoulders, then lower them slowly."
+    ],
+    "mistakes": [
+      "Avoid swinging your hips for momentum."
+    ],
+    "tips": [
+      "Keep your upper arms steady."
+    ]
+  },
+  {
+    "id": "dbincline",
+    "name": "Incline dumbbell press",
+    "primary": "Chest",
+    "equipment": "Dumbbells",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Shoulders",
+      "Triceps"
+    ],
+    "images": [
+      "/exercises/dbincline.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Set the bench to a moderate incline and hold dumbbells near the upper chest.",
+      "Press the weights upward, then lower them with control while keeping your back supported."
+    ],
+    "mistakes": [
+      "Avoid flaring your elbows to an uncomfortable angle."
+    ],
+    "tips": [
+      "Keep your feet planted and wrists stacked over your forearms."
+    ]
+  },
+  {
+    "id": "dbrow",
+    "name": "Single-arm dumbbell row",
+    "primary": "Back",
+    "equipment": "Dumbbells",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Biceps"
+    ],
+    "images": [
+      "/exercises/dbrow.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Support one hand and knee on a bench while the other foot stays planted on the floor.",
+      "Pull the dumbbell toward your hip, then lower it while keeping your torso steady."
+    ],
+    "mistakes": [
+      "Avoid rotating your whole trunk to lift the weight."
+    ],
+    "tips": [
+      "Think of drawing your elbow backward."
+    ]
+  },
+  {
+    "id": "dbshoulderpress",
+    "name": "Dumbbell shoulder press",
+    "primary": "Shoulders",
+    "equipment": "Dumbbells",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Triceps"
+    ],
+    "images": [
+      "/exercises/dbshoulderpress.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Stand with your trunk braced and dumbbells near shoulder level.",
+      "Press the weights overhead within a comfortable range, then lower them slowly."
+    ],
+    "mistakes": [
+      "Avoid leaning backward to finish the press."
+    ],
+    "tips": [
+      "Keep your ribs over your pelvis."
+    ]
+  },
+  {
+    "id": "deadbug",
+    "name": "Dead bug",
+    "primary": "Core",
+    "equipment": "Bodyweight",
+    "difficulty": "Beginner",
+    "secondary": [],
+    "images": [
+      "/exercises/deadbug.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Lie on your back with hips and knees bent and arms reaching toward the ceiling.",
+      "Slowly extend one leg and the opposite arm, return and switch sides."
+    ],
+    "mistakes": [
+      "Avoid arching your lower back as the limbs extend."
+    ],
+    "tips": [
+      "Shorten the reach if your trunk starts to move."
+    ]
+  },
+  {
+    "id": "dip",
+    "name": "Parallel-bar dip",
+    "primary": "Chest",
+    "equipment": "Bodyweight",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Triceps",
+      "Shoulders"
+    ],
+    "images": [
+      "/exercises/dip.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Support yourself on stable parallel bars with shoulders controlled and arms extended.",
+      "Bend your elbows to lower within a comfortable shoulder range, then press back up."
+    ],
+    "mistakes": [
+      "Avoid sinking deeply into the shoulders."
+    ],
+    "tips": [
+      "Use assistance if you cannot control the descent."
+    ]
+  },
+  {
+    "id": "dumbbell-floor-press",
+    "name": "Dumbbell floor press",
+    "primary": "Chest",
+    "equipment": "Dumbbells",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Triceps"
+    ],
+    "images": [
+      "/exercises/dumbbell-floor-press.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Lie on the floor with knees bent and dumbbells above your chest.",
+      "Lower until your upper arms gently meet the floor, then press the weights upward."
+    ],
+    "mistakes": [
+      "Avoid bouncing your arms off the floor."
+    ],
+    "tips": [
+      "Keep wrists aligned above elbows."
+    ]
+  },
+  {
+    "id": "elliptical",
+    "name": "Elliptical trainer",
+    "primary": "Full Body",
+    "equipment": "Machines",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Quadriceps"
+    ],
+    "images": [
+      "/exercises/elliptical.png"
+    ],
+    "timed": true,
+    "instructions": [
+      "Step onto the stationary pedals, hold the handles and stand upright.",
+      "Move the pedals smoothly and adjust resistance to a sustainable effort."
+    ],
+    "mistakes": [
+      "Avoid supporting most of your body weight on the handles."
+    ],
+    "tips": [
+      "Begin at a slow pace to find the rhythm."
+    ]
+  },
+  {
+    "id": "facepull",
+    "name": "Cable face pull",
+    "primary": "Shoulders",
+    "equipment": "Cables",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Back"
+    ],
+    "images": [
+      "/exercises/facepull.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Set a rope handle around upper-chest or face height and stand with a stable stance.",
+      "Pull the rope toward your face with hands separating, then return slowly."
+    ],
+    "mistakes": [
+      "Avoid leaning backward to move the stack."
+    ],
+    "tips": [
+      "Keep your neck relaxed and shoulders controlled."
+    ]
+  },
+  {
+    "id": "farmers-carry",
+    "name": "Kettlebell farmer carry",
+    "primary": "Full Body",
+    "equipment": "Kettlebells",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Core"
+    ],
+    "images": [
+      "/exercises/farmers-carry.png"
+    ],
+    "timed": true,
+    "instructions": [
+      "Stand between two kettlebells, brace and lift them using a controlled hip and knee bend.",
+      "Walk with small steady steps, then lower the weights safely."
+    ],
+    "mistakes": [
+      "Avoid leaning to one side or holding your breath for the entire carry."
+    ],
+    "tips": [
+      "Keep the path clear before starting."
+    ]
+  },
+  {
+    "id": "front-squat",
+    "name": "Front squat",
+    "primary": "Quadriceps",
+    "equipment": "Barbells",
+    "difficulty": "Advanced",
+    "secondary": [
+      "Glutes",
+      "Core"
+    ],
+    "images": [
+      "/exercises/front-squat.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Set the bar across the front of your shoulders in a secure front-rack position.",
+      "Bend knees and hips into a controlled squat, then stand while keeping your elbows elevated."
+    ],
+    "mistakes": [
+      "Avoid letting the bar roll into your hands as your elbows drop."
+    ],
+    "tips": [
+      "Use rack safeties and a manageable load."
+    ]
+  },
+  {
+    "id": "glute-bridge",
+    "name": "Glute bridge",
+    "primary": "Glutes",
+    "equipment": "Bodyweight",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Hamstrings"
+    ],
+    "images": [
+      "/exercises/glute-bridge.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Lie on your back with knees bent and feet flat near your hips.",
+      "Push through your feet to lift your hips, then lower them slowly."
+    ],
+    "mistakes": [
+      "Avoid overextending your lower back at the top."
+    ],
+    "tips": [
+      "Finish with your ribs and pelvis aligned."
+    ]
+  },
+  {
+    "id": "glutekickback",
+    "name": "Cable glute kickback",
+    "primary": "Glutes",
+    "equipment": "Cables",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Hamstrings"
+    ],
+    "images": [
+      "/exercises/glutekickback.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Attach an ankle cuff to a low cable and hold a stable support.",
+      "Extend the working hip to move your leg backward, then return without swinging."
+    ],
+    "mistakes": [
+      "Avoid arching your back to lift the leg higher."
+    ],
+    "tips": [
+      "Keep your pelvis facing forward."
+    ]
+  },
+  {
+    "id": "gobletsquat",
+    "name": "Dumbbell goblet squat",
+    "primary": "Quadriceps",
+    "equipment": "Dumbbells",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Glutes"
+    ],
+    "images": [
+      "/exercises/gobletsquat.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Hold one dumbbell close to your chest and set your feet comfortably apart.",
+      "Sit down between your hips with heels planted, then stand up."
+    ],
+    "mistakes": [
+      "Avoid collapsing your knees inward."
+    ],
+    "tips": [
+      "Keep the weight close to your torso."
+    ]
+  },
+  {
+    "id": "hacksquat",
+    "name": "Hack squat",
+    "primary": "Quadriceps",
+    "equipment": "Machines",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Glutes"
+    ],
+    "images": [
+      "/exercises/hacksquat.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Position your back and shoulders against the machine pads with feet secure on the platform.",
+      "Release the safety handles, bend your knees to lower, then press the platform away to return."
+    ],
+    "mistakes": [
+      "Avoid lifting your heels or pelvis off their supports."
+    ],
+    "tips": [
+      "Learn the safety stops before loading the machine."
+    ]
+  },
+  {
+    "id": "hammer",
+    "name": "Hammer curl",
+    "primary": "Biceps",
+    "equipment": "Dumbbells",
+    "difficulty": "Beginner",
+    "secondary": [],
+    "images": [
+      "/exercises/hammer.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Stand with dumbbells by your sides and palms facing inward.",
+      "Bend your elbows to raise the weights, then lower slowly with the same grip."
+    ],
+    "mistakes": [
+      "Avoid swinging your shoulders forward."
+    ],
+    "tips": [
+      "Keep your wrists neutral."
+    ]
+  },
+  {
+    "id": "hanging-knee-raise",
+    "name": "Hanging knee raise",
+    "primary": "Core",
+    "equipment": "Bodyweight",
+    "difficulty": "Intermediate",
+    "secondary": [],
+    "images": [
+      "/exercises/hanging-knee-raise.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Hang securely from a pull-up bar with shoulders controlled.",
+      "Bring your knees toward your trunk, then lower them slowly."
+    ],
+    "mistakes": [
+      "Avoid swinging your legs for momentum."
+    ],
+    "tips": [
+      "Start each repetition from a still position."
+    ]
+  },
+  {
+    "id": "hipthrust",
+    "name": "Barbell hip thrust",
+    "primary": "Glutes",
+    "equipment": "Barbells",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Hamstrings"
+    ],
+    "images": [
+      "/exercises/hipthrust.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Support your upper back on a stable bench with a padded bar across your hips and feet planted.",
+      "Drive your hips upward, then lower under control."
+    ],
+    "mistakes": [
+      "Avoid leaning your head backward or overextending your spine."
+    ],
+    "tips": [
+      "Finish with your torso and thighs aligned."
+    ]
+  },
+  {
+    "id": "hollow-body-hold",
+    "name": "Hollow body hold",
+    "primary": "Core",
+    "equipment": "Bodyweight",
+    "difficulty": "Intermediate",
+    "secondary": [],
+    "images": [
+      "/exercises/hollow-body-hold.png"
+    ],
+    "timed": true,
+    "instructions": [
+      "Lie on your back, brace your abdomen and lift your shoulders slightly.",
+      "Extend your arms and legs only as far as you can while maintaining a stable lower back; hold and breathe."
+    ],
+    "mistakes": [
+      "Avoid letting your lower back arch."
+    ],
+    "tips": [
+      "Bend your knees to make the hold easier."
+    ]
+  },
+  {
+    "id": "jumprope",
+    "name": "Jump rope",
+    "primary": "Full Body",
+    "equipment": "Jump Rope",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Calves"
+    ],
+    "images": [
+      "/exercises/jumprope.png"
+    ],
+    "timed": true,
+    "instructions": [
+      "Hold the rope handles with elbows near your sides and clear space around you.",
+      "Turn the rope from your wrists while making small, soft jumps."
+    ],
+    "mistakes": [
+      "Avoid high jumps and stiff landings."
+    ],
+    "tips": [
+      "Start with short intervals to establish rhythm."
+    ]
+  },
+  {
+    "id": "kettlebell-swing",
+    "name": "Kettlebell swing",
+    "primary": "Glutes",
+    "equipment": "Kettlebells",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Hamstrings",
+      "Core"
+    ],
+    "images": [
+      "/exercises/kettlebell-swing.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Stand behind the kettlebell, hinge at your hips and grasp the handle with both hands.",
+      "Hike it back, extend your hips to send it forward, then hinge again as it returns."
+    ],
+    "mistakes": [
+      "Avoid lifting the kettlebell mainly with your arms."
+    ],
+    "tips": [
+      "Learn a controlled hip hinge before adding speed."
+    ]
+  },
+  {
+    "id": "latpulldown",
+    "name": "Lat pulldown",
+    "primary": "Back",
+    "equipment": "Cables",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Biceps"
+    ],
+    "images": [
+      "/exercises/latpulldown.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Adjust the thigh pad, grasp the bar and sit tall with feet planted.",
+      "Pull the bar toward your upper chest, then let your arms extend slowly."
+    ],
+    "mistakes": [
+      "Avoid pulling behind your neck or swinging backward."
+    ],
+    "tips": [
+      "Keep your elbows moving down toward your sides."
+    ]
+  },
+  {
+    "id": "latraise",
+    "name": "Dumbbell lateral raise",
+    "primary": "Shoulders",
+    "equipment": "Dumbbells",
+    "difficulty": "Beginner",
+    "secondary": [],
+    "images": [
+      "/exercises/latraise.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Stand with dumbbells by your sides and elbows slightly bent.",
+      "Raise your arms out to the sides to a comfortable height, then lower slowly."
+    ],
+    "mistakes": [
+      "Avoid shrugging or using a bounce from your legs."
+    ],
+    "tips": [
+      "Choose a load that allows a smooth arc."
+    ]
+  },
+  {
+    "id": "legcurl",
+    "name": "Seated leg curl",
+    "primary": "Hamstrings",
+    "equipment": "Machines",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Calves"
+    ],
+    "images": [
+      "/exercises/legcurl.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Adjust the machine so your knee aligns with its pivot and the lower pad rests above your heels.",
+      "Bend your knees against the pad, then extend them slowly."
+    ],
+    "mistakes": [
+      "Avoid lifting your hips from the seat."
+    ],
+    "tips": [
+      "Secure the thigh pad before starting."
+    ]
+  },
+  {
+    "id": "legextension",
+    "name": "Leg extension",
+    "primary": "Quadriceps",
+    "equipment": "Machines",
+    "difficulty": "Beginner",
+    "secondary": [],
+    "images": [
+      "/exercises/legextension.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Adjust the seat so your knees align with the machine pivot and the pad rests above your ankles.",
+      "Straighten your knees with control, then lower the pad slowly."
+    ],
+    "mistakes": [
+      "Avoid kicking the weight or slamming the stack."
+    ],
+    "tips": [
+      "Keep your back against the support."
+    ]
+  },
+  {
+    "id": "legpress",
+    "name": "Leg press",
+    "primary": "Quadriceps",
+    "equipment": "Machines",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Glutes"
+    ],
+    "images": [
+      "/exercises/legpress.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Sit with your back and pelvis supported and feet flat on the platform.",
+      "Release the safety stops, bend your knees within a controlled range and press back up."
+    ],
+    "mistakes": [
+      "Avoid lowering until your pelvis curls away from the pad."
+    ],
+    "tips": [
+      "Keep your knees aligned with your feet."
+    ]
+  },
+  {
+    "id": "legraise",
+    "name": "Lying leg raise",
+    "primary": "Core",
+    "equipment": "Bodyweight",
+    "difficulty": "Intermediate",
+    "secondary": [],
+    "images": [
+      "/exercises/legraise.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Lie on your back with legs extended and your abdomen braced.",
+      "Lift your legs, then lower them only as far as you can without arching your back."
+    ],
+    "mistakes": [
+      "Avoid using momentum or losing trunk control."
+    ],
+    "tips": [
+      "Bend your knees to reduce the demand."
+    ]
+  },
+  {
+    "id": "lunge",
+    "name": "Dumbbell lunge",
+    "primary": "Quadriceps",
+    "equipment": "Dumbbells",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Glutes"
+    ],
+    "images": [
+      "/exercises/lunge.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Stand holding dumbbells by your sides and step forward with one foot.",
+      "Bend both knees to lower your body, then push through the front foot to return."
+    ],
+    "mistakes": [
+      "Avoid stepping onto a very narrow line."
+    ],
+    "tips": [
+      "Keep the front foot fully planted."
+    ]
+  },
+  {
+    "id": "lying-leg-curl",
+    "name": "Lying leg curl",
+    "primary": "Hamstrings",
+    "equipment": "Machines",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Calves"
+    ],
+    "images": [
+      "/exercises/lying-leg-curl.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Lie face down on the machine with knees aligned to its pivot and the pad above your heels.",
+      "Curl your heels toward your hips, then lower the pad slowly."
+    ],
+    "mistakes": [
+      "Avoid lifting your hips away from the bench."
+    ],
+    "tips": [
+      "Use a comfortable knee range."
+    ]
+  },
+  {
+    "id": "mtclimber",
+    "name": "Mountain climber",
+    "primary": "Full Body",
+    "equipment": "Bodyweight",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Core"
+    ],
+    "images": [
+      "/exercises/mtclimber.png"
+    ],
+    "timed": true,
+    "instructions": [
+      "Start in a high plank with your hands beneath your shoulders.",
+      "Bring one knee toward your chest, return it and alternate sides."
+    ],
+    "mistakes": [
+      "Avoid bouncing your hips high or sagging your back."
+    ],
+    "tips": [
+      "Begin slowly and maintain your plank position."
+    ]
+  },
+  {
+    "id": "overheadtri",
+    "name": "Dumbbell overhead triceps extension",
+    "primary": "Triceps",
+    "equipment": "Dumbbells",
+    "difficulty": "Intermediate",
+    "secondary": [],
+    "images": [
+      "/exercises/overheadtri.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Hold a dumbbell securely overhead with both hands and a braced trunk.",
+      "Bend your elbows to lower it behind your head, then straighten your arms."
+    ],
+    "mistakes": [
+      "Avoid arching your back to move the weight."
+    ],
+    "tips": [
+      "Keep the load light enough to control overhead."
+    ]
+  },
+  {
+    "id": "pallof-press",
+    "name": "Pallof press",
+    "primary": "Core",
+    "equipment": "Cables",
+    "difficulty": "Beginner",
+    "secondary": [],
+    "images": [
+      "/exercises/pallof-press.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Stand sideways to a chest-height cable and hold the handle against your chest.",
+      "Press your hands forward without turning your torso, pause and return."
+    ],
+    "mistakes": [
+      "Avoid rotating toward the cable as your arms extend."
+    ],
+    "tips": [
+      "Use a stable stance and breathe through the hold."
+    ]
+  },
+  {
+    "id": "pec-deck",
+    "name": "Pec deck fly",
+    "primary": "Chest",
+    "equipment": "Machines",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Shoulders"
+    ],
+    "images": [
+      "/exercises/pec-deck.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Adjust the seat so the handles are near chest height and your back is supported.",
+      "Bring the handles together in front of your chest, then open slowly."
+    ],
+    "mistakes": [
+      "Avoid forcing your shoulders far behind your body."
+    ],
+    "tips": [
+      "Keep a small bend in your elbows."
+    ]
+  },
+  {
+    "id": "plank",
+    "name": "Forearm plank",
+    "primary": "Core",
+    "equipment": "Bodyweight",
+    "difficulty": "Beginner",
+    "secondary": [],
+    "images": [
+      "/exercises/plank.png"
+    ],
+    "timed": true,
+    "instructions": [
+      "Place your forearms on the floor with elbows under your shoulders and legs extended.",
+      "Brace your trunk and hold a straight, comfortable line while breathing steadily."
+    ],
+    "mistakes": [
+      "Avoid letting your hips sag."
+    ],
+    "tips": [
+      "Use your knees as a support if needed."
+    ]
+  },
+  {
+    "id": "preachercurl",
+    "name": "EZ-bar preacher curl",
+    "primary": "Biceps",
+    "equipment": "Barbells",
+    "difficulty": "Beginner",
+    "secondary": [],
+    "images": [
+      "/exercises/preachercurl.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Sit at the preacher bench with your upper arms supported on the pad and take a secure grip.",
+      "Curl the bar upward, then lower it slowly without forcing your elbows straight."
+    ],
+    "mistakes": [
+      "Avoid lifting your upper arms off the pad."
+    ],
+    "tips": [
+      "Keep the bottom position controlled."
+    ]
+  },
+  {
+    "id": "pullups",
+    "name": "Pull-up",
+    "primary": "Back",
+    "equipment": "Bodyweight",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Biceps"
+    ],
+    "images": [
+      "/exercises/pullups.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Take a secure grip on the bar and hang with your shoulders controlled.",
+      "Pull your body upward, then lower slowly to the starting position."
+    ],
+    "mistakes": [
+      "Avoid kicking your legs for momentum."
+    ],
+    "tips": [
+      "Use assistance when needed to maintain control."
+    ]
+  },
+  {
+    "id": "pushup",
+    "name": "Push-up",
+    "primary": "Chest",
+    "equipment": "Bodyweight",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Triceps",
+      "Core"
+    ],
+    "images": [
+      "/exercises/pushup.jpg"
+    ],
+    "timed": false,
+    "instructions": [
+      "Start in a plank with hands a little wider than your shoulders.",
+      "Bend your elbows to lower your body as one unit, then press the floor away."
+    ],
+    "mistakes": [
+      "Avoid sagging through your lower back."
+    ],
+    "tips": [
+      "Use an elevated hand support to reduce difficulty."
+    ]
+  },
+  {
+    "id": "rdl",
+    "name": "Barbell Romanian deadlift",
+    "primary": "Hamstrings",
+    "equipment": "Barbells",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Glutes",
+      "Back"
+    ],
+    "images": [
+      "/exercises/rdl.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Stand with a bar held close to your thighs and knees softly bent.",
+      "Move your hips backward as the bar travels close to your legs, then stand tall."
+    ],
+    "mistakes": [
+      "Avoid rounding your back or forcing the bar to the floor."
+    ],
+    "tips": [
+      "Stop the descent when you can no longer keep the hinge controlled."
+    ]
+  },
+  {
+    "id": "reardeltfly",
+    "name": "Dumbbell rear delt fly",
+    "primary": "Shoulders",
+    "equipment": "Dumbbells",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Back"
+    ],
+    "images": [
+      "/exercises/reardeltfly.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Hinge forward with soft knees and dumbbells hanging beneath your shoulders.",
+      "Raise your arms out to the sides with a slight elbow bend, then lower slowly."
+    ],
+    "mistakes": [
+      "Avoid jerking your torso upward."
+    ],
+    "tips": [
+      "Use a lighter load than for a row."
+    ]
+  },
+  {
+    "id": "reverse-crunch",
+    "name": "Reverse crunch",
+    "primary": "Core",
+    "equipment": "Bodyweight",
+    "difficulty": "Beginner",
+    "secondary": [],
+    "images": [
+      "/exercises/reverse-crunch.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Lie on your back with hips and knees bent and arms resting on the floor.",
+      "Curl your pelvis gently toward your ribs, then lower slowly."
+    ],
+    "mistakes": [
+      "Avoid swinging your legs to lift your hips."
+    ],
+    "tips": [
+      "Keep the movement small and controlled."
+    ]
+  },
+  {
+    "id": "reverse-lunge",
+    "name": "Dumbbell reverse lunge",
+    "primary": "Quadriceps",
+    "equipment": "Dumbbells",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Glutes"
+    ],
+    "images": [
+      "/exercises/reverse-lunge.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Stand holding dumbbells by your sides, then step one foot backward.",
+      "Lower with both knees bending, then press through your front foot to return."
+    ],
+    "mistakes": [
+      "Avoid pushing mainly from the rear foot."
+    ],
+    "tips": [
+      "Keep your stance wide enough for balance."
+    ]
+  },
+  {
+    "id": "rope-overhead-tricep-extension",
+    "name": "Cable overhead triceps extension",
+    "primary": "Triceps",
+    "equipment": "Cables",
+    "difficulty": "Intermediate",
+    "secondary": [],
+    "images": [
+      "/exercises/rope-overhead-tricep-extension.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Face away from a cable while holding a rope behind your head with elbows bent.",
+      "Extend your elbows to move your hands overhead, then return slowly."
+    ],
+    "mistakes": [
+      "Avoid arching your lower back."
+    ],
+    "tips": [
+      "Keep your trunk stable as your elbows move."
+    ]
+  },
+  {
+    "id": "rowing",
+    "name": "Rowing machine",
+    "primary": "Full Body",
+    "equipment": "Machines",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Back",
+      "Quadriceps"
+    ],
+    "images": [
+      "/exercises/rowing.png"
+    ],
+    "timed": true,
+    "instructions": [
+      "Secure your feet and hold the handle with relaxed shoulders and straight wrists.",
+      "Drive with your legs, lean back slightly and pull the handle toward your lower ribs; return arms, trunk and then knees."
+    ],
+    "mistakes": [
+      "Avoid pulling early with your arms before the leg drive."
+    ],
+    "tips": [
+      "Practice the sequence slowly before increasing pace."
+    ]
+  },
+  {
+    "id": "russiantwist",
+    "name": "Russian twist",
+    "primary": "Core",
+    "equipment": "Bodyweight",
+    "difficulty": "Intermediate",
+    "secondary": [],
+    "images": [
+      "/exercises/russiantwist.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Sit with knees bent, feet supported and your trunk slightly reclined.",
+      "Turn your upper body gently from side to side while keeping the motion controlled."
+    ],
+    "mistakes": [
+      "Avoid rounding and twisting abruptly under load."
+    ],
+    "tips": [
+      "Keep your feet down while learning the movement."
+    ]
+  },
+  {
+    "id": "seatedcalfraise",
+    "name": "Seated calf raise",
+    "primary": "Calves",
+    "equipment": "Machines",
+    "difficulty": "Beginner",
+    "secondary": [],
+    "images": [
+      "/exercises/seatedcalfraise.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Sit with the pads resting above your knees and the balls of your feet on the platform.",
+      "Raise your heels, pause and lower them slowly."
+    ],
+    "mistakes": [
+      "Avoid bouncing through the bottom position."
+    ],
+    "tips": [
+      "Keep pressure through the balls of your feet."
+    ]
+  },
+  {
+    "id": "seatedrow",
+    "name": "Seated cable row",
+    "primary": "Back",
+    "equipment": "Cables",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Biceps"
+    ],
+    "images": [
+      "/exercises/seatedrow.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Sit with feet supported and hold the cable handle with your trunk upright.",
+      "Pull toward your lower ribs, then extend your arms under control."
+    ],
+    "mistakes": [
+      "Avoid rocking your torso back and forth."
+    ],
+    "tips": [
+      "Let your shoulder blades move without shrugging."
+    ]
+  },
+  {
+    "id": "sideplank",
+    "name": "Side plank",
+    "primary": "Core",
+    "equipment": "Bodyweight",
+    "difficulty": "Intermediate",
+    "secondary": [],
+    "images": [
+      "/exercises/sideplank.png"
+    ],
+    "timed": true,
+    "instructions": [
+      "Lie on one side with your elbow below your shoulder and legs stacked or staggered.",
+      "Lift your hips and hold your trunk steady while breathing."
+    ],
+    "mistakes": [
+      "Avoid letting your shoulder collapse toward your ear."
+    ],
+    "tips": [
+      "Support yourself on bent knees for an easier variation."
+    ]
+  },
+  {
+    "id": "single-leg-romanian-deadlift",
+    "name": "Single-leg dumbbell Romanian deadlift",
+    "primary": "Hamstrings",
+    "equipment": "Dumbbells",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Glutes",
+      "Core"
+    ],
+    "images": [
+      "/exercises/single-leg-romanian-deadlift.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Stand on one leg with a softly bent knee and hold dumbbells near your sides.",
+      "Hinge at your hip as the other leg reaches backward, then return to standing."
+    ],
+    "mistakes": [
+      "Avoid opening your pelvis toward the lifted leg."
+    ],
+    "tips": [
+      "Use a nearby support until your balance is steady."
+    ]
+  },
+  {
+    "id": "skullcrusher",
+    "name": "EZ-bar skull crusher",
+    "primary": "Triceps",
+    "equipment": "Barbells",
+    "difficulty": "Intermediate",
+    "secondary": [],
+    "images": [
+      "/exercises/skullcrusher.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Lie on a bench with an EZ-bar above your chest and a secure grip.",
+      "Bend your elbows to lower the bar toward the area above your head, then straighten your arms."
+    ],
+    "mistakes": [
+      "Avoid dropping the bar toward your face."
+    ],
+    "tips": [
+      "Use a light load and a spotter when appropriate."
+    ]
+  },
+  {
+    "id": "sledpush",
+    "name": "Sled push",
+    "primary": "Full Body",
+    "equipment": "Sled",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Quadriceps",
+      "Glutes"
+    ],
+    "images": [
+      "/exercises/sledpush.png"
+    ],
+    "timed": true,
+    "instructions": [
+      "Hold the sled handles, lean forward from your ankles and brace your trunk.",
+      "Push the sled with steady alternating steps while keeping your spine controlled."
+    ],
+    "mistakes": [
+      "Avoid letting your back collapse as fatigue builds."
+    ],
+    "tips": [
+      "Start with a light sled on a clear surface."
+    ]
+  },
+  {
+    "id": "smithincline",
+    "name": "Smith machine incline press",
+    "primary": "Chest",
+    "equipment": "Smith Machine",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Triceps",
+      "Shoulders"
+    ],
+    "images": [
+      "/exercises/smithincline.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Position an incline bench under the Smith bar so the bar path aligns comfortably with your upper chest.",
+      "Unrack, lower the bar slowly and press upward; re-engage the hooks after the set."
+    ],
+    "mistakes": [
+      "Avoid a bench position that forces your shoulders behind an uncomfortable bar path."
+    ],
+    "tips": [
+      "Set the safety stops before lifting."
+    ]
+  },
+  {
+    "id": "stairmaster",
+    "name": "Stair climber",
+    "primary": "Quadriceps",
+    "equipment": "Machines",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Glutes",
+      "Calves"
+    ],
+    "images": [
+      "/exercises/stairmaster.png"
+    ],
+    "timed": true,
+    "instructions": [
+      "Step onto the stationary machine and begin at a low speed.",
+      "Climb with steady steps, using the handrails lightly for balance."
+    ],
+    "mistakes": [
+      "Avoid hanging your body weight from the rails."
+    ],
+    "tips": [
+      "Keep your torso upright and look ahead."
+    ]
+  },
+  {
+    "id": "steadyrun",
+    "name": "Running",
+    "primary": "Full Body",
+    "equipment": "Bodyweight",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Quadriceps",
+      "Calves"
+    ],
+    "images": [
+      "/exercises/steadyrun.png"
+    ],
+    "timed": true,
+    "instructions": [
+      "Begin with an easy walk or jog on a clear route or running surface.",
+      "Run at a manageable pace with relaxed shoulders and comfortable strides."
+    ],
+    "mistakes": [
+      "Avoid forcing a pace that immediately disrupts your control."
+    ],
+    "tips": [
+      "Increase effort gradually."
+    ]
+  },
+  {
+    "id": "stepup",
+    "name": "Dumbbell step-up",
+    "primary": "Quadriceps",
+    "equipment": "Dumbbells",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Glutes"
+    ],
+    "images": [
+      "/exercises/stepup.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Stand facing a stable step with dumbbells by your sides and place one foot fully on top.",
+      "Press through that foot to stand on the step, then lower with control."
+    ],
+    "mistakes": [
+      "Avoid pushing mostly from the trailing foot."
+    ],
+    "tips": [
+      "Choose a step height that lets you keep your balance."
+    ]
+  },
+  {
+    "id": "sumodeadlift",
+    "name": "Sumo deadlift",
+    "primary": "Glutes",
+    "equipment": "Barbells",
+    "difficulty": "Advanced",
+    "secondary": [
+      "Hamstrings",
+      "Quadriceps",
+      "Back"
+    ],
+    "images": [
+      "/exercises/sumodeadlift.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Stand close to the bar with a wide stance and toes angled comfortably outward; grip inside your knees.",
+      "Brace, push through the floor to stand, then bend hips and knees to return the bar."
+    ],
+    "mistakes": [
+      "Avoid letting your knees fall inward."
+    ],
+    "tips": [
+      "Keep the bar close and reset before the next repetition."
+    ]
+  },
+  {
+    "id": "t-bar-row",
+    "name": "T-bar row",
+    "primary": "Back",
+    "equipment": "Barbells",
+    "difficulty": "Intermediate",
+    "secondary": [
+      "Biceps"
+    ],
+    "images": [
+      "/exercises/t-bar-row.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Straddle the secured bar, hinge your hips and grasp the handle with a braced trunk.",
+      "Pull the handle toward your torso, then lower with control."
+    ],
+    "mistakes": [
+      "Avoid jerking your torso upward to move the load."
+    ],
+    "tips": [
+      "Keep your back position consistent."
+    ]
+  },
+  {
+    "id": "tmwalk",
+    "name": "Treadmill walking",
+    "primary": "Quadriceps",
+    "equipment": "Machines",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Calves"
+    ],
+    "images": [
+      "/exercises/tmwalk.png"
+    ],
+    "timed": true,
+    "instructions": [
+      "Attach the treadmill safety clip and start at a slow belt speed.",
+      "Walk naturally with an upright posture, then slow the belt before stepping off."
+    ],
+    "mistakes": [
+      "Avoid stepping onto a fast-moving belt."
+    ],
+    "tips": [
+      "Use the rails for balance rather than hanging on them."
+    ]
+  },
+  {
+    "id": "toe-touch-crunch",
+    "name": "Toe-touch crunch",
+    "primary": "Core",
+    "equipment": "Bodyweight",
+    "difficulty": "Beginner",
+    "secondary": [],
+    "images": [
+      "/exercises/toe-touch-crunch.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Lie on your back with your legs raised and your arms reaching upward.",
+      "Curl your shoulders toward your feet, then lower slowly."
+    ],
+    "mistakes": [
+      "Avoid swinging your arms to create momentum."
+    ],
+    "tips": [
+      "Reach only as far as you can without straining your neck."
+    ]
+  },
+  {
+    "id": "triceppushdown",
+    "name": "Cable triceps pushdown",
+    "primary": "Triceps",
+    "equipment": "Cables",
+    "difficulty": "Beginner",
+    "secondary": [],
+    "images": [
+      "/exercises/triceppushdown.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Stand facing a high cable with elbows near your sides and a secure grip on the handle.",
+      "Straighten your elbows to press the handle down, then return slowly."
+    ],
+    "mistakes": [
+      "Avoid moving your whole shoulder to push the load."
+    ],
+    "tips": [
+      "Keep your upper arms near your torso."
+    ]
+  },
+  {
+    "id": "upright-row",
+    "name": "Barbell upright row",
+    "primary": "Shoulders",
+    "equipment": "Barbells",
+    "difficulty": "Intermediate",
+    "secondary": [],
+    "images": [
+      "/exercises/upright-row.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Stand with a bar in front of your thighs and take a comfortable grip.",
+      "Lift it close to your body with elbows leading, stopping at a comfortable shoulder height, then lower."
+    ],
+    "mistakes": [
+      "Avoid pulling into shoulder discomfort."
+    ],
+    "tips": [
+      "Use a light load and an unrestricted grip width."
+    ]
+  },
+  {
+    "id": "v-up",
+    "name": "V-up",
+    "primary": "Core",
+    "equipment": "Bodyweight",
+    "difficulty": "Advanced",
+    "secondary": [],
+    "images": [
+      "/exercises/v-up.png"
+    ],
+    "timed": false,
+    "instructions": [
+      "Lie on your back with arms and legs extended.",
+      "Lift your trunk and legs toward each other, then lower slowly."
+    ],
+    "mistakes": [
+      "Avoid throwing your arms to create momentum."
+    ],
+    "tips": [
+      "Bend your knees or shorten the movement if needed."
+    ]
+  },
+  {
+    "id": "wall-sit",
+    "name": "Wall sit",
+    "primary": "Quadriceps",
+    "equipment": "Bodyweight",
+    "difficulty": "Beginner",
+    "secondary": [
+      "Glutes"
+    ],
+    "images": [
+      "/exercises/wall-sit.png"
+    ],
+    "timed": true,
+    "instructions": [
+      "Stand with your back against a wall and feet a short distance forward.",
+      "Slide down to a comfortable knee bend and hold while breathing steadily."
+    ],
+    "mistakes": [
+      "Avoid allowing your knees to collapse inward."
+    ],
+    "tips": [
+      "Use a shallower position to reduce the demand."
+    ]
+  }
+]

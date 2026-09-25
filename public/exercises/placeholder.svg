@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="Exercise image unavailable">
+  <rect width="600" height="400" fill="#1f2521"/>
+  <g fill="none" stroke="#d0f595" stroke-width="15" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M140 200h320M110 155v90M140 130v140M460 130v140M490 155v90"/>
+  </g>
+</svg>

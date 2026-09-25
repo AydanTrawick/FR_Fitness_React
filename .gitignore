@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Public configuration template
+!.env.example
+
+# Exercise library browser test output
+/test-results/
+/playwright-report/
+*.tsbuildinfo
+node_modules*

@@ -1,0 +1,1091 @@
+{
+  "programs": [
+    {
+      "id": "FullBody",
+      "title": "Low Volume Strength",
+      "description": "Three focused full-body sessions for a busy week.",
+      "schedule": [
+        {
+          "day": "Day 1",
+          "title": "Full Body A",
+          "duration": 45,
+          "exercises": [
+            {
+              "name": "Barbell Squat",
+              "sets": 3,
+              "reps": "5",
+              "muscle": "Quads",
+              "equipment": "Barbell",
+              "rest": 150
+            },
+            {
+              "name": "Bench Press",
+              "sets": 3,
+              "reps": "5",
+              "muscle": "Chest",
+              "equipment": "Barbell",
+              "rest": 150
+            },
+            {
+              "name": "Lat Pulldown",
+              "sets": 2,
+              "reps": "8-10",
+              "muscle": "Back",
+              "equipment": "Cable Machine",
+              "rest": 90
+            }
+          ]
+        },
+        {
+          "day": "Day 2",
+          "title": "Full Body B",
+          "duration": 45,
+          "exercises": [
+            {
+              "name": "Romanian Deadlift",
+              "sets": 3,
+              "reps": "6",
+              "muscle": "Hamstrings",
+              "equipment": "Barbell",
+              "rest": 150
+            },
+            {
+              "name": "Shoulder Press",
+              "sets": 3,
+              "reps": "6",
+              "muscle": "Shoulders",
+              "equipment": "Dumbbells or Barbell",
+              "rest": 120
+            },
+            {
+              "name": "Walking Lunge",
+              "sets": 2,
+              "reps": "10 each leg",
+              "muscle": "Glutes",
+              "equipment": "Dumbbells",
+              "rest": 75
+            }
+          ]
+        },
+        {
+          "day": "Day 3",
+          "title": "Full Body C",
+          "duration": 45,
+          "exercises": [
+            {
+              "name": "Front Squat",
+              "sets": 3,
+              "reps": "5",
+              "muscle": "Quads",
+              "equipment": "Barbell",
+              "rest": 150
+            },
+            {
+              "name": "Chest-Supported Row",
+              "sets": 3,
+              "reps": "8",
+              "muscle": "Back",
+              "equipment": "Dumbbells or Machine",
+              "rest": 90
+            },
+            {
+              "name": "Pallof Press",
+              "sets": 2,
+              "reps": "10 each side",
+              "muscle": "Obliques",
+              "equipment": "Cable Machine or Band",
+              "rest": 45
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "UpperLower",
+      "title": "Upper / Lower",
+      "description": "Balanced strength training across four sessions.",
+      "schedule": [
+        {
+          "day": "Day 1",
+          "title": "Upper A",
+          "duration": 40,
+          "exercises": [
+            {
+              "name": "Incline Dumbbell Press",
+              "sets": 3,
+              "reps": "8-10",
+              "muscle": "Chest",
+              "equipment": "Dumbbells",
+              "rest": 90
+            },
+            {
+              "name": "Seated Row",
+              "sets": 3,
+              "reps": "8-10",
+              "muscle": "Back",
+              "equipment": "Cable Machine",
+              "rest": 90
+            },
+            {
+              "name": "Lateral Raise",
+              "sets": 2,
+              "reps": "12-15",
+              "muscle": "Shoulders",
+              "equipment": "Dumbbells",
+              "rest": 60
+            }
+          ]
+        },
+        {
+          "day": "Day 2",
+          "title": "Lower A",
+          "duration": 40,
+          "exercises": [
+            {
+              "name": "Leg Press",
+              "sets": 3,
+              "reps": "10",
+              "muscle": "Quads",
+              "equipment": "Machine",
+              "rest": 90
+            },
+            {
+              "name": "Leg Curl",
+              "sets": 3,
+              "reps": "10",
+              "muscle": "Hamstrings",
+              "equipment": "Machine",
+              "rest": 75
+            },
+            {
+              "name": "Calf Raise",
+              "sets": 2,
+              "reps": "15-20",
+              "muscle": "Calves",
+              "equipment": "Machine",
+              "rest": 45
+            }
+          ]
+        },
+        {
+          "day": "Day 3",
+          "title": "Upper B",
+          "duration": 40,
+          "exercises": [
+            {
+              "name": "Machine Chest Press",
+              "sets": 3,
+              "reps": "8-10",
+              "muscle": "Chest",
+              "equipment": "Machine",
+              "rest": 90
+            },
+            {
+              "name": "Lat Pulldown",
+              "sets": 3,
+              "reps": "8-10",
+              "muscle": "Back",
+              "equipment": "Cable Machine",
+              "rest": 90
+            },
+            {
+              "name": "Cable Curl",
+              "sets": 2,
+              "reps": "10-12",
+              "muscle": "Biceps",
+              "equipment": "Cable Machine",
+              "rest": 60
+            }
+          ]
+        },
+        {
+          "day": "Day 4",
+          "title": "Lower B",
+          "duration": 40,
+          "exercises": [
+            {
+              "name": "Hack Squat",
+              "sets": 3,
+              "reps": "8-10",
+              "muscle": "Quads",
+              "equipment": "Machine",
+              "rest": 90
+            },
+            {
+              "name": "Hip Thrust",
+              "sets": 3,
+              "reps": "8-10",
+              "muscle": "Glutes",
+              "equipment": "Barbell or Machine",
+              "rest": 90
+            },
+            {
+              "name": "Adductor Machine",
+              "sets": 2,
+              "reps": "12-15",
+              "muscle": "Adductors",
+              "equipment": "Machine",
+              "rest": 45
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PPL",
+      "title": "Push / Pull / Legs",
+      "description": "A dedicated split to build strength and muscle.",
+      "schedule": [
+        {
+          "day": "Day 1",
+          "title": "Push",
+          "duration": 90,
+          "exercises": [
+            {
+              "name": "Tricep Pushdown",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Tricep",
+              "equipment": "Cable Tower",
+              "rest": 60
+            },
+            {
+              "name": "Dips",
+              "sets": 2,
+              "reps": "10-20",
+              "muscle": "Lower Chest",
+              "equipment": "Dip bar",
+              "rest": 60
+            },
+            {
+              "name": "Incline Smith Press",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Upper Chest",
+              "equipment": "Smith Machine",
+              "rest": 60
+            },
+            {
+              "name": "Shoulder Press",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Shoulders",
+              "equipment": "Smith Machine/ Bar",
+              "rest": 60
+            },
+            {
+              "name": "Pec Flys",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Chest",
+              "equipment": "Pec Deck",
+              "rest": 60
+            }
+          ]
+        },
+        {
+          "day": "Day 2",
+          "title": "Pull",
+          "duration": 90,
+          "exercises": [
+            {
+              "name": "Pullovers",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Back",
+              "equipment": "Cable Tower",
+              "rest": 60
+            },
+            {
+              "name": "Pullups",
+              "sets": 2,
+              "reps": "6-15",
+              "muscle": "Back",
+              "equipment": "Pull-up bar",
+              "rest": 60
+            },
+            {
+              "name": "Archer Rows",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Shoulders",
+              "equipment": "Smith Machine",
+              "rest": 60
+            },
+            {
+              "name": "Hammer Curls",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Arms",
+              "equipment": "DB's",
+              "rest": 60
+            },
+            {
+              "name": "Bicep Curls",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Arms",
+              "equipment": "DB's",
+              "rest": 60
+            },
+            {
+              "name": "T-bar Row",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Back",
+              "equipment": "T-bar/ Smith Machine",
+              "rest": 60
+            }
+          ]
+        },
+        {
+          "day": "Day 3",
+          "title": "Legs (Hamstring Focus)",
+          "duration": 60,
+          "exercises": [
+            {
+              "name": "Adductor Machine",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Adductors",
+              "equipment": "Adductor Machine",
+              "rest": 60
+            },
+            {
+              "name": "RDL's",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Hamstrings",
+              "equipment": "Smith Machine/Bar/DB's",
+              "rest": 60
+            },
+            {
+              "name": "Leg Extensions",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Quads",
+              "equipment": "Leg Extension",
+              "rest": 60
+            },
+            {
+              "name": "Leg curls",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Arms",
+              "equipment": "DB's",
+              "rest": 60
+            },
+            {
+              "name": "Hip Thrust",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Glutes",
+              "equipment": "Hip Thurst Machine/ Smith Machine",
+              "rest": 60
+            },
+            {
+              "name": "Calf Raises",
+              "sets": 3,
+              "reps": "15-20",
+              "muscle": "Calfs",
+              "equipment": "DB's",
+              "rest": 60
+            }
+          ]
+        },
+        {
+          "day": "Day 4",
+          "title": "Push",
+          "duration": 90,
+          "exercises": [
+            {
+              "name": "Tricep Pushdown",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Tricep",
+              "equipment": "Cable Tower",
+              "rest": 60
+            },
+            {
+              "name": "Dips",
+              "sets": 2,
+              "reps": "10-20",
+              "muscle": "Lower Chest",
+              "equipment": "Dip bar",
+              "rest": 60
+            },
+            {
+              "name": "Low-to-High Cable fly",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Upper Chest",
+              "equipment": "Cables",
+              "rest": 60
+            },
+            {
+              "name": "Lateral Raises",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Shoulders",
+              "equipment": "DB's",
+              "rest": 60
+            },
+            {
+              "name": "Overhead Tricep Extensions",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Tricep",
+              "equipment": "Calbles/DB's",
+              "rest": 60
+            }
+          ]
+        },
+        {
+          "day": "Day 5",
+          "title": "Pull",
+          "duration": 90,
+          "exercises": [
+            {
+              "name": "Pullovers",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Back",
+              "equipment": "Cable Tower",
+              "rest": 60
+            },
+            {
+              "name": "Pullups",
+              "sets": 2,
+              "reps": "10-20",
+              "muscle": "Back",
+              "equipment": "Pull-up bar",
+              "rest": 60
+            },
+            {
+              "name": "Archer Rows",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Shoulders",
+              "equipment": "Smith Machine",
+              "rest": 60
+            },
+            {
+              "name": "Hammer Curls",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Arms",
+              "equipment": "DB's",
+              "rest": 60
+            },
+            {
+              "name": "Bicep Curls",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Arms",
+              "equipment": "DB's",
+              "rest": 60
+            },
+            {
+              "name": "T-bar Row",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Back",
+              "equipment": "T-bar/ Smith Machine",
+              "rest": 60
+            }
+          ]
+        },
+        {
+          "day": "Day 6",
+          "title": "Legs(Quad Focus)",
+          "duration": 90,
+          "exercises": [
+            {
+              "name": "Adductor Machine",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Adductors",
+              "equipment": "Adductor Machine",
+              "rest": 60
+            },
+            {
+              "name": "Squats",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Quads",
+              "equipment": "Smith Machine/Bar/DB's",
+              "rest": 60
+            },
+            {
+              "name": "Leg Extensions",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Quads",
+              "equipment": "Leg Extension",
+              "rest": 60
+            },
+            {
+              "name": "Leg curls",
+              "sets": 3,
+              "reps": "6-10",
+              "muscle": "Arms",
+              "equipment": "Leg Curl Machine",
+              "rest": 60
+            },
+            {
+              "name": "Calf Raises",
+              "sets": 3,
+              "reps": "15-20",
+              "muscle": "Calfs",
+              "equipment": "DB's",
+              "rest": 60
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Hybrid",
+      "title": "Lift + Cardio Hybrid",
+      "description": "Strength and conditioning in one weekly routine.",
+      "schedule": [
+        {
+          "day": "Day 1",
+          "title": "Upper Strength",
+          "duration": 55,
+          "exercises": [
+            {
+              "name": "Bench Press",
+              "sets": 4,
+              "reps": "5",
+              "muscle": "Chest",
+              "equipment": "Barbell",
+              "rest": 150
+            },
+            {
+              "name": "Lat Pulldown",
+              "sets": 4,
+              "reps": "8",
+              "muscle": "Back",
+              "equipment": "Cable Machine",
+              "rest": 90
+            },
+            {
+              "name": "Face Pull",
+              "sets": 3,
+              "reps": "12-15",
+              "muscle": "Shoulders",
+              "equipment": "Cable Machine",
+              "rest": 60
+            }
+          ]
+        },
+        {
+          "day": "Day 2",
+          "title": "Incline Conditioning",
+          "duration": 45,
+          "exercises": [
+            {
+              "name": "Incline Treadmill Walk",
+              "sets": 1,
+              "reps": "30-40 min",
+              "muscle": "Conditioning",
+              "equipment": "Treadmill",
+              "rest": 0
+            },
+            {
+              "name": "Pallof Press",
+              "sets": 3,
+              "reps": "10 each side",
+              "muscle": "Obliques",
+              "equipment": "Cable Machine or Band",
+              "rest": 45
+            }
+          ]
+        },
+        {
+          "day": "Day 3",
+          "title": "Lower Strength",
+          "duration": 55,
+          "exercises": [
+            {
+              "name": "Barbell Squat",
+              "sets": 4,
+              "reps": "5",
+              "muscle": "Quads",
+              "equipment": "Barbell",
+              "rest": 150
+            },
+            {
+              "name": "Leg Curl",
+              "sets": 3,
+              "reps": "10",
+              "muscle": "Hamstrings",
+              "equipment": "Machine",
+              "rest": 75
+            },
+            {
+              "name": "Calf Raise",
+              "sets": 4,
+              "reps": "12-20",
+              "muscle": "Calves",
+              "equipment": "Machine",
+              "rest": 60
+            }
+          ]
+        },
+        {
+          "day": "Day 4",
+          "title": "Bike Intervals",
+          "duration": 40,
+          "exercises": [
+            {
+              "name": "Assault Bike",
+              "sets": 10,
+              "reps": "20 sec sprint",
+              "muscle": "Conditioning",
+              "equipment": "Air Bike",
+              "rest": 60
+            },
+            {
+              "name": "Hollow Body Hold",
+              "sets": 3,
+              "reps": "30 sec",
+              "muscle": "Abs",
+              "equipment": "Bodyweight",
+              "rest": 45
+            }
+          ]
+        },
+        {
+          "day": "Day 5",
+          "title": "Full Body Pump",
+          "duration": 55,
+          "exercises": [
+            {
+              "name": "Dumbbell Floor Press",
+              "sets": 3,
+              "reps": "10-12",
+              "muscle": "Chest",
+              "equipment": "Dumbbells",
+              "rest": 75
+            },
+            {
+              "name": "Chest-Supported Row",
+              "sets": 3,
+              "reps": "10-12",
+              "muscle": "Back",
+              "equipment": "Dumbbells or Machine",
+              "rest": 75
+            },
+            {
+              "name": "Walking Lunge",
+              "sets": 3,
+              "reps": "12 each leg",
+              "muscle": "Glutes",
+              "equipment": "Dumbbells",
+              "rest": 75
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Cardio",
+      "title": "Cardio + Strength",
+      "description": "Endurance-focused training with supporting strength work.",
+      "schedule": [
+        {
+          "day": "Day 1",
+          "title": "HIIT + Upper",
+          "duration": 55,
+          "exercises": [
+            {
+              "name": "Treadmill Intervals (1 min sprint / 1 min walk)",
+              "sets": 10,
+              "reps": "1 min on / 1 min off",
+              "muscle": "Conditioning",
+              "equipment": "Treadmill",
+              "rest": 0
+            },
+            {
+              "name": "Jump Rope",
+              "sets": 3,
+              "reps": "2 min",
+              "muscle": "Conditioning",
+              "equipment": "Jump Rope",
+              "rest": 30
+            },
+            {
+              "name": "Bench Press",
+              "sets": 3,
+              "reps": "6-8",
+              "muscle": "Chest",
+              "equipment": "Barbell",
+              "rest": 90
+            },
+            {
+              "name": "Lat Pulldown",
+              "sets": 3,
+              "reps": "8-10",
+              "muscle": "Back",
+              "equipment": "Cable Machine",
+              "rest": 75
+            }
+          ]
+        },
+        {
+          "day": "Day 2",
+          "title": "Steady State + Lower",
+          "duration": 60,
+          "exercises": [
+            {
+              "name": "Incline Treadmill Walk",
+              "sets": 1,
+              "reps": "25-30 min",
+              "muscle": "Conditioning",
+              "equipment": "Treadmill",
+              "rest": 0
+            },
+            {
+              "name": "Stationary Bike",
+              "sets": 1,
+              "reps": "10 min moderate pace",
+              "muscle": "Conditioning",
+              "equipment": "Bike",
+              "rest": 0
+            },
+            {
+              "name": "Leg Press",
+              "sets": 3,
+              "reps": "8-10",
+              "muscle": "Quads",
+              "equipment": "Machine",
+              "rest": 90
+            },
+            {
+              "name": "Leg Curl",
+              "sets": 3,
+              "reps": "10",
+              "muscle": "Hamstrings",
+              "equipment": "Machine",
+              "rest": 75
+            },
+            {
+              "name": "Calf Raise",
+              "sets": 2,
+              "reps": "15-20",
+              "muscle": "Calves",
+              "equipment": "Machine",
+              "rest": 45
+            }
+          ]
+        },
+        {
+          "day": "Day 3",
+          "title": "Circuit + Core",
+          "duration": 50,
+          "exercises": [
+            {
+              "name": "Rowing Machine",
+              "sets": 4,
+              "reps": "500m",
+              "muscle": "Conditioning",
+              "equipment": "Rowing Machine",
+              "rest": 60
+            },
+            {
+              "name": "Box Jumps",
+              "sets": 4,
+              "reps": "10",
+              "muscle": "Conditioning",
+              "equipment": "Plyo Box",
+              "rest": 45
+            },
+            {
+              "name": "Hollow Body Hold",
+              "sets": 3,
+              "reps": "30-45 sec",
+              "muscle": "Abs",
+              "equipment": "Bodyweight",
+              "rest": 30
+            },
+            {
+              "name": "Pallof Press",
+              "sets": 3,
+              "reps": "10 each side",
+              "muscle": "Obliques",
+              "equipment": "Cable Machine or Band",
+              "rest": 45
+            }
+          ]
+        },
+        {
+          "day": "Day 4",
+          "title": "Assault Bike + Full Body",
+          "duration": 55,
+          "exercises": [
+            {
+              "name": "Assault Bike Intervals (20 sec sprint / 40 sec rest)",
+              "sets": 12,
+              "reps": "20 sec on / 40 sec off",
+              "muscle": "Conditioning",
+              "equipment": "Air Bike",
+              "rest": 0
+            },
+            {
+              "name": "Barbell Squat",
+              "sets": 3,
+              "reps": "5-6",
+              "muscle": "Quads",
+              "equipment": "Barbell",
+              "rest": 120
+            },
+            {
+              "name": "Dumbbell Row",
+              "sets": 3,
+              "reps": "8-10 each side",
+              "muscle": "Back",
+              "equipment": "Dumbbells",
+              "rest": 75
+            },
+            {
+              "name": "Farmer Carry",
+              "sets": 3,
+              "reps": "40 meters",
+              "muscle": "Full Body",
+              "equipment": "Dumbbells or Kettlebells",
+              "rest": 60
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "foods": {
+    "Chicken breast, cooked, skinless": [
+      31.0,
+      0.0,
+      3.6
+    ],
+    "White rice, cooked": [
+      2.7,
+      28.2,
+      0.3
+    ],
+    "Oats, dry": [
+      13.2,
+      67.7,
+      6.5
+    ],
+    "Egg, whole, hard-boiled": [
+      12.6,
+      1.1,
+      10.6
+    ],
+    "Milk, whole": [
+      3.2,
+      4.8,
+      3.3
+    ],
+    "Peanut butter, smooth": [
+      25.0,
+      20.0,
+      50.0
+    ],
+    "Olive oil": [
+      0.0,
+      0.0,
+      100.0
+    ],
+    "Greek yogurt, plain, nonfat": [
+      10.3,
+      3.6,
+      0.4
+    ],
+    "Banana, raw, peeled": [
+      1.1,
+      22.8,
+      0.3
+    ],
+    "Apple, raw, with skin": [
+      0.3,
+      13.8,
+      0.2
+    ],
+    "Broccoli, cooked, drained": [
+      2.4,
+      7.2,
+      0.4
+    ],
+    "Potato, baked, with skin": [
+      2.5,
+      21.2,
+      0.1
+    ],
+    "Salmon, Atlantic, cooked": [
+      22.1,
+      0.0,
+      12.4
+    ],
+    "Tuna, canned in water, drained": [
+      25.5,
+      0.0,
+      0.8
+    ],
+    "Lentils, cooked": [
+      9.0,
+      20.1,
+      0.4
+    ],
+    "Black beans, cooked": [
+      8.9,
+      23.7,
+      0.5
+    ],
+    "Almonds, raw": [
+      21.2,
+      21.6,
+      49.9
+    ],
+    "Tofu, firm": [
+      17.3,
+      2.8,
+      8.7
+    ]
+  },
+  "glossary": [
+    [
+      "Rep",
+      "One complete movement of an exercise, such as one squat."
+    ],
+    [
+      "Set",
+      "A group of reps performed back to back without rest."
+    ],
+    [
+      "1RM (One-Rep Max)",
+      "The heaviest weight you can lift for one complete rep."
+    ],
+    [
+      "Progressive overload",
+      "Gradually increasing weight, reps, or difficulty so the body keeps adapting."
+    ],
+    [
+      "Compound movement",
+      "An exercise that uses multiple joints and muscle groups, such as a squat or deadlift."
+    ],
+    [
+      "Isolation exercise",
+      "An exercise that mainly targets one muscle or joint, such as a biceps curl."
+    ],
+    [
+      "Superset",
+      "Two exercises performed back to back with little or no rest between them."
+    ],
+    [
+      "Drop set",
+      "Continuing a set with less weight immediately after reaching or approaching failure."
+    ],
+    [
+      "Failure",
+      "The point where you cannot complete another rep with good form."
+    ],
+    [
+      "RPE (Rate of Perceived Exertion)",
+      "A 1\u201310 rating of how hard a set felt."
+    ],
+    [
+      "RIR (Reps in Reserve)",
+      "How many more good-form reps you estimate you could have completed."
+    ],
+    [
+      "Tempo",
+      "The speed of each phase of a rep, often written as three or four numbers."
+    ],
+    [
+      "Eccentric",
+      "The phase of a lift where the working muscle lengthens, usually while lowering the weight."
+    ],
+    [
+      "Concentric",
+      "The phase of a lift where the working muscle shortens, usually while raising the weight."
+    ],
+    [
+      "Hypertrophy",
+      "An increase in muscle size."
+    ],
+    [
+      "Deload",
+      "A planned period of lighter training that allows fatigue to drop and recovery to catch up."
+    ],
+    [
+      "Split",
+      "How training is divided across days or muscle groups, such as push/pull/legs."
+    ],
+    [
+      "DOMS (Delayed Onset Muscle Soreness)",
+      "Muscle soreness that commonly appears 24\u201372 hours after unfamiliar or demanding exercise."
+    ],
+    [
+      "Spotter",
+      "A person positioned to assist if you cannot safely complete a lift."
+    ],
+    [
+      "PR (Personal Record)",
+      "Your best recorded performance for a lift, exercise, distance, or other measure."
+    ],
+    [
+      "Volume",
+      "A measure of total training work, often calculated as sets \u00d7 reps \u00d7 weight."
+    ],
+    [
+      "Macronutrient",
+      "Protein, carbohydrate, or fat\u2014the nutrients that provide calories."
+    ],
+    [
+      "Micronutrient",
+      "A vitamin or mineral needed in smaller amounts."
+    ],
+    [
+      "Maintenance calories",
+      "The approximate calorie intake at which body weight stays stable over time."
+    ]
+  ],
+  "guides": {
+    "Understanding BMI": "BMI is your weight divided by your height squared. That's the whole formula. It was designed in the 1800s to describe populations, not to assess individuals, and it's used today because height and weight are cheap and easy to measure \u2014 not because it's the most accurate thing available.\n\nThe standard adult bands are: below 18.5 is underweight, 18.5 to 24.9 is the healthy range, 25.0 to 29.9 is overweight, and 30.0 and above is obesity.\n\nTreat your result as one data point that tells you roughly where you sit on a chart. It is not a grade, a diagnosis, or a measure of how healthy you are.",
+    "What BMI misses": "Four big blind spots.\n\nMuscle versus fat. BMI can't tell them apart \u2014 it only knows total weight. Someone carrying a lot of muscle can land in the \"overweight\" band while being in excellent condition. If you train seriously, expect BMI to overstate things.\n\nWhere the weight sits. Fat stored around the organs behaves very differently from fat on the hips and thighs. BMI has no idea which you have.\n\nAge. Muscle mass and bone density change across a lifetime. The same BMI at 25 and at 70 can describe two very different bodies.\n\nAncestry. Health risk doesn't begin at the same BMI for everyone. Several health bodies use lower cutoffs for people of South Asian, Chinese and other Asian descent, because elevated risk tends to show up at a lower BMI.\n\nNone of this makes BMI useless. It makes it a starting point rather than an answer.",
+    "Other ways to track progress": "Cheap measures that tell you more than BMI on its own.\n\nWaist circumference. Measure at the belly button, standing relaxed, at the end of a normal exhale. It tracks abdominal fat, which BMI cannot see.\n\nWaist-to-height ratio. Waist divided by height. A common rule of thumb is keeping your waist under half your height.\n\nHow clothes fit. Free, and surprisingly honest about body composition change during periods when the scale isn't moving.\n\nPerformance. Are your working weights climbing? Do you have energy through the day? Are you sleeping?\n\nPhotos, monthly, in the same light and the same pose. Slow change is invisible day to day.\n\nTrend beats snapshot for every one of these. One measurement means very little.",
+    "How to read a workout": "\"3 x 8 at 135 lb\" means three sets of eight repetitions at 135 pounds. Three separate rounds of eight reps, with rest in between.\n\nRest. Two to three minutes between hard sets of big lifts \u2014 squat, deadlift, press, row. Sixty to ninety seconds for smaller accessory work. Resting less doesn't make you tougher, it makes your next set worse.\n\nRPE stands for Rate of Perceived Exertion, on a 1 to 10 scale. RPE 8 means you had roughly two reps left in the tank. RPE 10 means nothing left. Most productive work sits around 7 to 8.\n\nWhen it feels too easy. If you hit every prescribed rep and the last set still felt like RPE 6 or below, add a small amount of weight next session. That's progressive overload, and it's the entire engine of getting stronger.\n\nWhen it feels too hard. Drop the weight and finish the reps with clean form. A missed rep teaches your body less than a controlled one.\n\nTempo written as four numbers, like 3-1-1-0, is seconds: lowering, pause at the bottom, lifting, pause at the top.",
+    "Warm-up and form": "Five to ten minutes, in two parts.\n\nGeneral. Get warm and get blood moving \u2014 bike, row, brisk walk, jump rope. You want slightly elevated breathing, not fatigue.\n\nSpecific. Ramp up to your working weight on the first exercise. For a 135 lb bench press: the empty bar for 10, 95 for 5, 115 for 3, then start working sets. Each ramp set rehearses the movement under progressively more load.\n\nSave long held stretches for after training or a separate session. Stretching immediately before heavy lifting can temporarily reduce how much force you produce.\n\nForm basics that apply almost everywhere: brace your core as though you're about to be poked in the stomach, control the lowering phase, work through a range of motion you can actually own, and end the set when technique breaks down rather than when the reps run out.",
+    "When to ask for help": "See a doctor for unexplained weight change, pain that doesn't resolve, chest symptoms during exercise, dizziness, or before starting training if you have an existing medical condition or have been inactive a long time.\n\nSee a registered dietitian for medical nutrition therapy, for eating that feels out of your control, for food restriction that's affecting your life, or for nutrition planning around a diagnosed condition.\n\nSee a coach for technique, programming and accountability.\n\nThis app is an educational tool. It doesn't diagnose anything and it isn't a substitute for any of the above.",
+    "Glossary": "Rep \u2014 one complete repetition of an exercise. Set \u2014 a group of reps performed back to back without rest. Volume \u2014 total work done, usually sets x reps x weight. RPE \u2014 Rate of Perceived Exertion, 1 to 10, how hard a set felt. RIR \u2014 Reps In Reserve, how many you had left. RPE 8 is about 2 RIR. Progressive overload \u2014 gradually increasing demand so the body keeps adapting. Compound lift \u2014 a movement using multiple joints: squat, deadlift, bench, row. Isolation lift \u2014 a movement using one joint: curl, leg extension, lateral raise. Tempo \u2014 the speed of each phase of a rep, written as four numbers. Superset \u2014 two exercises performed back to back with no rest. Deload \u2014 a planned lighter week so fatigue drops and recovery catches up. Macronutrient \u2014 protein, carbohydrate or fat. The nutrients that supply calories. Micronutrient \u2014 vitamins and minerals. No calories, still essential. Maintenance calories \u2014 the intake at which weight stays roughly stable.",
+    "Understanding macros": "Protein builds and repairs tissue, including muscle. 4 calories per gram.\n\nCarbohydrate is the body's quickest fuel source, and what most training intensity runs on. 4 calories per gram.\n\nFat supports hormone production and lets you absorb vitamins A, D, E and K. 9 calories per gram \u2014 more than double the others, which is why small amounts of oil and nut butter add up fast.\n\nCalories here are calculated from what you log, so the two numbers can't contradict each other. Logging is a measurement tool. It tells you what you're actually eating, which is usually different from what you think you're eating.\n\nIf tracking food starts to feel stressful or compulsive rather than informative, that's worth talking to a registered dietitian about."
+  },
+  "equipment": [
+    "Adductor Machine",
+    "Bench Press",
+    "Calf raise",
+    "Captains chair",
+    "Chest Press",
+    "Dumbbells",
+    "Hip thrust",
+    "Lat Pulldown",
+    "Leg Curl",
+    "Leg Extension",
+    "Leg Press",
+    "Pec Deck",
+    "Smith Machine",
+    "Squat",
+    "Treadmill",
+    "bike",
+    "elliptical",
+    "lateral raise",
+    "pull up bar",
+    "rowing machine",
+    "seated cable row",
+    "shoulder press",
+    "stair master",
+    "t-bar row"
+  ]
+}

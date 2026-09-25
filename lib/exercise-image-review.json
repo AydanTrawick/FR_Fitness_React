@@ -1,0 +1,22 @@
+[
+  {
+    "file": "HIIT.png",
+    "reason": "Shows interval running, a training protocol rather than one discrete exercise."
+  },
+  {
+    "file": "arnold-press.png",
+    "reason": "Single overhead-press position does not verify the defining Arnold rotation."
+  },
+  {
+    "file": "machine-chest-press.png",
+    "reason": "Image appears to show a pec-deck fly machine rather than a chest press."
+  },
+  {
+    "file": "incline-treadmill-walk.png",
+    "reason": "Incline is not visually established. Review before assigning the incline variant."
+  },
+  {
+    "file": "straight-arm-pulldown.png",
+    "reason": "Cable position and elbow action are ambiguous; may depict a triceps pushdown."
+  }
+]
