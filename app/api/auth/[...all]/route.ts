@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+import { getAuth } from "@/lib/auth";
 import { sharedRateStorage } from "@/lib/auth/rate-storage";
 import { db } from "@/lib/database";
 import { after } from "next/server";
@@ -11,7 +11,7 @@ const mailPaths = new Set([
   "/send-verification-email",
 ]);
 async function handle(request: Request) {
-  if (!process.env.BETTER_AUTH_SECRET)
+  if (!process.env.BETTER_AUTH_SECRET || !process.env.NEON_DATABASE_URL)
     return Response.json(
       {
         message:
@@ -60,7 +60,7 @@ async function handle(request: Request) {
   }
   // Never log request bodies, cookies, response credentials, or email codes.
   const started = Date.now();
-  const result = await auth.handler(request);
+  const result = await getAuth().handler(request);
   if (mailPaths.has(path) || path === "/sign-up/email")
     await new Promise((resolve) =>
       setTimeout(resolve, Math.max(0, 1200 - (Date.now() - started))),

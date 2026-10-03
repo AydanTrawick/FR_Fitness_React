@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { auth } from "@/lib/auth";
+import { getAuth } from "@/lib/auth";
 import { db, HttpError } from "@/lib/database";
 import { checkOrigin } from "@/lib/server";
 import { requireAccountSession, requireFresh } from "@/lib/auth-session";
@@ -103,7 +103,10 @@ async function handle(
         )
       )
         throw new HttpError("Choose a JPG, PNG, or WebP profile photo.");
-      await auth.api.updateUser({ headers: request.headers, body: values });
+      await getAuth().api.updateUser({
+        headers: request.headers,
+        body: values,
+      });
       await audit(user.id, "profile-updated", request);
       return response({ saved: true });
     }
@@ -168,7 +171,7 @@ async function handle(
     if (path === "add-password") {
       requireFresh(session);
       const password = passwordSchema.parse(body.password);
-      await auth.api.setPassword({
+      await getAuth().api.setPassword({
         headers: request.headers,
         body: { newPassword: password },
       });

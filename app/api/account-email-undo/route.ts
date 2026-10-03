@@ -1,5 +1,5 @@
-import { auth } from "@/lib/auth";
-import { db } from "@/lib/database";
+import { getAuth } from "@/lib/auth";
+import { db, HttpError } from "@/lib/database";
 import { checkOrigin } from "@/lib/server";
 import { z } from "zod";
 import { sharedRateStorage } from "@/lib/auth/rate-storage";
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
         { error: "Too many attempts. Please wait." },
         { status: 429 },
       );
-    const context = await auth.$context;
+    const context = await getAuth().$context;
     const proof = await context.internalAdapter.consumeVerificationValue(
       "firstrep-email-undo:" + body.token,
     );
@@ -44,7 +44,9 @@ export async function POST(request: Request) {
       await tx`INSERT INTO firstrep_audit_log(user_id,event) VALUES (${identity.userId},'email-change-undone')`;
     });
     return Response.json({ restored: true });
-  } catch {
+  } catch (error) {
+    if (error instanceof HttpError)
+      return Response.json({ error: error.message }, { status: error.status });
     return Response.json(
       { error: "This undo link is invalid, expired, or already used." },
       { status: 400 },

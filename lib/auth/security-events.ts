@@ -17,9 +17,9 @@ export async function emailUndo(
 ): Promise<void> {
   const rows =
     await db()`INSERT INTO firstrep_email_history(user_id,old_email,new_email) VALUES (${userId},${oldEmail},${newEmail}) RETURNING id`;
-  const { auth } = await import("@/lib/auth");
+  const { getAuth } = await import("@/lib/auth");
   const token = generateRandomString(32);
-  const context = await auth.$context;
+  const context = await getAuth().$context;
   // Better Auth handles random generation, hashed identifiers, expiry and
   // atomic consumption. Undo survives sign-out and session revocation.
   await context.internalAdapter.createVerificationValue({

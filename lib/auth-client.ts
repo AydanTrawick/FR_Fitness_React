@@ -7,7 +7,7 @@ import {
   inferAdditionalFields,
 } from "better-auth/client/plugins";
 import { passkeyClient } from "@better-auth/passkey/client";
-import type { auth } from "./auth";
+import type { FirstRepAuth } from "./auth";
 // Reload at identity transitions so cached data from a prior account is discarded.
 export function reloadAccountPage(path: string) {
   const url = new URL(path, window.location.origin);
@@ -17,7 +17,7 @@ export function reloadAccountPage(path: string) {
 }
 export const authClient = createAuthClient({
   plugins: [
-    inferAdditionalFields<typeof auth>(),
+    inferAdditionalFields<FirstRepAuth>(),
     emailOTPClient(),
     usernameClient(),
     twoFactorClient({

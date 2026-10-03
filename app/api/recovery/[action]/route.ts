@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+import { getAuth } from "@/lib/auth";
 import { z } from "zod";
 import { emailSchema } from "@/lib/auth/validation";
 import { db, HttpError } from "@/lib/database";
@@ -30,7 +30,7 @@ export async function POST(
       throw new HttpError("Too many attempts. Please wait a minute.", 429);
     // Verify and consume the email code using Better Auth. Its 2FA challenge
     // deletes the temporary session, so recovery never unlocks app access.
-    const proof = await auth.handler(
+    const proof = await getAuth().handler(
       new Request(new URL("/api/auth/sign-in/email-otp", request.url), {
         method: "POST",
         headers: request.headers,
@@ -79,7 +79,7 @@ export async function POST(
         "The 24-hour wait has not ended, or your recovery request was cancelled.",
         403,
       );
-    const context = await auth.$context;
+    const context = await getAuth().$context;
     await context.internalAdapter.updateUser(user.id, {
       twoFactorEnabled: false,
     });

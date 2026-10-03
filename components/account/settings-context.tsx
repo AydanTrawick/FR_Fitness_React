@@ -7,13 +7,13 @@ import {
   useCallback,
   type ReactNode,
 } from "react";
-import type { auth } from "@/lib/auth";
+import type { FirstRepAuth } from "@/lib/auth";
 import { preferencesSchema } from "@/lib/auth/validation";
 import { api } from "@/lib/client";
 import Link from "next/link";
 import type { z } from "zod";
 export type AccountData = {
-  user: typeof auth.$Infer.Session.user;
+  user: FirstRepAuth["$Infer"]["Session"]["user"];
   preferences: z.infer<typeof preferencesSchema>;
   passkeyPrompted: boolean;
   providers: { google: boolean; apple: boolean };
