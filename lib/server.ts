@@ -1,55 +1,17 @@
-import postgres from "postgres";
-import { cookies } from "next/headers";
-import { createHash, randomUUID } from "node:crypto";
+import { serverSession } from "./auth-session";
+import { randomUUID } from "node:crypto";
 import nodemailer from "nodemailer";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
-let connection: ReturnType<typeof postgres> | undefined;
-export function db() {
-  if (!process.env.NEON_DATABASE_URL)
-    throw new HttpError(
-      "Account storage is not connected yet. You can use the trackers in guest mode.",
-      503,
-    );
-  return (connection ??= postgres(process.env.NEON_DATABASE_URL, {
-    ssl: "require",
-    max: 5,
-    connect_timeout: 10,
-    idle_timeout: 20,
-    types: {
-      date: {
-        to: 1082,
-        from: [1082, 1184, 1114],
-        serialize: (v: unknown) => String(v),
-        parse: (v: string) => v,
-      },
-    },
-  }));
-}
-export class HttpError extends Error {
-  constructor(
-    message: string,
-    public status = 400,
-  ) {
-    super(message);
-  }
-}
-export const hash = (v: string) => createHash("sha256").update(v).digest("hex");
-export const cookieName = "firstrep_session";
-export type User = {
-  id: string;
-  display_name: string;
-  email: string;
-  role: string;
-};
+export { db, HttpError } from "./database";
+import { db, HttpError } from "./database";
+export type User = { id: string; display_name: string; email: string; role: string; weightUnit?: string; distanceUnit?: string; timezone?: string; };
 export async function currentUser(): Promise<User | null> {
-  if (!process.env.NEON_DATABASE_URL) return null;
-  const token = (await cookies()).get(cookieName)?.value;
-  if (!token || !/^[A-Za-z0-9_-]{43}$/.test(token)) return null;
-  const users = await db()<
-    User[]
-  >`SELECT u.id, u.email, u.display_name, u.role FROM firstrep_login_sessions s JOIN firstrep_users u ON u.id = s.user_id WHERE s.token_hash = ${hash(token)} AND s.expires_at > NOW()`;
-  return users[0] ?? null;
+  if (!process.env.NEON_DATABASE_URL || !process.env.BETTER_AUTH_SECRET) return null;
+  const session = await serverSession();
+  if (!session) return null;
+  const roles = await db()`SELECT role FROM firstrep_users WHERE id=${session.user.id}`;
+  return {id:session.user.id, email:session.user.email, display_name:session.user.name, role:roles[0]?.role || 'customer', weightUnit:session.user.weightUnit, distanceUnit:session.user.distanceUnit, timezone:session.user.timezone};
 }
 export async function requireUser() {
   const user = await currentUser();

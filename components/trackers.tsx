@@ -111,24 +111,34 @@ function History({ kind }: { kind: Kind }) {
     const fields = Object.fromEntries(new FormData(event.currentTarget));
     if (!edit) return;
     let matched: ExerciseMatch["match"] = null;
-    if (kind === "workout" && String(fields.exercise).trim() !== edit.exercise) {
+    if (
+      kind === "workout" &&
+      String(fields.exercise).trim() !== edit.exercise
+    ) {
       try {
         matched = (await resolveExercise(String(fields.exercise))).match;
-        if (!matched) throw new Error("Choose a recognized exercise from the catalog.");
+        if (!matched)
+          throw new Error("Choose a recognized exercise from the catalog.");
       } catch (error) {
         setError(errorText(error));
         return;
       }
     }
     if (
-      (await save(
+      await save(
         kind,
         logs[kind].map((row) =>
           row.id === edit.id
-            ? ({ ...row, ...fields, ...(matched ? { exercise_id: matched.id, exercise: matched.name } : {}) } as Entry)
+            ? ({
+                ...row,
+                ...fields,
+                ...(matched
+                  ? { exercise_id: matched.id, exercise: matched.name }
+                  : {}),
+              } as Entry)
             : row,
         ),
-      ))
+      )
     )
       setEdit(null);
   }
@@ -371,12 +381,22 @@ function History({ kind }: { kind: Kind }) {
                 try {
                   let rows = restore;
                   if (kind === "workout") {
-                    const names = [...new Set(restore.map((row) => String(row.exercise)))];
-                    const matches = await Promise.all(names.map(resolveExercise));
-                    const byName = new Map(names.map((name, i) => [name, matches[i].match]));
-                    const unresolved = names.filter((name) => !byName.get(name));
+                    const names = [
+                      ...new Set(restore.map((row) => String(row.exercise))),
+                    ];
+                    const matches = await Promise.all(
+                      names.map(resolveExercise),
+                    );
+                    const byName = new Map(
+                      names.map((name, i) => [name, matches[i].match]),
+                    );
+                    const unresolved = names.filter(
+                      (name) => !byName.get(name),
+                    );
                     if (unresolved.length)
-                      throw new Error(`Cannot restore unmatched exercises: ${unresolved.slice(0, 5).join(", ")}. Review their names first.`);
+                      throw new Error(
+                        `Cannot restore unmatched exercises: ${unresolved.slice(0, 5).join(", ")}. Review their names first.`,
+                      );
                     rows = restore.map((row) => ({
                       ...row,
                       exercise_id: byName.get(String(row.exercise))!.id,
@@ -398,17 +418,58 @@ function History({ kind }: { kind: Kind }) {
   );
 }
 export function BmiTracker() {
-  const { logs, save, busy } = useStore();
-  const [unit, setUnit] = useState("metric");
+  const { logs, save, busy, status } = useStore();
+  const [unit, setUnit] = useState(
+    status.user?.weightUnit === "lb" ? "imperial" : "metric",
+  );
   const [height, setHeight] = useState(170);
+  const [heightFeet, setHeightFeet] = useState("5");
+  const [heightInches, setHeightInches] = useState("6.93");
+  const [heightError, setHeightError] = useState("");
+  function switchUnits(next: string) {
+    if (next === unit) return;
+    if (next === "imperial") {
+      const total = Number((height / 2.54).toFixed(2));
+      setHeightFeet(String(Math.floor(total / 12)));
+      setHeightInches(String(Number((total % 12).toFixed(2))));
+    } else {
+      const cm = (Number(heightFeet) * 12 + Number(heightInches)) * 2.54;
+      if (
+        heightFeet &&
+        heightInches &&
+        Number.isFinite(cm) &&
+        cm >= 100 &&
+        cm <= 250
+      )
+        setHeight(cm);
+    }
+    setHeightError("");
+    setUnit(next);
+  }
   const [weight, setWeight] = useState(70);
   const [result, setResult] = useState<Entry | null>(null);
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const enteredHeight =
+      unit === "metric"
+        ? height
+        : (Number(heightFeet) * 12 + Number(heightInches)) * 2.54;
+    if (
+      !Number.isFinite(enteredHeight) ||
+      enteredHeight < 100 ||
+      enteredHeight > 250
+    ) {
+      setHeightError(
+        "Enter a height between 3 ft 3.38 in and 8 ft 2.42 in (100–250 cm).",
+      );
+      return;
+    }
+    setHeightError("");
+    setHeight(enteredHeight);
     const row = {
       id: crypto.randomUUID(),
       recorded_at: new Date().toISOString(),
-      height_cm: height,
+      height_cm: enteredHeight,
       weight_kg: weight,
     };
     setResult(row);
@@ -429,13 +490,13 @@ export function BmiTracker() {
           <div className="tabs">
             <button
               className={unit === "metric" ? "active" : ""}
-              onClick={() => setUnit("metric")}
+              onClick={() => switchUnits("metric")}
             >
               Metric
             </button>
             <button
               className={unit === "imperial" ? "active" : ""}
-              onClick={() => setUnit("imperial")}
+              onClick={() => switchUnits("imperial")}
             >
               Imperial
             </button>
@@ -466,19 +527,48 @@ export function BmiTracker() {
                   />
                 </Field>
               ) : (
-                <Field
-                  label="Height (total inches)"
-                  hint="5 ft 7 in = 67 inches"
-                >
-                  <NumberInput
-                    min={39.37}
-                    max={98.425}
-                    value={Number((height / 2.54).toFixed(2))}
-                    onChange={(n) => setHeight(n * 2.54)}
-                  />
-                </Field>
+                <fieldset className="imperial-height">
+                  <legend>Height</legend>
+                  <div className="imperial-height-fields">
+                    <Field label="Feet">
+                      <input
+                        type="number"
+                        name="heightFeet"
+                        required
+                        min={3}
+                        max={8}
+                        step={1}
+                        value={heightFeet}
+                        onChange={(e) => {
+                          setHeightFeet(e.target.value);
+                          setHeightError("");
+                        }}
+                      />
+                    </Field>
+                    <Field label="Inches">
+                      <input
+                        type="number"
+                        name="heightInches"
+                        required
+                        min={0}
+                        max={11.99}
+                        step="any"
+                        value={heightInches}
+                        onChange={(e) => {
+                          setHeightInches(e.target.value);
+                          setHeightError("");
+                        }}
+                      />
+                    </Field>
+                  </div>
+                </fieldset>
               )}
             </div>
+            {heightError && (
+              <p className="error-text" role="alert">
+                {heightError}
+              </p>
+            )}
             <label className="checkbox">
               <input type="checkbox" required />I am 20 or older.
             </label>
@@ -525,8 +615,8 @@ export function BmiTracker() {
   );
 }
 export function WorkoutTracker() {
-  const { logs, save, busy, setError } = useStore();
-  const [unit, setUnit] = useState("kg");
+  const { logs, save, busy, setError, status } = useStore();
+  const [unit, setUnit] = useState(status.user?.weightUnit || "kg");
   const [date, setDate] = useState(today);
   const [exercise, setExercise] = useState("");
   const [selectedExerciseId, setSelectedExerciseId] = useState("");
@@ -542,9 +632,11 @@ export function WorkoutTracker() {
       matched = result.match;
       if (!matched) {
         setCandidates(result.candidates);
-        throw new Error(result.candidates.length
-          ? `Did you mean ${result.candidates[0].name}? Choose a suggestion before logging.`
-          : "No matching exercise found. Choose one from the catalog.");
+        throw new Error(
+          result.candidates.length
+            ? `Did you mean ${result.candidates[0].name}? Choose a suggestion before logging.`
+            : "No matching exercise found. Choose one from the catalog.",
+        );
       }
     } catch (error) {
       setError(errorText(error));
@@ -556,7 +648,8 @@ export function WorkoutTracker() {
       date,
       exercise: matched.name,
       exercise_id: matched.id,
-      performed_at: date === today() ? new Date().toISOString() : `${date}T12:00:00.000Z`,
+      performed_at:
+        date === today() ? new Date().toISOString() : `${date}T12:00:00.000Z`,
       weight_kg: toKg(Number(fields.weight), unit),
     } as Entry;
     if (await save("workout", [...logs.workout, row])) {
@@ -599,7 +692,10 @@ export function WorkoutTracker() {
                 list="exercises"
                 placeholder="e.g. Bench Press"
                 value={exercise}
-                onChange={(e) => { setExercise(e.target.value); setSelectedExerciseId(""); }}
+                onChange={(e) => {
+                  setExercise(e.target.value);
+                  setSelectedExerciseId("");
+                }}
                 required
                 maxLength={300}
               />
@@ -619,12 +715,26 @@ export function WorkoutTracker() {
             </Field>
             {candidates.length > 0 && (
               <Field label="Did you mean…?">
-                <select defaultValue="" onChange={(e) => {
-                  const candidate = candidates.find((item) => item.id === e.target.value);
-                  if (candidate) { setExercise(candidate.name); setSelectedExerciseId(candidate.id); }
-                }}>
-                  <option value="" disabled>Choose a catalog exercise</option>
-                  {candidates.map((candidate) => <option key={candidate.id} value={candidate.id}>{candidate.name} ({candidate.id})</option>)}
+                <select
+                  defaultValue=""
+                  onChange={(e) => {
+                    const candidate = candidates.find(
+                      (item) => item.id === e.target.value,
+                    );
+                    if (candidate) {
+                      setExercise(candidate.name);
+                      setSelectedExerciseId(candidate.id);
+                    }
+                  }}
+                >
+                  <option value="" disabled>
+                    Choose a catalog exercise
+                  </option>
+                  {candidates.map((candidate) => (
+                    <option key={candidate.id} value={candidate.id}>
+                      {candidate.name} ({candidate.id})
+                    </option>
+                  ))}
                 </select>
               </Field>
             )}
@@ -951,8 +1061,8 @@ export function FoodTracker() {
             style={{
               background:
                 totals.calories > 0
-                  ? `conic-gradient(#cee7a5 0 ${((totals.protein * 4) / totals.calories) * 100}%, #a995c0 ${((totals.protein * 4) / totals.calories) * 100}% ${((totals.protein * 4 + totals.carbs * 4) / totals.calories) * 100}%, #d9bd89 ${((totals.protein * 4 + totals.carbs * 4) / totals.calories) * 100}% 100%)`
-                  : "#34412d",
+                  ? `conic-gradient(#5b8cff 0 ${((totals.protein * 4) / totals.calories) * 100}%, #a995c0 ${((totals.protein * 4) / totals.calories) * 100}% ${((totals.protein * 4 + totals.carbs * 4) / totals.calories) * 100}%, #d9bd89 ${((totals.protein * 4 + totals.carbs * 4) / totals.calories) * 100}% 100%)`
+                  : "#283146",
             }}
           >
             <div>

@@ -1,0 +1,308 @@
+/* ---- colors ---- */
+.overlay {
+  --bg: var(--background);
+  --tick: #3d3d3d;
+  --blue: var(--accent);
+  --ink: var(--foreground);
+  --muted: var(--muted);
+
+  isolation: isolate;
+  overflow: hidden;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--bg);
+  transition:
+    opacity 450ms ease,
+    transform 450ms ease;
+}
+
+.exit {
+  opacity: 0;
+  transform: scale(1.04);
+  pointer-events: none;
+}
+
+/* ---- layout ---- */
+.lockup {
+  display: flex;
+  align-items: center;
+  gap: clamp(24px, 5vw, 56px);
+}
+
+.dial {
+  position: relative;
+  width: clamp(140px, 25vw, 220px);
+  aspect-ratio: 1;
+  animation: dialIn 400ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.ring {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* ---- the ticks ---- */
+.tick {
+  fill: var(--tick);
+  animation: flash 500ms ease-out both;
+}
+
+.indicator {
+  fill: var(--blue);
+  transform-box: view-box;
+  transform-origin: 100px 100px;
+  animation: sweep 1200ms linear 350ms both;
+}
+
+/* ---- the "1" ---- */
+.one {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(72px, 15vw, 120px);
+  line-height: 1;
+  color: var(--ink);
+  transform: skewX(-10deg);
+  animation: pop 380ms cubic-bezier(0.3, 1.6, 0.5, 1) 1550ms both;
+}
+
+/* ---- wordmark ---- */
+.wordmark {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  animation: slideIn 500ms cubic-bezier(0.2, 0.8, 0.2, 1) 150ms both;
+}
+
+.brand {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(48px, 10vw, 96px);
+  line-height: 0.95;
+  color: var(--ink);
+  transform: skewX(-10deg);
+}
+
+.sub {
+  margin-top: 6px;
+  font-family: var(--font-sub), sans-serif;
+  font-size: clamp(14px, 2.6vw, 22px);
+  letter-spacing: 0.45em;
+  color: var(--blue);
+}
+
+.tagline {
+  position: absolute;
+  left: 32px;
+  bottom: max(32px, env(safe-area-inset-bottom));
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  color: var(--muted);
+  animation: fadeIn 600ms ease 600ms both;
+}
+
+/* ---- phones: stack the dial over the wordmark ---- */
+@media (max-width: 640px) {
+  .lockup {
+    flex-direction: column;
+    text-align: center;
+  }
+  .wordmark {
+    align-items: center;
+  }
+  .tagline {
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+}
+
+/* ---- keyframes ---- */
+@keyframes sweep {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes flash {
+  0%,
+  100% {
+    fill: var(--tick);
+  }
+  25% {
+    fill: var(--blue);
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: skewX(-10deg) scale(1);
+  }
+  50% {
+    transform: skewX(-10deg) scale(1.15);
+    color: var(--blue);
+  }
+  100% {
+    transform: skewX(-10deg) scale(1);
+  }
+}
+
+@keyframes dialIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---- respect users who turn off motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  .dial,
+  .tick,
+  .indicator,
+  .one,
+  .wordmark,
+  .tagline {
+    animation: none;
+  }
+  .overlay {
+    transition: opacity 300ms ease;
+  }
+  .exit {
+    transform: none;
+  }
+}
+
+/* Quiet training-console details frame the original dial and wordmark. */
+.content {
+  display: contents;
+}
+.center {
+  position: relative;
+}
+.ambient {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(ellipse at 46% 48%, #5b8cff12, transparent 55%);
+}
+.edition,
+.session {
+  position: absolute;
+  font-family: var(--font-mono), monospace;
+  font-size: 9px;
+  letter-spacing: 1.8px;
+  color: var(--muted);
+  animation: fadeIn 600ms ease 600ms both;
+}
+.edition {
+  top: max(32px, env(safe-area-inset-top));
+  left: 32px;
+}
+.session {
+  right: 32px;
+  bottom: max(32px, env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.session i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--blue);
+  box-shadow: 0 0 12px #5b8cff88;
+}
+.innerRing {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 0.5;
+  opacity: 0.2;
+}
+.progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -48px;
+  height: 2px;
+  background: #ffffff0a;
+  overflow: hidden;
+}
+.progress span {
+  display: block;
+  height: 100%;
+  background: var(--blue);
+  transform-origin: left;
+  animation: charge 2s cubic-bezier(0.2, 0.6, 0.3, 1) both;
+  box-shadow: 0 0 12px #5b8cff66;
+}
+@keyframes charge {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@media (max-width: 640px) {
+  .edition {
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 8px;
+  }
+  .session {
+    bottom: max(62px, calc(env(safe-area-inset-bottom) + 30px));
+    right: 0;
+    left: 0;
+    justify-content: center;
+    font-size: 8px;
+  }
+  .tagline {
+    font-size: 10px;
+  }
+  .progress {
+    bottom: -36px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .edition,
+  .session,
+  .progress span {
+    animation: none;
+  }
+}

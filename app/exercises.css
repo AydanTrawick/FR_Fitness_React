@@ -1,12 +1,11 @@
 .exercise-hub {
-  --accent: #cefa83;
   min-width: 0;
 }
 .exercise-tabs {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 5px;
-  background: #191e1a;
+  background: #1b1b1c;
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 6px;
@@ -16,7 +15,7 @@
   padding: 13px 10px;
   text-align: center;
   border-radius: 9px;
-  color: #a9b3aa;
+  color: #ababb1;
   font-weight: 600;
   display: flex;
   gap: 8px;
@@ -25,11 +24,11 @@
 }
 .exercise-tabs a.active {
   background: var(--accent);
-  color: #172111;
+  color: var(--on-accent);
 }
 .exercise-tabs span {
   border-radius: 20px;
-  background: #172111;
+  background: #0f1524;
   color: var(--accent);
   padding: 0 7px;
 }
@@ -72,11 +71,11 @@
 .exercise-hero-stat span {
   font-size: 10px;
   letter-spacing: 1.8px;
-  color: #a2ad9f;
+  color: #a3a3a9;
 }
 .exercise-signin {
-  border: 1px solid #35432d;
-  background: #1e2819;
+  border: 1px solid #273149;
+  background: #161c2b;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -90,9 +89,9 @@
   gap: 12px;
   align-items: center;
   padding: 8px 10px 8px 18px;
-  border: 1px solid #3b453c;
+  border: 1px solid #3e3e42;
   border-radius: 12px;
-  background: #1b201c;
+  background: #1c1d1f;
 }
 .exercise-search > input {
   border: 0 !important;
@@ -118,14 +117,14 @@
 .muscle-chips button {
   border: 1px solid var(--line);
   background: transparent;
-  color: #aeb7ac;
+  color: #afafb4;
   border-radius: 30px;
   padding: 8px 15px;
   min-height: 40px;
 }
 .muscle-chips button.active {
-  background: #cefa8318;
-  border-color: #a1c365;
+  background: #5b8cff18;
+  border-color: #5a7cce;
   color: var(--accent);
 }
 .exercise-filters {
@@ -159,9 +158,9 @@
   gap: 20px;
 }
 .exercise-card {
-  border: 1px solid #30372f;
+  border: 1px solid #313135;
   border-radius: 16px;
-  background: #191e1a;
+  background: #1b1b1c;
   overflow: hidden;
   transition:
     transform 0.2s,
@@ -170,7 +169,7 @@
 }
 .exercise-card:hover {
   transform: translateY(-3px);
-  border-color: #677d4f;
+  border-color: #455887;
 }
 .exercise-visual {
   position: relative;
@@ -197,19 +196,19 @@
   position: absolute;
   bottom: 12px;
   left: 12px;
-  border: 1px solid #d2d7cd;
+  border: 1px solid #d0d1d4;
   border-radius: 20px;
-  background: #f8faf4ec;
-  color: #35402c;
+  background: #f3f5fbec;
+  color: #273045;
   font-size: 10px;
   font-weight: 700;
   padding: 4px 10px;
   pointer-events: none;
 }
 .exercise-heart {
-  border: 1px solid #46513e;
-  background: #192016;
-  color: #e4eddc;
+  border: 1px solid #45454a;
+  background: #131823;
+  color: #d9e0f0;
   border-radius: 50%;
   width: 42px;
   height: 42px;
@@ -231,7 +230,7 @@
 }
 .exercise-heart.is-favorite {
   color: var(--accent);
-  background: #25341c;
+  background: #182138;
 }
 .exercise-card-body {
   padding: 19px;
@@ -262,7 +261,7 @@
 }
 .exercise-title svg {
   flex-shrink: 0;
-  color: #a2ad97;
+  color: #9f9fa5;
 }
 .exercise-card-body > .row {
   font-size: 11px;
@@ -287,7 +286,7 @@
   text-align: center;
   gap: 14px;
   padding: 48px 20px;
-  border: 1px dashed #3b4833;
+  border: 1px dashed #3b3c40;
   border-radius: 14px;
   margin: 22px 0;
   color: var(--accent);
@@ -322,8 +321,8 @@
   font-size: 15px;
 }
 .workout-builder {
-  border: 1px solid #405032;
-  background: linear-gradient(145deg, #222b1d, #171d17 40%);
+  border: 1px solid #2b3856;
+  background: linear-gradient(145deg, #19202f, #19191b 40%);
   border-radius: 16px;
   padding: 22px;
   display: flex;
@@ -338,10 +337,10 @@
   display: flex;
   gap: 18px;
   flex-wrap: wrap;
-  border-top: 1px solid #35402d;
-  border-bottom: 1px solid #35402d;
+  border-top: 1px solid #353538;
+  border-bottom: 1px solid #353538;
   padding: 16px 0;
-  color: #a6b39b;
+  color: #a4a4aa;
   font-size: 12px;
 }
 .workout-summary strong {
@@ -355,8 +354,8 @@
 }
 .workout-item {
   padding: 16px;
-  background: #131912;
-  border: 1px solid #303b2a;
+  background: #151516;
+  border: 1px solid #313134;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -432,14 +431,14 @@
   width: min(760px, calc(100% - 28px));
   max-height: 90dvh;
   overflow: auto;
-  border: 1px solid #45573a;
+  border: 1px solid #333f5e;
   border-radius: 20px;
-  background: #181f17;
+  background: #1a1a1c;
   color: var(--foreground);
   padding: 28px;
 }
 .exercise-dialog::backdrop {
-  background: #050905cc;
+  background: #04060acc;
   backdrop-filter: blur(6px);
 }
 .exercise-dialog > * + * {
@@ -448,7 +447,7 @@
 .exercise-dialog li {
   margin: 10px 0;
   line-height: 1.7;
-  color: #c7d0c0;
+  color: #c6c6ca;
 }
 .exercise-dialog ol,
 .exercise-dialog ul {
@@ -468,7 +467,7 @@
 .exercise-skeleton {
   padding: 20px;
   border-radius: 12px;
-  background: linear-gradient(90deg, #20261c, #303d25, #20261c);
+  background: linear-gradient(90deg, #202022, #202a42, #202022);
   background-size: 200% 100%;
   animation: exercise-pulse 2s infinite;
   margin: 20px 0;

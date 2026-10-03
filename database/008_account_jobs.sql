@@ -1,0 +1,3 @@
+BEGIN;
+ALTER TABLE firstrep_data_export ADD COLUMN IF NOT EXISTS started_at TIMESTAMPTZ;
+COMMIT;

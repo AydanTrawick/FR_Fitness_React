@@ -10,10 +10,10 @@ import {
   Square,
   Upload,
   Volume2,
-  X,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import Image from "next/image";
+import Link from "next/link";
 import { api, apiBlob, download, errorText } from "@/lib/client";
 import { useStore } from "./store";
 import { Card, Field, PageTitle } from "./ui";
@@ -45,6 +45,25 @@ export function AiTool({
   onSignIn: () => void;
 }) {
   const { status, logs, save, ready } = useStore();
+  const [includeTrainingHistory, setIncludeTrainingHistory] = useState(false);
+  const [historyAllowed, setHistoryAllowed] = useState(false);
+  useEffect(() => {
+    let active = true;
+    const sync = () =>
+      fetch("/api/account")
+        .then((r) => (r.ok ? r.json() : null))
+        .then((data) => {
+          if (active)
+            setHistoryAllowed(data?.preferences?.aiDataOptIn === true);
+        })
+        .catch(() => {});
+    void sync();
+    window.addEventListener("firstrep:consent-updated", sync);
+    return () => {
+      active = false;
+      window.removeEventListener("firstrep:consent-updated", sync);
+    };
+  }, []);
   const [messages, setMessages] = useState<Message[]>([]);
   const [prompt, setPrompt] = useState("");
   const [busy, setBusy] = useState(false);
@@ -146,12 +165,16 @@ export function AiTool({
     setError("");
     const text = prompt;
     try {
-      const result = await api<{ text: string; workoutDraft?: WorkoutDraft }>("ai", {
-        mode,
-        prompt: text,
-        history: messages.slice(-12),
-        localDate: today(),
-      });
+      const result = await api<{ text: string; workoutDraft?: WorkoutDraft }>(
+        "ai",
+        {
+          mode,
+          prompt: text,
+          history: messages.slice(-12),
+          includeTrainingHistory: historyAllowed && includeTrainingHistory,
+          localDate: today(),
+        },
+      );
       setMessages([
         ...messages,
         { role: "user", content: text },
@@ -159,8 +182,14 @@ export function AiTool({
       ]);
       setPrompt("");
       setWorkoutDraft(result.workoutDraft ?? null);
-      setSelectedExercise(result.workoutDraft?.exerciseMatch?.match?.name ?? result.workoutDraft?.exercise ?? "");
-      setSelectedExerciseId(result.workoutDraft?.exerciseMatch?.match?.id ?? "");
+      setSelectedExercise(
+        result.workoutDraft?.exerciseMatch?.match?.name ??
+          result.workoutDraft?.exercise ??
+          "",
+      );
+      setSelectedExerciseId(
+        result.workoutDraft?.exerciseMatch?.match?.id ?? "",
+      );
     } catch (e) {
       setError(errorText(e));
     } finally {
@@ -175,7 +204,10 @@ export function AiTool({
     const fields = Object.fromEntries(new FormData(event.currentTarget));
     let matched: { id: string; name: string };
     try {
-      const resolution = await api<{ match: { id: string; name: string } | null; candidates: { id: string; name: string }[] }>(
+      const resolution = await api<{
+        match: { id: string; name: string } | null;
+        candidates: { id: string; name: string }[];
+      }>(
         `exercises/match?name=${encodeURIComponent(selectedExerciseId || selectedExercise)}`,
       );
       if (!resolution.match)
@@ -191,7 +223,10 @@ export function AiTool({
       date: String(fields.date),
       exercise: matched.name,
       exercise_id: matched.id,
-      performed_at: String(fields.date) === today() ? new Date().toISOString() : `${fields.date}T12:00:00.000Z`,
+      performed_at:
+        String(fields.date) === today()
+          ? new Date().toISOString()
+          : `${fields.date}T12:00:00.000Z`,
       sets: Number(fields.sets),
       reps: Number(fields.reps),
       weight_kg: toKg(Number(fields.weight), String(fields.unit)),
@@ -203,10 +238,15 @@ export function AiTool({
         setWorkoutDraft(null);
         setMessages((current) => [
           ...current,
-          { role: "assistant", content: `Logged ${row.sets} sets of ${row.exercise} for ${row.reps} reps at ${fields.weight} ${fields.unit} on ${row.date}.` },
+          {
+            role: "assistant",
+            content: `Logged ${row.sets} sets of ${row.exercise} for ${row.reps} reps at ${fields.weight} ${fields.unit} on ${row.date}.`,
+          },
         ]);
       } else {
-        setError("The workout could not be saved. Check the tracker notice and try again.");
+        setError(
+          "The workout could not be saved. Check the tracker notice and try again.",
+        );
       }
     } finally {
       setSavingWorkout(false);
@@ -394,51 +434,146 @@ export function AiTool({
               <div ref={bottom} />
             </div>
             {mode === "assistant" && workoutDraft && (
-              <form key={JSON.stringify(workoutDraft)} className="stack" onSubmit={confirmWorkout} aria-label="Review workout log">
+              <form
+                key={JSON.stringify(workoutDraft)}
+                className="stack"
+                onSubmit={confirmWorkout}
+                aria-label="Review workout log"
+              >
                 <h3>Review workout log</h3>
-                <p className="muted">Nothing is saved until you confirm. Fill in any missing details.</p>
+                <p className="muted">
+                  Nothing is saved until you confirm. Fill in any missing
+                  details.
+                </p>
                 <div className="form-grid">
                   <Field label="Training date">
-                    <input name="date" type="date" defaultValue={workoutDraft.date ?? today()} required />
+                    <input
+                      name="date"
+                      type="date"
+                      defaultValue={workoutDraft.date ?? today()}
+                      required
+                    />
                   </Field>
                   <Field label="Exercise">
-                    <input name="exercise" value={selectedExercise} onChange={(event) => { setSelectedExercise(event.target.value); setSelectedExerciseId(""); }} maxLength={300} required />
+                    <input
+                      name="exercise"
+                      value={selectedExercise}
+                      onChange={(event) => {
+                        setSelectedExercise(event.target.value);
+                        setSelectedExerciseId("");
+                      }}
+                      maxLength={300}
+                      required
+                    />
                   </Field>
-                  {!workoutDraft.exerciseMatch?.match && !!workoutDraft.exerciseMatch?.candidates.length && (
-                    <Field label="Did you mean…?">
-                      <select defaultValue="" onChange={(event) => {
-                        const candidate = workoutDraft.exerciseMatch?.candidates.find((item) => item.id === event.target.value);
-                        if (candidate) { setSelectedExercise(candidate.name); setSelectedExerciseId(candidate.id); }
-                      }}>
-                        <option value="" disabled>Choose an exercise</option>
-                        {workoutDraft.exerciseMatch.candidates.map((candidate) => <option key={candidate.id} value={candidate.id}>{candidate.name} ({candidate.id})</option>)}
-                      </select>
-                    </Field>
-                  )}
+                  {!workoutDraft.exerciseMatch?.match &&
+                    !!workoutDraft.exerciseMatch?.candidates.length && (
+                      <Field label="Did you mean…?">
+                        <select
+                          defaultValue=""
+                          onChange={(event) => {
+                            const candidate =
+                              workoutDraft.exerciseMatch?.candidates.find(
+                                (item) => item.id === event.target.value,
+                              );
+                            if (candidate) {
+                              setSelectedExercise(candidate.name);
+                              setSelectedExerciseId(candidate.id);
+                            }
+                          }}
+                        >
+                          <option value="" disabled>
+                            Choose an exercise
+                          </option>
+                          {workoutDraft.exerciseMatch.candidates.map(
+                            (candidate) => (
+                              <option key={candidate.id} value={candidate.id}>
+                                {candidate.name} ({candidate.id})
+                              </option>
+                            ),
+                          )}
+                        </select>
+                      </Field>
+                    )}
                   <Field label="Sets">
-                    <input name="sets" type="number" min="1" max="100" step="1" defaultValue={workoutDraft.sets ?? ""} required />
+                    <input
+                      name="sets"
+                      type="number"
+                      min="1"
+                      max="100"
+                      step="1"
+                      defaultValue={workoutDraft.sets ?? ""}
+                      required
+                    />
                   </Field>
                   <Field label="Reps per set">
-                    <input name="reps" type="number" min="1" max="1000" step="1" defaultValue={workoutDraft.reps ?? ""} required />
+                    <input
+                      name="reps"
+                      type="number"
+                      min="1"
+                      max="1000"
+                      step="1"
+                      defaultValue={workoutDraft.reps ?? ""}
+                      required
+                    />
                   </Field>
                   <Field label="Weight">
-                    <input name="weight" type="number" min="0" max="2205" step="any" defaultValue={workoutDraft.weight ?? ""} required />
+                    <input
+                      name="weight"
+                      type="number"
+                      min="0"
+                      max="2205"
+                      step="any"
+                      defaultValue={workoutDraft.weight ?? ""}
+                      required
+                    />
                   </Field>
                   <Field label="Weight unit">
-                    <select name="unit" defaultValue={workoutDraft.unit ?? ""} required>
-                      <option value="" disabled>Choose unit</option>
+                    <select
+                      name="unit"
+                      defaultValue={workoutDraft.unit ?? ""}
+                      required
+                    >
+                      <option value="" disabled>
+                        Choose unit
+                      </option>
                       <option value="lb">lb</option>
                       <option value="kg">kg</option>
                     </select>
                   </Field>
                   <Field label="RPE (effort, 1–10)">
-                    <input name="rpe" type="number" min="1" max="10" step="0.5" defaultValue={workoutDraft.rpe ?? 7} required />
+                    <input
+                      name="rpe"
+                      type="number"
+                      min="1"
+                      max="10"
+                      step="0.5"
+                      defaultValue={workoutDraft.rpe ?? 7}
+                      required
+                    />
                   </Field>
                 </div>
-                {workoutDraft.rpe === null && <p className="muted">RPE defaults to 7 because the workout tracker requires it. Adjust it before confirming if needed.</p>}
+                {workoutDraft.rpe === null && (
+                  <p className="muted">
+                    RPE defaults to 7 because the workout tracker requires it.
+                    Adjust it before confirming if needed.
+                  </p>
+                )}
                 <div className="row">
-                  <button className="btn primary" disabled={savingWorkout || !ready}>{savingWorkout ? "Saving…" : "Confirm and log workout"}</button>
-                  <button type="button" className="btn secondary" disabled={savingWorkout} onClick={() => setWorkoutDraft(null)}>Cancel</button>
+                  <button
+                    className="btn primary"
+                    disabled={savingWorkout || !ready}
+                  >
+                    {savingWorkout ? "Saving…" : "Confirm and log workout"}
+                  </button>
+                  <button
+                    type="button"
+                    className="btn secondary"
+                    disabled={savingWorkout}
+                    onClick={() => setWorkoutDraft(null)}
+                  >
+                    Cancel
+                  </button>
                 </div>
               </form>
             )}
@@ -447,6 +582,26 @@ export function AiTool({
                 {error}
               </p>
             )}
+            <div className="account-hint" style={{ padding: "12px 18px" }}>
+              {historyAllowed ? (
+                <label className="row">
+                  <input
+                    type="checkbox"
+                    checked={includeTrainingHistory}
+                    onChange={(e) =>
+                      setIncludeTrainingHistory(e.target.checked)
+                    }
+                  />{" "}
+                  Include my recent workouts and meals in this request
+                </label>
+              ) : (
+                <span>
+                  Saved training history is excluded. Enable it in{" "}
+                  <Link href="/settings/privacy">Privacy settings</Link> to
+                  choose when to include it.
+                </span>
+              )}
+            </div>
             <form onSubmit={submit} className="chat-composer">
               <textarea
                 aria-label="Your request"
@@ -487,8 +642,9 @@ export function AiTool({
             </form>
             <p className="footnote">
               Submitted text is sent to Anthropic. AI replies are drafts; review
-              food exclusions and exercise suitability. Workout entries are saved
-              only after you review and confirm them. Conversations last while this screen is open.
+              food exclusions and exercise suitability. Workout entries are
+              saved only after you review and confirm them. Conversations last
+              while this screen is open.
               {status.voice &&
                 " Voice recordings and replies are sent to ElevenLabs."}
             </p>
@@ -745,150 +901,5 @@ export function Equipment() {
         </div>
       </Card>
     </>
-  );
-}
-export function AccountDialog({ close }: { close: () => void }) {
-  const { status, refresh, guest, importGuest, busy } = useStore();
-  const [register, setRegister] = useState(false);
-  const [working, setWorking] = useState(false);
-  const [error, setError] = useState("");
-  const dialog = useRef<HTMLDialogElement>(null);
-  useEffect(() => {
-    dialog.current?.showModal();
-  }, []);
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setWorking(true);
-    setError("");
-    try {
-      await api("auth", {
-        ...Object.fromEntries(new FormData(event.currentTarget)),
-        action: register ? "register" : "login",
-      });
-      await refresh();
-      close();
-    } catch (e) {
-      setError(errorText(e));
-    } finally {
-      setWorking(false);
-    }
-  }
-  return (
-    <dialog ref={dialog} className="account-dialog" onCancel={close}>
-      <div className="row between">
-        <h3>
-          {status.user
-            ? "Your account"
-            : register
-              ? "Make it yours."
-              : "Welcome to FirstRep."}
-        </h3>
-        <button
-          className="btn icon"
-          aria-label="Close account dialog"
-          onClick={close}
-        >
-          <X size={18} />
-        </button>
-      </div>
-      {status.user ? (
-        <div className="stack">
-          <p>{status.user.display_name}</p>
-          <p className="muted">{status.user.email}</p>
-          {Object.values(guest).some((rows) => rows.length > 0) && (
-            <>
-              <p className="notice">
-                You have guest entries available from this browser session.
-              </p>
-              <button
-                className="btn primary"
-                disabled={busy}
-                onClick={() => void importGuest()}
-              >
-                Add guest entries to my account
-              </button>
-            </>
-          )}
-          <button
-            className="btn secondary"
-            disabled={working}
-            onClick={async () => {
-              setWorking(true);
-              try {
-                await api("auth", { action: "logout" });
-                await refresh();
-                close();
-              } catch (e) {
-                setError(errorText(e));
-              } finally {
-                setWorking(false);
-              }
-            }}
-          >
-            Sign out
-          </button>
-        </div>
-      ) : (
-        <>
-          {!status.accounts && (
-            <p className="notice">
-              Accounts are not connected yet. Guest trackers are available now;
-              connect Neon to enable sign-in and saved account logs.
-            </p>
-          )}
-          <form onSubmit={submit} className="stack">
-            {register && (
-              <Field label="Your name">
-                <input
-                  name="display_name"
-                  autoComplete="name"
-                  required
-                  maxLength={100}
-                />
-              </Field>
-            )}
-            <Field label="Email">
-              <input
-                type="email"
-                name="email"
-                autoComplete="email"
-                required
-                maxLength={250}
-              />
-            </Field>
-            <Field label="Password">
-              <input
-                type="password"
-                name="password"
-                autoComplete={register ? "new-password" : "current-password"}
-                required
-                minLength={8}
-                maxLength={256}
-              />
-            </Field>
-            <button
-              className="btn primary"
-              disabled={working || !status.accounts}
-            >
-              {working
-                ? "Please wait…"
-                : register
-                  ? "Create account"
-                  : "Sign in"}
-            </button>
-          </form>
-          <button className="text-link" onClick={() => setRegister(!register)}>
-            {register
-              ? "Already have an account? Sign in"
-              : "New here? Create an account"}
-          </button>
-        </>
-      )}
-      {error && (
-        <p className="notice error" role="alert">
-          {error}
-        </p>
-      )}
-    </dialog>
   );
 }

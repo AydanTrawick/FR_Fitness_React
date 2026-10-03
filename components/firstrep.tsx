@@ -1,4 +1,5 @@
 "use client";
+import { BrandLogo } from "./brand-logo";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -20,7 +21,7 @@ import { ExerciseLibrary } from "./exercise-library";
 import Dashboard from "./dashboard";
 import { BmiTracker, FoodTracker, WorkoutTracker } from "./trackers";
 import { Guides, Programs } from "./library";
-import { AccountDialog, AiTool, Equipment } from "./tools";
+import { AiTool, Equipment } from "./tools";
 import { StoreProvider, useStore } from "./store";
 const exercisePages = new Set(["exercises", "favorites", "builder", "saved"]);
 const navigation = [
@@ -35,7 +36,10 @@ const navigation = [
   },
   {
     section: "OVERVIEW",
-    items: [{ id: "home", label: "Dashboard", Icon: LayoutDashboard }, { id: "analysis", label: "Your Analysis", Icon: Activity }],
+    items: [
+      { id: "home", label: "Dashboard", Icon: LayoutDashboard },
+      { id: "analysis", label: "Your Analysis", Icon: Activity },
+    ],
   },
   {
     section: "YOUR DAILY TOOLS",
@@ -64,7 +68,6 @@ function Shell() {
   const { status, ready, error, notice, setError, refresh, busy } = useStore();
   const [page, setPage] = useState("home");
   const [mobile, setMobile] = useState(false);
-  const [account, setAccount] = useState(false);
   useEffect(() => {
     const sync = () => {
       const next = window.location.hash.slice(1);
@@ -75,7 +78,10 @@ function Shell() {
     return () => window.removeEventListener("hashchange", sync);
   }, []);
   function go(id: string) {
-    if (id === "analysis") { router.push("/analysis"); return; }
+    if (id === "analysis") {
+      router.push("/analysis");
+      return;
+    }
     setPage(id);
     window.location.hash = id;
     setMobile(false);
@@ -99,7 +105,7 @@ function Shell() {
       <aside className={`sidebar ${mobile ? "open" : ""}`}>
         <a href="#home" className="brand" onClick={() => go("home")}>
           <span className="brand-mark">
-            <Dumbbell size={24} strokeWidth={2.5} />
+            <BrandLogo size={39} />
           </span>
           <span>
             FirstRep<span className="brand-period">.</span>
@@ -145,7 +151,10 @@ function Shell() {
               Let’s talk <ArrowUpRight size={16} />
             </button>
           </div>
-          <button className="profile" onClick={() => setAccount(true)}>
+          <button
+            className="profile"
+            onClick={() => router.push("/settings/profile")}
+          >
             <span className="avatar">
               {status.user ? (
                 status.user.display_name.charAt(0).toUpperCase()
@@ -187,7 +196,7 @@ function Shell() {
             <button
               className="top-avatar"
               aria-label="Open account"
-              onClick={() => setAccount(true)}
+              onClick={() => router.push("/settings/profile")}
             >
               {status.user ? (
                 status.user.display_name.charAt(0).toUpperCase()
@@ -213,7 +222,7 @@ function Shell() {
           {!ready ? (
             <div className="loading-card">
               <span className="brand-mark">
-                <Dumbbell size={30} />
+                <BrandLogo size={39} />
               </span>
               <h2>
                 {error ? "Let’s reconnect." : "Getting your toolkit ready…"}
@@ -236,7 +245,7 @@ function Shell() {
                 <ExerciseLibrary
                   page={page}
                   go={go}
-                  onSignIn={() => setAccount(true)}
+                  onSignIn={() => router.push("/settings/profile")}
                 />
               )}
               {page === "home" && <Dashboard go={go} />}{" "}
@@ -249,7 +258,7 @@ function Shell() {
               {(page === "plans" || page === "assistant") && (
                 <AiTool
                   mode={page === "plans" ? "plan" : "assistant"}
-                  onSignIn={() => setAccount(true)}
+                  onSignIn={() => router.push("/settings/profile")}
                 />
               )}
             </div>
@@ -270,7 +279,6 @@ function Shell() {
           {busy ? "Saving…" : notice}
         </div>
       )}
-      {account && <AccountDialog close={() => setAccount(false)} />}
     </div>
   );
 }

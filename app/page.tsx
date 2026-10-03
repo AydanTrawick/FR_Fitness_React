@@ -1,4 +1,6 @@
 import FirstRep from "@/components/firstrep";
-export default function Home() {
+import { requirePageSession } from "@/lib/auth-session";
+export default async function Home() {
+  await requirePageSession("/");
   return <FirstRep />;
 }

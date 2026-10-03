@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+.env
 
 # vercel
 .vercel
@@ -48,3 +49,6 @@ next-env.d.ts
 /playwright-report/
 *.tsbuildinfo
 node_modules*
+
+# Isolated local authentication acceptance-test server
+.next-auth-tests/

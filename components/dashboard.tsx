@@ -1,4 +1,5 @@
 "use client";
+import { BrandLogo } from "./brand-logo";
 import {
   Activity,
   ArrowRight,
@@ -100,14 +101,8 @@ export default function Dashboard({ go }: { go: (page: string) => void }) {
           <div className="orbit orbit-one" />
           <div className="orbit orbit-two" />
           <div className="hero-emblem">
-            <Dumbbell size={84} strokeWidth={1.6} />
+            <BrandLogo size={172} />
           </div>
-          <span className="art-tag tag-one">
-            <Activity size={16} /> SHOW UP.
-          </span>
-          <span className="art-tag tag-two">
-            <span className="dot" /> GET STRONGER.
-          </span>
           <span className="art-coordinate">FIRSTREP / EVERY REP COUNTS</span>
         </div>
       </section>

@@ -11,7 +11,7 @@ import { colorBucket, toSlugTotals, type MuscleTotals } from "@/lib/muscle-heatm
 
 type Range = "7d" | "30d";
 type Payload = { range: Range; muscles: MuscleTotals };
-const colors = ["#48514b", "#c9e5a6", "#8fbd58", "#4f8b34"];
+const colors = ["#3d3d42", "#b7ccff", "#5b8cff", "#3159b5"];
 const supported = {
   anterior: new Set(anteriorData.map((part) => part.muscle)),
   posterior: new Set(posteriorData.map((part) => part.muscle)),
@@ -85,7 +85,7 @@ export default function MuscleHeatmap() {
                   type={view}
                   data={modelData(view)}
                   bodyColor={colors[0]}
-                  borderColor="#273029"
+                  borderColor="#2a2a2d"
                   style={{ width: "100%", maxWidth: 290 }}
                   onClick={({ muscle }) => setSelected(slugTotals[baseSlug(muscle)] ? baseSlug(muscle) : null)}
                 />

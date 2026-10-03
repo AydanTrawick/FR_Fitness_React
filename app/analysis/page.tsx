@@ -1,4 +1,5 @@
 import { currentUser } from "@/lib/server";
+import { requirePageSession } from "@/lib/auth-session";
 import Link from "next/link";
 import { getAnalysisData } from "@/lib/analysis/queries";
 import { analysisOptions } from "@/lib/analysis/options";
@@ -28,8 +29,10 @@ export default async function AnalysisPage({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const options = analysisOptions(await searchParams);
+  await requirePageSession("/analysis");
   const user = await currentUser();
+  const params = await searchParams;
+  const options = analysisOptions({ tz: user?.timezone, unit: user?.weightUnit, ...params });
   const data = user
     ? await getAnalysisData(
         user.id,

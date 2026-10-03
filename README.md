@@ -11,7 +11,7 @@ npm ci
 npm run dev
 ```
 
-Open http://localhost:3000. Guest mode works without credentials. Guest logs survive refreshes within the browser tab using `sessionStorage`; export a CSV before closing the session. No sample health or training data is preloaded.
+Open http://localhost:3000. The app now requires a verified account. Follow [account setup](AUTH_SETUP.md) to configure email delivery and the database. No sample health or training data is preloaded.
 
 You can also run `npm run dev` from the enclosing `FRTK react` folder; its package script forwards to this app. Development uses webpack so dependencies linked outside the project work correctly.
 
@@ -26,7 +26,7 @@ On this Mac, iCloud offloaded dependencies, build caches, and several source fil
 - Editing, deletion confirmation, CSV export and validated CSV replacement for every tracker. Original Streamlit tracker exports use the same headers and are accepted. CSV imports do not import account IDs.
 - All five original workout programs and 22 training days, including exercises, rest, equipment and durations. Program Markdown download.
 - Original glossary and training/nutrition guide content with search.
-- Optional Neon sign-in/registration/logout and tracker persistence compatible with existing FirstRep accounts. Password hashing matches Python's PBKDF2-SHA256 / 240,000 iterations. Sessions use hashed opaque tokens, revocation, expiry and HttpOnly cookies.
+- Better Auth sign-in with verified email/password, email codes, passkeys, authenticator two-factor and backup codes; optional Google/Apple. Account settings include security, devices, privacy, exports and recoverable deletion. Existing account IDs and tracker records are preserved; legacy passwords are replaced through email recovery. See [account setup](AUTH_SETUP.md).
 - Explicit guest-to-account import. Account data is not stored in browser storage. Server writes validate inputs, scope to the authenticated owner, commit transactionally, and reject conflicting tracker snapshots.
 - Optional Anthropic text plan drafts and a text training assistant, with conversational follow-ups and Markdown export for plans.
 - Optional equipment classification through the existing FastAPI model service, including image preview, top predictions, corrected labels, local feedback download, and feedback upload to Cloudflare R2.
@@ -48,9 +48,9 @@ Copy `.env.example` to `.env.local`. Supply only the services you need. Restart 
 | `EMAIL_ADDRESS`, `EMAIL_PASSWORD` | Emailing AI plan drafts to the signed-in account, via Gmail SMTP (use an [App Password](https://myaccount.google.com/apppasswords), not your login password) |
 | `STORAGE_BACKEND=r2`, `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET_NAME` | Uploads equipment-classifier feedback to Cloudflare R2 instead of local-only download |
 
-All credentials are server-only. No variable needs a `NEXT_PUBLIC_` prefix.
+Credentials are server-only. Turnstile’s public site key and PostHog’s public project key use `NEXT_PUBLIC_`; their collection behavior is described in [account setup](AUTH_SETUP.md).
 
-For a new database, apply `database/001_trackers.sql` and `database/002_sessions.sql`. Both preserve existing tables/data. An existing Streamlit database generally already contains the tracker and session tables; review its schema before applying migrations. No live database migrations were run during this conversion. Use HTTPS for production cookies.
+For a new database, apply `database/001_trackers.sql` and `database/002_sessions.sql`. Both preserve existing tables/data. An existing Streamlit database generally already contains the tracker and session tables; review its schema before applying migrations. The account migration was applied to this workspace’s configured Neon database; new installations must run the migrations described in [account setup](AUTH_SETUP.md). Use HTTPS for production cookies.
 
 Equipment inference still uses the separately deployed trained PyTorch model. The Next.js server forwards the image to its `/classify-equipment` endpoint; the 45 MB `.pth` model and Python virtual environment are not copied into the browser app.
 
@@ -78,7 +78,7 @@ npm test
 npm run build
 ```
 
-Tests cover calculation boundaries, unit conversions, log validation, quoted/multiline CSV roundtrips and Streamlit CSV compatibility. Browser checks verified desktop and 390 px phone layouts, navigation, workout saving/refresh/editing, and food totals. HTTP checks verified authentication gates, missing-service responses, and cross-origin mutation rejection. Build and lint were run against the local copy because the original iCloud directory blocked dependency reads. Live Neon and paid provider integrations require configuration and have not been exercised against your accounts.
+Tests cover calculation boundaries, unit conversions, log validation, quoted/multiline CSV roundtrips and Streamlit CSV compatibility. Browser checks verified desktop and 390 px phone layouts, navigation, workout saving/refresh/editing, and food totals. HTTP checks verified authentication gates, missing-service responses, and cross-origin mutation rejection. Build and lint were run against the local copy because the original iCloud directory blocked dependency reads. Account acceptance tests now exercise the configured Neon database with disposable accounts, including verification, passkeys, 2FA, recovery, exports, and deletion/restoration. Paid provider integrations still require their own configuration; see [account setup](AUTH_SETUP.md).
 
 ## Layout
 
