@@ -22,6 +22,7 @@ import {
 } from "@/lib/auth/validation";
 import { PasswordInput } from "./password-input";
 import { Turnstile } from "./turnstile";
+import { loginErrorMessage } from "@/lib/auth/login-error";
 
 export async function authRequest(path: string, body: unknown) {
   const res = await fetch("/api/auth/" + path, {
@@ -77,8 +78,15 @@ export function AuthScreen({
   });
   const captureToken = useCallback((value: string) => setCaptcha(value), []);
   const complete = useCallback(async () => {
-    const result = await authClient.getSession();
-    if (!result.data) return;
+    const result = await authClient.getSession({
+      query: { disableCookieCache: true },
+      fetchOptions: { cache: "no-store" },
+    });
+    if (result.error) throw new Error(loginErrorMessage(result.error));
+    if (!result.data)
+      throw new Error(
+        "Your sign-in session could not be confirmed. Please try signing in again.",
+      );
     reloadAccountPage(
       result.data.user.deletedAt
         ? "/auth/restore"
@@ -212,14 +220,16 @@ export function AuthScreen({
           {step === "email" && (
             <>
               <div className="social-buttons">
-                <button
-                  className="account-button social"
-                  disabled={busy || !providers.apple}
-                  onClick={() => void social("apple")}
-                >
-                  <span aria-hidden="true">●</span> Continue with Apple
-                  {!providers.apple && <small>Coming soon</small>}
-                </button>
+                {providers.apple && (
+                  <button
+                    className="account-button social"
+                    disabled={busy || !providers.apple}
+                    onClick={() => void social("apple")}
+                  >
+                    <span aria-hidden="true">●</span> Continue with Apple
+                    {!providers.apple && <small>Coming soon</small>}
+                  </button>
+                )}
                 <button
                   className="account-button social"
                   disabled={busy || !providers.google}
@@ -238,7 +248,17 @@ export function AuthScreen({
                     onClick={() =>
                       void run(async () => {
                         const result = await authClient.signIn.passkey();
-                        if (result.error) throw new Error(result.error.message);
+                        if (result.error) {
+                          const cancelled =
+                            "code" in result.error &&
+                            (result.error.code === "AUTH_CANCELLED" ||
+                              result.error.code === "ERROR_CEREMONY_ABORTED");
+                          throw new Error(
+                            cancelled
+                              ? "Passkey sign-in was cancelled or no matching passkey was available. Sign in with email, then add a passkey for this website in Settings → Security."
+                              : result.error.message,
+                          );
+                        }
                         await complete();
                       })
                     }
@@ -293,9 +313,7 @@ export function AuthScreen({
                       await sendCode("email-verification");
                       return;
                     }
-                    throw new Error(
-                      "Email or password is incorrect. You can also use an email code.",
-                    );
+                    throw new Error(loginErrorMessage(result.error));
                   }
                   await complete();
                 });

@@ -3,6 +3,7 @@ import { createElement } from "react";
 import { render } from "@react-email/render";
 import nodemailer from "nodemailer";
 import { AccountEmail } from "@/emails/account-email";
+import { accountMailConfig } from "./mail-config";
 
 export async function accountMail(
   to: string,
@@ -32,9 +33,10 @@ export async function accountMail(
       ]
     : undefined;
   const react = createElement(AccountEmail, { title, message, ...options });
-  if (process.env.RESEND_API_KEY) {
-    const { error } = await new Resend(process.env.RESEND_API_KEY).emails.send({
-      from: process.env.AUTH_EMAIL_FROM || "FirstRep <accounts@firstrep.app>",
+  const config = accountMailConfig();
+  if (config.provider === "resend") {
+    const { error } = await new Resend(config.apiKey).emails.send({
+      from: config.from,
       to,
       subject: title,
       react,
@@ -43,21 +45,20 @@ export async function accountMail(
     if (error) throw new Error("Account email delivery failed.");
     return;
   }
-  if (
-    process.env.NODE_ENV !== "production" &&
-    process.env.EMAIL_ADDRESS &&
-    process.env.EMAIL_PASSWORD
-  ) {
+  if (config.provider === "gmail") {
     await nodemailer
       .createTransport({
         service: "gmail",
+        connectionTimeout: 10000,
+        greetingTimeout: 10000,
+        socketTimeout: 20000,
         auth: {
-          user: process.env.EMAIL_ADDRESS,
-          pass: process.env.EMAIL_PASSWORD,
+          user: config.user,
+          pass: config.password,
         },
       })
       .sendMail({
-        from: process.env.EMAIL_ADDRESS,
+        from: config.from,
         to,
         subject: title,
         html: await render(react),
@@ -68,5 +69,4 @@ export async function accountMail(
       });
     return;
   }
-  throw new Error("Configure Resend to deliver account emails.");
 }

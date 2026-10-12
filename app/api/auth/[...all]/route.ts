@@ -1,6 +1,7 @@
+import { authRequestOrigins, getAuthURL } from "@/lib/auth/origin";
 import { getAuth } from "@/lib/auth";
 import { sharedRateStorage } from "@/lib/auth/rate-storage";
-import { db } from "@/lib/database";
+import { db, HttpError } from "@/lib/database";
 import { after } from "next/server";
 import { accountMail } from "@/lib/auth/mail";
 export const runtime = "nodejs";
@@ -18,6 +19,27 @@ async function handle(request: Request) {
           "Account sign-in is being configured. Please try again shortly.",
       },
       { status: 503 },
+    );
+  let auth;
+  try {
+    auth = getAuth();
+  } catch (error) {
+    if (error instanceof HttpError)
+      return Response.json(
+        { message: error.message },
+        { status: error.status },
+      );
+    throw error;
+  }
+  const origin = request.headers.get("origin");
+  if (origin && !authRequestOrigins(request).includes(origin))
+    return Response.json(
+      {
+        code: "INVALID_ORIGIN",
+        message:
+          "This website address is not configured for sign-in. Open the main FirstRep website, or ask the app owner to update the allowed website URLs.",
+      },
+      { status: 403 },
     );
   const path = new URL(request.url).pathname.replace("/api/auth", "");
   const body =
@@ -60,7 +82,7 @@ async function handle(request: Request) {
   }
   // Never log request bodies, cookies, response credentials, or email codes.
   const started = Date.now();
-  const result = await getAuth().handler(request);
+  const result = await auth.handler(request);
   if (mailPaths.has(path) || path === "/sign-up/email")
     await new Promise((resolve) =>
       setTimeout(resolve, Math.max(0, 1200 - (Date.now() - started))),
@@ -79,9 +101,7 @@ async function handle(request: Request) {
               "Unusual FirstRep sign-in attempts",
               "We noticed several unsuccessful sign-in attempts. No permanent lock was applied. Review your devices or reset your password.",
               {
-                url:
-                  (process.env.BETTER_AUTH_URL || "http://localhost:3000") +
-                  "/settings/security",
+                url: getAuthURL() + "/settings/security",
               },
             ).catch(() => {});
         });

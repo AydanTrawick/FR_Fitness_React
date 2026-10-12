@@ -26,7 +26,7 @@ import {
   TERMS_VERSION,
 } from "./auth/validation";
 
-const baseURL = process.env.BETTER_AUTH_URL || "http://localhost:3000";
+import { authOriginConfig, authRequestOrigins, getAuthURL } from "./auth/origin";
 const factor = twoFactor({
   issuer: "FirstRep Fitness",
   allowPasswordless: true,
@@ -70,7 +70,7 @@ const securityEvents = {
             typeof ctx.context.returned === "object" &&
             "twoFactorRedirect" in ctx.context.returned
           )
-            throw ctx.redirect(baseURL + "/auth?step=two-factor");
+            throw ctx.redirect(getAuthURL() + "/auth?step=two-factor");
           const session = ctx.context.newSession || ctx.context.session;
           if (!session || ctx.context.returned instanceof APIError) return;
           if (
@@ -94,7 +94,7 @@ const securityEvents = {
                   session.user.email,
                   "A new device signed in to FirstRep",
                   "If this was you, you’re all set. Otherwise, review and revoke your active sessions.",
-                  { url: baseURL + "/settings/sessions" },
+                  { url: getAuthURL() + "/settings/sessions" },
                 ),
               );
           }
@@ -118,7 +118,7 @@ const securityEvents = {
                   session.user.email,
                   "Your FirstRep security settings changed",
                   "A password, authenticator, or passkey change was made. If this wasn’t you, review your account immediately.",
-                  { url: baseURL + "/settings/security" },
+                  { url: getAuthURL() + "/settings/security" },
                 ),
               );
             if (
@@ -141,18 +141,14 @@ const securityEvents = {
 };
 
 function createAuth() {
+  const { baseURL, trustedOrigins, rpID } = authOriginConfig();
   return betterAuth({
     appName: "FirstRep Fitness",
     baseURL,
     logger: { disabled: true },
     secret: process.env.BETTER_AUTH_SECRET,
     database: drizzleAdapter(drizzle(db(), { schema }), { provider: "pg" }),
-    trustedOrigins: [
-      baseURL,
-      ...(process.env.AUTH_TRUSTED_ORIGINS?.split(",")
-        .map((v) => v.trim())
-        .filter(Boolean) || []),
-    ],
+    trustedOrigins: (request) => authRequestOrigins(request),
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: true,
@@ -172,7 +168,7 @@ function createAuth() {
           user.email,
           "Your FirstRep password was changed",
           "All other sessions have been signed out. If this wasn’t you, open sign-in help immediately.",
-          { url: baseURL + "/auth/help" },
+          { url: getAuthURL() + "/auth/help" },
         ),
     },
     emailVerification: {
@@ -286,8 +282,8 @@ function createAuth() {
       factor,
       passkey({
         rpName: "FirstRep Fitness",
-        rpID: new URL(baseURL).hostname,
-        origin: baseURL,
+        rpID,
+        origin: trustedOrigins,
       }),
       haveIBeenPwned(),
       ...(process.env.TURNSTILE_SECRET_KEY
@@ -482,5 +478,18 @@ export function getAuth(): FirstRepAuth {
       "Account sign-in is not configured yet. Configure BETTER_AUTH_SECRET for this deployment.",
       503,
     );
-  return (instance ??= createAuth());
+  if (!instance) {
+    try {
+      authOriginConfig();
+    } catch (error) {
+      throw new HttpError(
+        error instanceof Error
+          ? error.message
+          : "Account website configuration is invalid.",
+        503,
+      );
+    }
+    instance = createAuth();
+  }
+  return instance;
 }
