@@ -28,6 +28,8 @@ import { api, download, errorText } from "@/lib/client";
 import content from "@/lib/content.json";
 import { useStore } from "./store";
 import { Card, Empty, Field, PageTitle } from "./ui";
+import { NewPRButton, WorkoutCardButton } from "./workout-share-cards";
+import type { CardUnit } from "@/lib/share-cards";
 type ExerciseMatch = {
   match: { id: string; name: string } | null;
   confidence: "exact" | "alias" | "fuzzy" | "low" | "none";
@@ -94,7 +96,15 @@ function NumberInput({
     />
   );
 }
-function History({ kind }: { kind: Kind }) {
+function History({
+  kind,
+  workoutDate,
+  workoutUnit,
+}: {
+  kind: Kind;
+  workoutDate?: string;
+  workoutUnit?: CardUnit;
+}) {
   const { logs, busy, save, setError, status, reload } = useStore();
   const [edit, setEdit] = useState<Entry | null>(null);
   const [remove, setRemove] = useState<string | null>(null);
@@ -165,6 +175,13 @@ function History({ kind }: { kind: Kind }) {
           >
             <Download size={15} /> Export CSV
           </button>
+          {kind === "workout" && (
+            <WorkoutCardButton
+              rows={logs.workout}
+              initialDate={workoutDate || today()}
+              initialUnit={workoutUnit || "kg"}
+            />
+          )}
           {status.user && (
             <button
               className="btn icon"
@@ -623,7 +640,9 @@ const firstWorkoutSet = (): WorkoutSet => ({
 });
 export function WorkoutTracker() {
   const { logs, save, busy, setError, status } = useStore();
-  const [unit, setUnit] = useState(status.user?.weightUnit || "kg");
+  const [unit, setUnit] = useState<CardUnit>(
+    status.user?.weightUnit === "lb" ? "lb" : "kg",
+  );
   const [date, setDate] = useState(today);
   const [exercise, setExercise] = useState("");
   const [selectedExerciseId, setSelectedExerciseId] = useState("");
@@ -692,7 +711,10 @@ export function WorkoutTracker() {
       />
       <div className="two-col">
         <Card>
-          <h3>Log an exercise</h3>
+          <div className="section-top workout-log-title">
+            <h3>Log an exercise</h3>
+            <NewPRButton initialDate={date} initialUnit={unit} />
+          </div>
           <form onSubmit={submit} className="stack">
             <div className="form-grid">
               <Field label="Training date">
@@ -705,7 +727,10 @@ export function WorkoutTracker() {
                 />
               </Field>
               <Field label="Weight unit">
-                <select value={unit} onChange={(e) => setUnit(e.target.value)}>
+                <select
+                  value={unit}
+                  onChange={(e) => setUnit(e.target.value as CardUnit)}
+                >
                   <option value="kg">Kilograms (kg)</option>
                   <option value="lb">Pounds (lb)</option>
                 </select>
@@ -884,7 +909,7 @@ export function WorkoutTracker() {
           </p>
         </Card>
       </div>
-      <History kind="workout" />
+      <History kind="workout" workoutDate={date} workoutUnit={unit} />
     </>
   );
 }

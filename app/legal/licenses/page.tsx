@@ -23,6 +23,14 @@ export default function Licenses() {
       <p>
         FirstRep web · version 0.1.0. These projects help power your toolkit.
       </p>
+      <p>
+        Share card typography uses{" "}
+        <a href="/fonts/share-cards/barlow-condensed/OFL.txt">
+          Barlow Condensed
+        </a>{" "}
+        and <a href="/fonts/share-cards/ibm-plex-mono/OFL.txt">IBM Plex Mono</a>
+        , both distributed under the SIL Open Font License.
+      </p>
       <div className="help-faq">
         {packages.map((name) => {
           let license = "See the package’s distributed license for its terms.";

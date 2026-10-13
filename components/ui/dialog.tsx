@@ -8,11 +8,16 @@ export const DialogTitle = DialogPrimitive.Title;
 export const DialogDescription = DialogPrimitive.Description;
 export function DialogContent({
   children,
+  overlayClassName = "",
   ...props
-}: ComponentProps<typeof DialogPrimitive.Content>) {
+}: ComponentProps<typeof DialogPrimitive.Content> & {
+  overlayClassName?: string;
+}) {
   return (
     <DialogPrimitive.Portal>
-      <DialogPrimitive.Overlay className="confirm-overlay" />
+      <DialogPrimitive.Overlay
+        className={"confirm-overlay " + overlayClassName}
+      />
       <DialogPrimitive.Content
         {...props}
         className={"confirm-dialog " + (props.className || "")}
