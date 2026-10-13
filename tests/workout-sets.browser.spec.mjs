@@ -9,6 +9,8 @@ const expect = baseExpect.configure({ timeout: 20000 });
 test("workout sets start at one and persist individual weights and reps", async ({
   page,
 }) => {
+  const errors = [];
+  page.on("pageerror", (err) => errors.push(err.message));
   const sql = postgres(process.env.NEON_DATABASE_URL, {
     ssl: "require",
     max: 1,
@@ -24,6 +26,7 @@ test("workout sets start at one and persist individual weights and reps", async 
       await tx`INSERT INTO firstrep_user_settings(user_id) VALUES (${userId})`;
       await tx`INSERT INTO account(id,account_id,provider_id,user_id,password,updated_at) VALUES (${randomUUID()},${userId},'credential',${userId},${hash},NOW())`;
     });
+    await page.request.get(origin + "/api/auth/get-session");
     const login = await page.request.post(origin + "/api/auth/sign-in/email", {
       headers: { origin },
       data: { email, password },
@@ -36,6 +39,9 @@ test("workout sets start at one and persist individual weights and reps", async 
     await page
       .getByRole("status", { name: "Loading FirstRep Fitness" })
       .waitFor({ state: "detached", timeout: 10000 });
+    await page
+      .getByRole("button", { name: "Log an exercise", exact: true })
+      .click();
     await expect(
       page.getByRole("group", { name: "Set 1", exact: true }),
     ).toHaveCount(1);
@@ -70,9 +76,24 @@ test("workout sets start at one and persist individual weights and reps", async 
         () => document.documentElement.scrollWidth <= window.innerWidth,
       ),
     ).toBe(true);
+    expect(
+      await page.locator(".ws-quick-log form").evaluate((form) =>
+        Array.from(form.elements)
+          .filter((el) => el.validity && !el.validity.valid)
+          .map((el) => ({ name: el.name, message: el.validationMessage })),
+      ),
+    ).toEqual([]);
+    const savedResponse = page.waitForResponse(
+      (response) =>
+        response.url().endsWith("/api/logs/workout") &&
+        response.request().method() === "PUT",
+      { timeout: 30000 },
+    );
     await page
       .getByRole("button", { name: "Save 2 sets", exact: true })
       .click();
+    expect((await savedResponse).ok(), errors.join("; ")).toBe(true);
+
     await expect(
       page.getByText("Saved to your account.", { exact: true }),
     ).toBeVisible({ timeout: 20000 });
@@ -93,9 +114,9 @@ test("workout sets start at one and persist individual weights and reps", async 
     await expect(
       page.getByRole("heading", { name: "Every rep counts." }),
     ).toBeVisible({ timeout: 20000 });
-    await expect(
-      page.getByText("total sets", { exact: true }).locator(".."),
-    ).toContainText("2");
+    await expect(page.locator(".ws-session-stats > div").first()).toContainText(
+      "2",
+    );
   } finally {
     await sql`DELETE FROM "user" WHERE email=${email}`;
     await sql`DELETE FROM firstrep_users WHERE email=${email}`;

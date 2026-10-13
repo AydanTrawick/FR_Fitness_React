@@ -390,7 +390,10 @@ export function renderPRCard(canvas: HTMLCanvasElement, data: PRCardData) {
     );
     y += heading.size + 6;
   }
-  const weight = cardNumber(data.weight, 6);
+  const weight =
+    data.bodyweight && data.weight === 0
+      ? "BW"
+      : (data.bodyweight ? "+" : "") + cardNumber(data.weight, 6);
   let size = 315;
   font(ctx, size, "display");
   while (ctx.measureText(weight).width + 110 > WIDTH && size > 130) {
@@ -403,7 +406,7 @@ export function renderPRCard(canvas: HTMLCanvasElement, data: PRCardData) {
   font(ctx, size, "display");
   text(
     ctx,
-    data.unit.toUpperCase(),
+    data.bodyweight && data.weight === 0 ? "" : data.unit.toUpperCase(),
     x + ctx.measureText(weight).width + 18,
     1236,
     68,

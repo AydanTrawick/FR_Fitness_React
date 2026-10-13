@@ -19,6 +19,7 @@ import { errorText } from "@/lib/client";
 import { today, type Entry } from "@/lib/tracking";
 import {
   validPR,
+  cardWeight,
   workoutCardData,
   type CardUnit,
   type PRCardData,
@@ -35,24 +36,31 @@ export function WorkoutCardButton({
   rows,
   initialDate,
   initialUnit,
+  buttonLabel = "Workout card",
+  buttonClassName = "btn secondary small",
+  initialTitle,
 }: {
   rows: Entry[];
   initialDate: string;
   initialUnit: CardUnit;
+  buttonLabel?: string;
+  buttonClassName?: string;
+  initialTitle?: string;
 }) {
   const [open, setOpen] = useState(false);
   return (
     <>
       <button
-        className="btn secondary small"
+        className={buttonClassName}
         disabled={!rows.length}
         onClick={() => setOpen(true)}
       >
-        <ImageDown size={15} /> Workout card
+        <ImageDown size={15} /> {buttonLabel}
       </button>
       {open && (
         <ShareCardEditor
           kind="workout"
+          initialTitle={initialTitle}
           rows={rows}
           initialDate={initialDate}
           initialUnit={initialUnit}
@@ -92,13 +100,36 @@ export function NewPRButton({
   );
 }
 
+export function PRCardEditor({
+  data,
+  onClose,
+}: {
+  data: PRCardData;
+  onClose: () => void;
+}) {
+  return (
+    <ShareCardEditor
+      kind="pr"
+      rows={[]}
+      initialDate={data.date}
+      initialUnit={data.unit}
+      initialPR={data}
+      onClose={onClose}
+    />
+  );
+}
+
 function ShareCardEditor({
   kind,
   rows,
   initialDate,
   initialUnit,
   onClose,
+  initialPR,
+  initialTitle,
 }: {
+  initialPR?: PRCardData;
+  initialTitle?: string;
   kind: "workout" | "pr";
   rows: Entry[];
   initialDate: string;
@@ -114,12 +145,20 @@ function ShareCardEditor({
       ? initialDate
       : dates[0] || today(),
   );
-  const [title, setTitle] = useState("Workout log");
+  const [title, setTitle] = useState(
+    initialTitle?.slice(0, 60) || "Workout log",
+  );
   const [unit, setUnit] = useState<CardUnit>(initialUnit);
-  const [exercise, setExercise] = useState("Bench press");
-  const [reps, setReps] = useState("1");
-  const [weight, setWeight] = useState("");
-  const [previous, setPrevious] = useState("");
+  const [exercise, setExercise] = useState(
+    initialPR?.exercise || "Bench press",
+  );
+  const [reps, setReps] = useState(String(initialPR?.reps || 1));
+  const [weight, setWeight] = useState(
+    initialPR ? String(initialPR.weight) : "",
+  );
+  const [previous, setPrevious] = useState(
+    initialPR?.previous === undefined ? "" : String(initialPR.previous),
+  );
   const [page, setPage] = useState(0);
   const [pages, setPages] = useState(1);
   const [ready, setReady] = useState(false);
@@ -134,9 +173,10 @@ function ShareCardEditor({
       reps: Number(reps),
       weight: Number(weight),
       unit,
+      bodyweight: initialPR?.bodyweight,
       ...(previous.trim() ? { previous: Number(previous) } : {}),
     }),
-    [date, exercise, reps, weight, unit, previous],
+    [date, exercise, reps, weight, unit, previous, initialPR?.bodyweight],
   );
   const valid =
     kind === "pr"
@@ -364,11 +404,15 @@ function ShareCardEditor({
                       onChange={(event) => setReps(event.target.value)}
                     />
                   </Field>
-                  <Field label="PR weight">
+                  <Field
+                    label={
+                      initialPR?.bodyweight ? "PR added weight" : "PR weight"
+                    }
+                  >
                     <input
                       type="number"
-                      min={0.1}
-                      max={unit === "lb" ? 2204.62 : 1000}
+                      min={initialPR?.bodyweight ? 0 : 0.1}
+                      max={unit === "lb" ? 1000 / 0.45359237 : 1000}
                       step="any"
                       required
                       disabled={busy}
@@ -384,7 +428,23 @@ function ShareCardEditor({
               <select
                 value={unit}
                 disabled={busy}
-                onChange={(event) => setUnit(event.target.value as CardUnit)}
+                onChange={(event) => {
+                  const next = event.target.value as CardUnit;
+                  if (initialPR && next !== unit) {
+                    const convert = (value: string) =>
+                      String(
+                        Math.round(
+                          cardWeight(
+                            Number(value) * (unit === "lb" ? 0.45359237 : 1),
+                            next,
+                          ) * 1e6,
+                        ) / 1e6,
+                      );
+                    if (weight.trim()) setWeight(convert(weight));
+                    if (previous.trim()) setPrevious(convert(previous));
+                  }
+                  setUnit(next);
+                }}
               >
                 <option value="kg">Kilograms (kg)</option>
                 <option value="lb">Pounds (lb)</option>

@@ -21,6 +21,7 @@ export type PRCardData = {
   weight: number;
   unit: CardUnit;
   previous?: number;
+  bodyweight?: boolean;
 };
 
 export const cardWeight = (kg: number, unit: CardUnit) =>
@@ -87,8 +88,8 @@ export function validPR(data: PRCardData) {
     data.reps >= 1 &&
     data.reps <= 1000 &&
     Number.isFinite(data.weight) &&
-    data.weight > 0 &&
-    data.weight <= (data.unit === "lb" ? 2204.62 : 1000) &&
+    (data.weight > 0 || (data.weight === 0 && data.bodyweight === true)) &&
+    data.weight <= (data.unit === "lb" ? 1000 / 0.45359237 : 1000) &&
     (data.previous === undefined ||
       (Number.isFinite(data.previous) &&
         data.previous >= 0 &&

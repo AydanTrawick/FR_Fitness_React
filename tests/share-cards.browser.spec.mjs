@@ -95,14 +95,15 @@ test("workout and PR previews export branded PNGs; long sessions keep all cards"
     await page
       .getByRole("status", { name: "Loading FirstRep Fitness" })
       .waitFor({ state: "detached", timeout: 10000 });
+    const day = page.locator("#workout-day-2026-10-13");
     await expect(
-      page
+      day
         .getByRole("button", { name: "Export CSV", exact: true })
         .locator("..")
-        .getByRole("button", { name: "Workout card", exact: true }),
+        .getByRole("button", { name: "Share workout card", exact: true }),
     ).toBeVisible();
-    await page
-      .getByRole("button", { name: "Workout card", exact: true })
+    await day
+      .getByRole("button", { name: "Share workout card", exact: true })
       .click();
     const dialog = page.getByRole("dialog");
     await dialog
@@ -125,9 +126,12 @@ test("workout and PR previews export branded PNGs; long sessions keep all cards"
     expect([workoutMeta.width, workoutMeta.height, workoutMeta.format]).toEqual(
       [1080, 2160, "png"],
     );
-    await dialog
-      .getByRole("combobox", { name: "Card date", exact: true })
-      .selectOption("2026-10-12");
+    await dialog.getByRole("button", { name: "Close card editor" }).click();
+    await page
+      .locator("#workout-day-2026-10-12")
+      .getByRole("button", { name: "Share workout card", exact: true })
+      .click();
+
     await expect(dialog.getByText(/Card 1 of [2-9]/)).toBeVisible();
     const zipDownload = page.waitForEvent("download");
     await dialog

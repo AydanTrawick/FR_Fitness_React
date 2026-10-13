@@ -62,6 +62,7 @@ export const profileSchema = z.object({
   image: z.string().max(500000).nullable().optional(),
 });
 export const preferencesSchema = z.object({
+  weeklyWorkoutGoal: z.number().int().min(1).max(14).default(3),
   visibility: z.enum(["private", "followers", "public"]),
   aiDataOptIn: z.boolean(),
   analyticsOptIn: z.boolean(),
@@ -73,6 +74,7 @@ export const preferencesSchema = z.object({
   newsPush: z.boolean(),
 });
 export const defaultPreferences = {
+  weeklyWorkoutGoal: 3,
   visibility: "private" as const,
   aiDataOptIn: false,
   analyticsOptIn: false,
