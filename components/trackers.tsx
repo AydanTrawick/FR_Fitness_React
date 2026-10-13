@@ -614,6 +614,13 @@ export function BmiTracker() {
     </>
   );
 }
+type WorkoutSet = { id: string; reps: string; weight: string; rpe: string };
+const firstWorkoutSet = (): WorkoutSet => ({
+  id: "first",
+  reps: "8",
+  weight: "20",
+  rpe: "7",
+});
 export function WorkoutTracker() {
   const { logs, save, busy, setError, status } = useStore();
   const [unit, setUnit] = useState(status.user?.weightUnit || "kg");
@@ -621,6 +628,16 @@ export function WorkoutTracker() {
   const [exercise, setExercise] = useState("");
   const [selectedExerciseId, setSelectedExerciseId] = useState("");
   const [candidates, setCandidates] = useState<ExerciseMatch["candidates"]>([]);
+  const [sets, setSets] = useState<WorkoutSet[]>(() => [firstWorkoutSet()]);
+  function updateSet(
+    id: string,
+    field: "reps" | "weight" | "rpe",
+    value: string,
+  ) {
+    setSets((rows) =>
+      rows.map((row) => (row.id === id ? { ...row, [field]: value } : row)),
+    );
+  }
   const selected = logs.workout.filter((row) => row.date === date);
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -642,17 +659,25 @@ export function WorkoutTracker() {
       setError(errorText(error));
       return;
     }
-    const row = {
-      ...fields,
-      id: crypto.randomUUID(),
-      date,
-      exercise: matched.name,
-      exercise_id: matched.id,
-      performed_at:
-        date === today() ? new Date().toISOString() : `${date}T12:00:00.000Z`,
-      weight_kg: toKg(Number(fields.weight), unit),
-    } as Entry;
-    if (await save("workout", [...logs.workout, row])) {
+    const performedAt =
+      date === today() ? new Date().toISOString() : `${date}T12:00:00.000Z`;
+    const rows = sets.map(
+      (set) =>
+        ({
+          id: crypto.randomUUID(),
+          date,
+          exercise: matched.name,
+          exercise_id: matched.id,
+          performed_at: performedAt,
+          sets: 1,
+          reps: Number(set.reps),
+          weight_kg: toKg(Number(set.weight), unit),
+          rpe: Number(set.rpe),
+          notes: String(fields.notes || ""),
+        }) as Entry,
+    );
+    if (await save("workout", [...logs.workout, ...rows])) {
+      setSets([firstWorkoutSet()]);
       setExercise("");
       setSelectedExerciseId("");
       setCandidates([]);
@@ -738,29 +763,80 @@ export function WorkoutTracker() {
                 </select>
               </Field>
             )}
-            <div className="form-grid four">
-              <Field label="Sets">
-                <NumberInput name="sets" value={1} min={1} max={100} step={1} />
-              </Field>
-              <Field label="Reps / set">
-                <NumberInput
-                  name="reps"
-                  value={8}
-                  min={1}
-                  max={1000}
-                  step={1}
-                />
-              </Field>
-              <Field label={`Weight (${unit})`}>
-                <NumberInput
-                  name="weight"
-                  value={20}
-                  max={unit === "kg" ? 1000 : 2204.62}
-                />
-              </Field>
-              <Field label="RPE (1–10)">
-                <NumberInput name="rpe" value={7} min={1} max={10} step={0.5} />
-              </Field>
+            <div className="workout-sets">
+              {sets.map((set, index) => (
+                <fieldset className="workout-set" key={set.id} disabled={busy}>
+                  <legend>Set {index + 1}</legend>
+                  <div className="form-grid three">
+                    <Field label={`Set ${index + 1} weight (${unit})`}>
+                      <input
+                        type="number"
+                        required
+                        min={0}
+                        max={unit === "kg" ? 1000 : 2204.62}
+                        step="any"
+                        value={set.weight}
+                        onChange={(event) =>
+                          updateSet(set.id, "weight", event.target.value)
+                        }
+                      />
+                    </Field>
+                    <Field label={`Set ${index + 1} reps`}>
+                      <input
+                        type="number"
+                        required
+                        min={1}
+                        max={1000}
+                        step={1}
+                        value={set.reps}
+                        onChange={(event) =>
+                          updateSet(set.id, "reps", event.target.value)
+                        }
+                      />
+                    </Field>
+                    <Field label={`Set ${index + 1} RPE (1–10)`}>
+                      <input
+                        type="number"
+                        required
+                        min={1}
+                        max={10}
+                        step={0.5}
+                        value={set.rpe}
+                        onChange={(event) =>
+                          updateSet(set.id, "rpe", event.target.value)
+                        }
+                      />
+                    </Field>
+                  </div>
+                  {sets.length > 1 && (
+                    <button
+                      type="button"
+                      className="btn subtle"
+                      aria-label={`Remove set ${index + 1}`}
+                      onClick={() =>
+                        setSets((rows) =>
+                          rows.filter((row) => row.id !== set.id),
+                        )
+                      }
+                    >
+                      <Trash2 size={14} /> Remove set
+                    </button>
+                  )}
+                </fieldset>
+              ))}
+              <button
+                type="button"
+                className="btn"
+                disabled={busy || sets.length >= 100}
+                onClick={() =>
+                  setSets((rows) => [
+                    ...rows,
+                    { ...rows[rows.length - 1], id: crypto.randomUUID() },
+                  ])
+                }
+              >
+                <Plus size={16} /> Add set
+              </button>
             </div>
             <Field label="Notes (optional)">
               <input
@@ -770,7 +846,8 @@ export function WorkoutTracker() {
               />
             </Field>
             <button className="btn primary" disabled={busy}>
-              <Plus size={16} /> Add to workout log
+              <Check size={16} /> Save {sets.length}{" "}
+              {sets.length === 1 ? "set" : "sets"}
             </button>
           </form>
         </Card>
@@ -802,8 +879,8 @@ export function WorkoutTracker() {
             </p>
           </div>
           <p className="muted">
-            Volume = sets × reps × weight. Log separate entries when weight or
-            reps change between sets.
+            Each set keeps its own weight, reps, and effort. Training volume is
+            the sum of reps × weight across your saved sets.
           </p>
         </Card>
       </div>

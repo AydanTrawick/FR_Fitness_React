@@ -785,6 +785,24 @@ h4 {
   font-size: 12px;
   margin: 8px 0 18px;
 }
+.workout-sets {
+  display: grid;
+  gap: 14px;
+}
+.workout-set {
+  margin: 0;
+  padding: 14px;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.workout-set legend {
+  padding: 0 6px;
+  font-weight: 700;
+}
+.workout-set > button {
+  margin-top: 10px;
+}
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
