@@ -376,6 +376,20 @@ test("library filters, account bookmarks/swaps, detail logging, mobile recovery 
     await expect(
       page.getByRole("button", { name: "Day complete ✓", exact: true }),
     ).toBeDisabled();
+    await page.getByRole("link", { name: "View workout", exact: true }).click();
+    await expect(
+      page.getByText("WORKOUT COMPLETE", { exact: true }),
+    ).toBeVisible();
+    await page
+      .getByRole("link", { name: "Next day · Full Body C", exact: true })
+      .click();
+    await expect(
+      page.getByRole("heading", { name: "Front Squat", exact: true }),
+    ).toBeVisible();
+    await page.getByRole("link", { name: "Exit workout", exact: true }).click();
+    await expect(
+      page.locator('.pl-day-tabs button[aria-pressed="true"]'),
+    ).toContainText("Full Body C");
     expect(
       (
         await sql`SELECT COUNT(*)::int n FROM firstrep_workout_entries WHERE user_id=${ids[0]}`

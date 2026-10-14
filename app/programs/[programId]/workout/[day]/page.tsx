@@ -18,5 +18,11 @@ export default async function Page({
   )
     notFound();
   await requirePageSession(`/programs/${programId}/workout/${day}`);
-  return <ProgramWorkout programId={programId} day={selected} />;
+  return (
+    <ProgramWorkout
+      key={`${programId}:${selected}`}
+      programId={programId}
+      day={selected}
+    />
+  );
 }

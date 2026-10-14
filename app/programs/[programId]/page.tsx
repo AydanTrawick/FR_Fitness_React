@@ -13,18 +13,19 @@ export default async function Page({
     { day } = await searchParams;
   const program = programs.find((p) => p.id === programId);
   if (!program) notFound();
-  await requirePageSession(`/programs/${programId}`);
   const selected = Number(day || 1) - 1;
+  const initialDay =
+    Number.isInteger(selected) &&
+    selected >= 0 &&
+    selected < program.schedule.length
+      ? selected
+      : 0;
+  await requirePageSession(`/programs/${programId}?day=${initialDay + 1}`);
   return (
     <ProgramDetail
+      key={`${programId}:${initialDay}`}
       programId={programId}
-      initialDay={
-        Number.isInteger(selected) &&
-        selected >= 0 &&
-        selected < program.schedule.length
-          ? selected
-          : 0
-      }
+      initialDay={initialDay}
     />
   );
 }
