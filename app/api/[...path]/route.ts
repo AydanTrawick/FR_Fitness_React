@@ -165,9 +165,28 @@ async function handle(
               "This log changed in another session. Reload your saved logs before trying again.",
               409,
             );
+          if (kind === "workout") {
+            const kept = new Map(rows.map((row) => [row.id, row]));
+            const removed = current
+              .filter((row) => {
+                const next = kept.get(row.id);
+                return (
+                  !next ||
+                  next.exercise_id !== row.exercise_id ||
+                  (!row.exercise_id && next.exercise !== row.exercise)
+                );
+              })
+              .map((row) => row.id);
+            if (removed.length) {
+              await tx`DELETE FROM firstrep_program_sets WHERE workout_entry_id IN ${tx(removed)} AND session_id IN (SELECT id FROM firstrep_program_sessions WHERE user_id=${user.id})`;
+              await tx`UPDATE firstrep_program_sessions s SET completed_at=NULL,completion_reason=NULL WHERE s.user_id=${user.id} AND s.completion_reason='sets' AND (SELECT COUNT(*) FROM firstrep_program_sets p WHERE p.session_id=s.id) < (SELECT SUM((e->>'sets')::int) FROM jsonb_array_elements(s.exercises) e)`;
+            }
+          }
           await tx`DELETE FROM ${tx(tables[kind])} WHERE user_id = ${user.id}`;
           if (rows.length)
             await tx`INSERT INTO ${tx(tables[kind])} ${tx(rows.map((row) => ({ ...row, user_id: user.id })) as Record<string, string | number | null | undefined>[])}`;
+          if (kind === "workout")
+            await tx`UPDATE firstrep_program_sets p SET weight_kg=w.weight_kg,reps=w.reps,rpe=w.rpe FROM firstrep_workout_entries w WHERE w.id=p.workout_entry_id AND w.user_id=${user.id}`;
         });
         revalidateTag(`analysis-${user.id}`, { expire: 0 });
         return response({ rows });

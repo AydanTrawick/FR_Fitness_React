@@ -1,4 +1,5 @@
 import "./exercises.css";
+import "./programs.css";
 import type { Metadata } from "next";
 import "./globals.css";
 import { ConsentAnalytics } from "@/components/account/consent-analytics";

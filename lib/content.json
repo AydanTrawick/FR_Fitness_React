@@ -16,7 +16,32 @@
               "reps": "5",
               "muscle": "Quads",
               "equipment": "Barbell",
-              "rest": 150
+              "rest": 150,
+              "exerciseId": "bbsquat",
+              "restSeconds": 150,
+              "cues": [
+                "Use rack safeties and a depth you can control."
+              ],
+              "alternatives": [
+                {
+                  "name": "Dumbbell goblet squat",
+                  "exerciseId": "gobletsquat",
+                  "muscle": "Quadriceps",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep the weight close to your torso."
+                  ]
+                },
+                {
+                  "name": "Leg press",
+                  "exerciseId": "legpress",
+                  "muscle": "Quadriceps",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Keep your knees aligned with your feet."
+                  ]
+                }
+              ]
             },
             {
               "name": "Bench Press",
@@ -24,7 +49,33 @@
               "reps": "5",
               "muscle": "Chest",
               "equipment": "Barbell",
-              "rest": 150
+              "rest": 150,
+              "exerciseId": "bench",
+              "restSeconds": 150,
+              "cues": [
+                "Choose a load you can control throughout the movement.",
+                "Use a spotter and appropriately positioned safety supports."
+              ],
+              "alternatives": [
+                {
+                  "name": "Incline dumbbell press",
+                  "exerciseId": "dbincline",
+                  "muscle": "Chest",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep your feet planted and wrists stacked over your forearms."
+                  ]
+                },
+                {
+                  "name": "Dumbbell floor press",
+                  "exerciseId": "dumbbell-floor-press",
+                  "muscle": "Chest",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep wrists aligned above elbows."
+                  ]
+                }
+              ]
             },
             {
               "name": "Lat Pulldown",
@@ -32,7 +83,32 @@
               "reps": "8-10",
               "muscle": "Back",
               "equipment": "Cable Machine",
-              "rest": 90
+              "rest": 90,
+              "exerciseId": "latpulldown",
+              "restSeconds": 90,
+              "cues": [
+                "Keep your elbows moving down toward your sides."
+              ],
+              "alternatives": [
+                {
+                  "name": "Pull-up",
+                  "exerciseId": "pullups",
+                  "muscle": "Back",
+                  "equipment": "Bodyweight",
+                  "cues": [
+                    "Use assistance when needed to maintain control."
+                  ]
+                },
+                {
+                  "name": "Seated cable row",
+                  "exerciseId": "seatedrow",
+                  "muscle": "Back",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Let your shoulder blades move without shrugging."
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -47,7 +123,32 @@
               "reps": "6",
               "muscle": "Hamstrings",
               "equipment": "Barbell",
-              "rest": 150
+              "rest": 150,
+              "exerciseId": "rdl",
+              "restSeconds": 150,
+              "cues": [
+                "Stop the descent when you can no longer keep the hinge controlled."
+              ],
+              "alternatives": [
+                {
+                  "name": "Single-leg dumbbell Romanian deadlift",
+                  "exerciseId": "single-leg-romanian-deadlift",
+                  "muscle": "Hamstrings",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Use a nearby support until your balance is steady."
+                  ]
+                },
+                {
+                  "name": "Cable pull-through",
+                  "exerciseId": "cable-pull-through",
+                  "muscle": "Glutes",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Finish upright without leaning backward."
+                  ]
+                }
+              ]
             },
             {
               "name": "Shoulder Press",
@@ -55,7 +156,24 @@
               "reps": "6",
               "muscle": "Shoulders",
               "equipment": "Dumbbells or Barbell",
-              "rest": 120
+              "rest": 120,
+              "exerciseId": "dbshoulderpress",
+              "restSeconds": 120,
+              "cues": [
+                "Keep your ribs over your pelvis."
+              ],
+              "alternatives": [
+                {
+                  "name": "Barbell overhead press",
+                  "exerciseId": null,
+                  "muscle": "Shoulders",
+                  "equipment": "Barbell",
+                  "cues": [
+                    "Keep your torso stable as you press overhead.",
+                    "Lower the bar with control."
+                  ]
+                }
+              ]
             },
             {
               "name": "Walking Lunge",
@@ -63,7 +181,32 @@
               "reps": "10 each leg",
               "muscle": "Glutes",
               "equipment": "Dumbbells",
-              "rest": 75
+              "rest": 75,
+              "exerciseId": "lunge",
+              "restSeconds": 75,
+              "cues": [
+                "Keep the front foot fully planted."
+              ],
+              "alternatives": [
+                {
+                  "name": "Dumbbell reverse lunge",
+                  "exerciseId": "reverse-lunge",
+                  "muscle": "Quadriceps",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep your stance wide enough for balance."
+                  ]
+                },
+                {
+                  "name": "Dumbbell step-up",
+                  "exerciseId": "stepup",
+                  "muscle": "Quadriceps",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Choose a step height that lets you keep your balance."
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -78,7 +221,32 @@
               "reps": "5",
               "muscle": "Quads",
               "equipment": "Barbell",
-              "rest": 150
+              "rest": 150,
+              "exerciseId": "front-squat",
+              "restSeconds": 150,
+              "cues": [
+                "Use rack safeties and a manageable load."
+              ],
+              "alternatives": [
+                {
+                  "name": "Dumbbell goblet squat",
+                  "exerciseId": "gobletsquat",
+                  "muscle": "Quadriceps",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep the weight close to your torso."
+                  ]
+                },
+                {
+                  "name": "Hack squat",
+                  "exerciseId": "hacksquat",
+                  "muscle": "Quadriceps",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Learn the safety stops before loading the machine."
+                  ]
+                }
+              ]
             },
             {
               "name": "Chest-Supported Row",
@@ -86,7 +254,13 @@
               "reps": "8",
               "muscle": "Back",
               "equipment": "Dumbbells or Machine",
-              "rest": 90
+              "rest": 90,
+              "exerciseId": "chest-supported-row",
+              "restSeconds": 90,
+              "cues": [
+                "Let your shoulder blades move with the pull."
+              ],
+              "alternatives": []
             },
             {
               "name": "Pallof Press",
@@ -94,9 +268,78 @@
               "reps": "10 each side",
               "muscle": "Obliques",
               "equipment": "Cable Machine or Band",
-              "rest": 45
+              "rest": 45,
+              "exerciseId": "pallof-press",
+              "restSeconds": 45,
+              "cues": [
+                "Use a stable stance and breathe through the hold."
+              ],
+              "alternatives": [
+                {
+                  "name": "Cable woodchop",
+                  "exerciseId": "cablewoodchop",
+                  "muscle": "Core",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Keep the motion smooth in both directions."
+                  ]
+                },
+                {
+                  "name": "Dead bug",
+                  "exerciseId": "deadbug",
+                  "muscle": "Core",
+                  "equipment": "Bodyweight",
+                  "cues": [
+                    "Shorten the reach if your trunk starts to move."
+                  ]
+                }
+              ]
             }
           ]
+        }
+      ],
+      "level": "Beginner",
+      "goal": "Strength",
+      "focus": {
+        "strength": 5,
+        "muscle": 3,
+        "conditioning": 1
+      },
+      "weekSchedule": [
+        {
+          "kind": "lift",
+          "label": "A",
+          "dayIndex": 0
+        },
+        {
+          "kind": "rest",
+          "label": "",
+          "dayIndex": null
+        },
+        {
+          "kind": "lift",
+          "label": "B",
+          "dayIndex": 1
+        },
+        {
+          "kind": "rest",
+          "label": "",
+          "dayIndex": null
+        },
+        {
+          "kind": "lift",
+          "label": "C",
+          "dayIndex": 2
+        },
+        {
+          "kind": "rest",
+          "label": "",
+          "dayIndex": null
+        },
+        {
+          "kind": "rest",
+          "label": "",
+          "dayIndex": null
         }
       ]
     },
@@ -116,7 +359,33 @@
               "reps": "8-10",
               "muscle": "Chest",
               "equipment": "Dumbbells",
-              "rest": 90
+              "rest": 90,
+              "exerciseId": "dbincline",
+              "restSeconds": 90,
+              "cues": [
+                "Keep your feet planted and wrists stacked over your forearms."
+              ],
+              "alternatives": [
+                {
+                  "name": "Barbell bench press",
+                  "exerciseId": "bench",
+                  "muscle": "Chest",
+                  "equipment": "Barbells",
+                  "cues": [
+                    "Choose a load you can control throughout the movement.",
+                    "Use a spotter and appropriately positioned safety supports."
+                  ]
+                },
+                {
+                  "name": "Smith machine incline press",
+                  "exerciseId": "smithincline",
+                  "muscle": "Chest",
+                  "equipment": "Smith Machine",
+                  "cues": [
+                    "Set the safety stops before lifting."
+                  ]
+                }
+              ]
             },
             {
               "name": "Seated Row",
@@ -124,7 +393,32 @@
               "reps": "8-10",
               "muscle": "Back",
               "equipment": "Cable Machine",
-              "rest": 90
+              "rest": 90,
+              "exerciseId": "seatedrow",
+              "restSeconds": 90,
+              "cues": [
+                "Let your shoulder blades move without shrugging."
+              ],
+              "alternatives": [
+                {
+                  "name": "Chest-supported machine row",
+                  "exerciseId": "chest-supported-row",
+                  "muscle": "Back",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Let your shoulder blades move with the pull."
+                  ]
+                },
+                {
+                  "name": "Single-arm dumbbell row",
+                  "exerciseId": "dbrow",
+                  "muscle": "Back",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Think of drawing your elbow backward."
+                  ]
+                }
+              ]
             },
             {
               "name": "Lateral Raise",
@@ -132,7 +426,23 @@
               "reps": "12-15",
               "muscle": "Shoulders",
               "equipment": "Dumbbells",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "latraise",
+              "restSeconds": 60,
+              "cues": [
+                "Choose a load that allows a smooth arc."
+              ],
+              "alternatives": [
+                {
+                  "name": "Cable lateral raise",
+                  "exerciseId": "cable-lateral-raise",
+                  "muscle": "Shoulders",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Lead with the elbow and keep your wrist relaxed."
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -147,7 +457,32 @@
               "reps": "10",
               "muscle": "Quads",
               "equipment": "Machine",
-              "rest": 90
+              "rest": 90,
+              "exerciseId": "legpress",
+              "restSeconds": 90,
+              "cues": [
+                "Keep your knees aligned with your feet."
+              ],
+              "alternatives": [
+                {
+                  "name": "Hack squat",
+                  "exerciseId": "hacksquat",
+                  "muscle": "Quadriceps",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Learn the safety stops before loading the machine."
+                  ]
+                },
+                {
+                  "name": "Dumbbell goblet squat",
+                  "exerciseId": "gobletsquat",
+                  "muscle": "Quadriceps",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep the weight close to your torso."
+                  ]
+                }
+              ]
             },
             {
               "name": "Leg Curl",
@@ -155,7 +490,23 @@
               "reps": "10",
               "muscle": "Hamstrings",
               "equipment": "Machine",
-              "rest": 75
+              "rest": 75,
+              "exerciseId": "legcurl",
+              "restSeconds": 75,
+              "cues": [
+                "Secure the thigh pad before starting."
+              ],
+              "alternatives": [
+                {
+                  "name": "Lying leg curl",
+                  "exerciseId": "lying-leg-curl",
+                  "muscle": "Hamstrings",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Use a comfortable knee range."
+                  ]
+                }
+              ]
             },
             {
               "name": "Calf Raise",
@@ -163,7 +514,23 @@
               "reps": "15-20",
               "muscle": "Calves",
               "equipment": "Machine",
-              "rest": 45
+              "rest": 45,
+              "exerciseId": "calfraise",
+              "restSeconds": 45,
+              "cues": [
+                "Use a support for balance if needed."
+              ],
+              "alternatives": [
+                {
+                  "name": "Seated calf raise",
+                  "exerciseId": "seatedcalfraise",
+                  "muscle": "Calves",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Keep pressure through the balls of your feet."
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -178,7 +545,14 @@
               "reps": "8-10",
               "muscle": "Chest",
               "equipment": "Machine",
-              "rest": 90
+              "rest": 90,
+              "exerciseId": null,
+              "restSeconds": 90,
+              "cues": [
+                "Adjust the seat so the handles line up with your chest.",
+                "Keep your back against the pad and control the return."
+              ],
+              "alternatives": []
             },
             {
               "name": "Lat Pulldown",
@@ -186,7 +560,32 @@
               "reps": "8-10",
               "muscle": "Back",
               "equipment": "Cable Machine",
-              "rest": 90
+              "rest": 90,
+              "exerciseId": "latpulldown",
+              "restSeconds": 90,
+              "cues": [
+                "Keep your elbows moving down toward your sides."
+              ],
+              "alternatives": [
+                {
+                  "name": "Pull-up",
+                  "exerciseId": "pullups",
+                  "muscle": "Back",
+                  "equipment": "Bodyweight",
+                  "cues": [
+                    "Use assistance when needed to maintain control."
+                  ]
+                },
+                {
+                  "name": "Seated cable row",
+                  "exerciseId": "seatedrow",
+                  "muscle": "Back",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Let your shoulder blades move without shrugging."
+                  ]
+                }
+              ]
             },
             {
               "name": "Cable Curl",
@@ -194,7 +593,32 @@
               "reps": "10-12",
               "muscle": "Biceps",
               "equipment": "Cable Machine",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "cable-curl",
+              "restSeconds": 60,
+              "cues": [
+                "Keep your upper arm mostly still."
+              ],
+              "alternatives": [
+                {
+                  "name": "Dumbbell curl",
+                  "exerciseId": "dbcurl",
+                  "muscle": "Biceps",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep your upper arms steady."
+                  ]
+                },
+                {
+                  "name": "EZ-bar preacher curl",
+                  "exerciseId": "preachercurl",
+                  "muscle": "Biceps",
+                  "equipment": "Barbells",
+                  "cues": [
+                    "Keep the bottom position controlled."
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -209,7 +633,32 @@
               "reps": "8-10",
               "muscle": "Quads",
               "equipment": "Machine",
-              "rest": 90
+              "rest": 90,
+              "exerciseId": "hacksquat",
+              "restSeconds": 90,
+              "cues": [
+                "Learn the safety stops before loading the machine."
+              ],
+              "alternatives": [
+                {
+                  "name": "Leg press",
+                  "exerciseId": "legpress",
+                  "muscle": "Quadriceps",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Keep your knees aligned with your feet."
+                  ]
+                },
+                {
+                  "name": "Dumbbell goblet squat",
+                  "exerciseId": "gobletsquat",
+                  "muscle": "Quadriceps",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep the weight close to your torso."
+                  ]
+                }
+              ]
             },
             {
               "name": "Hip Thrust",
@@ -217,7 +666,23 @@
               "reps": "8-10",
               "muscle": "Glutes",
               "equipment": "Barbell or Machine",
-              "rest": 90
+              "rest": 90,
+              "exerciseId": "hipthrust",
+              "restSeconds": 90,
+              "cues": [
+                "Finish with your torso and thighs aligned."
+              ],
+              "alternatives": [
+                {
+                  "name": "Glute bridge",
+                  "exerciseId": "glute-bridge",
+                  "muscle": "Glutes",
+                  "equipment": "Bodyweight",
+                  "cues": [
+                    "Finish with your ribs and pelvis aligned."
+                  ]
+                }
+              ]
             },
             {
               "name": "Adductor Machine",
@@ -225,9 +690,59 @@
               "reps": "12-15",
               "muscle": "Adductors",
               "equipment": "Machine",
-              "rest": 45
+              "rest": 45,
+              "exerciseId": "adductor",
+              "restSeconds": 45,
+              "cues": [
+                "Keep your pelvis still."
+              ],
+              "alternatives": []
             }
           ]
+        }
+      ],
+      "level": "Beginner",
+      "goal": "Strength",
+      "focus": {
+        "strength": 4,
+        "muscle": 4,
+        "conditioning": 1
+      },
+      "weekSchedule": [
+        {
+          "kind": "lift",
+          "label": "Up",
+          "dayIndex": 0
+        },
+        {
+          "kind": "lift",
+          "label": "Low",
+          "dayIndex": 1
+        },
+        {
+          "kind": "rest",
+          "label": "",
+          "dayIndex": null
+        },
+        {
+          "kind": "lift",
+          "label": "Up",
+          "dayIndex": 2
+        },
+        {
+          "kind": "lift",
+          "label": "Low",
+          "dayIndex": 3
+        },
+        {
+          "kind": "rest",
+          "label": "",
+          "dayIndex": null
+        },
+        {
+          "kind": "rest",
+          "label": "",
+          "dayIndex": null
         }
       ]
     },
@@ -247,7 +762,32 @@
               "reps": "6-10",
               "muscle": "Tricep",
               "equipment": "Cable Tower",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "triceppushdown",
+              "restSeconds": 60,
+              "cues": [
+                "Keep your upper arms near your torso."
+              ],
+              "alternatives": [
+                {
+                  "name": "Cable overhead triceps extension",
+                  "exerciseId": "rope-overhead-tricep-extension",
+                  "muscle": "Triceps",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Keep your trunk stable as your elbows move."
+                  ]
+                },
+                {
+                  "name": "Dumbbell overhead triceps extension",
+                  "exerciseId": "overheadtri",
+                  "muscle": "Triceps",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep the load light enough to control overhead."
+                  ]
+                }
+              ]
             },
             {
               "name": "Dips",
@@ -255,7 +795,32 @@
               "reps": "10-20",
               "muscle": "Lower Chest",
               "equipment": "Dip bar",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "dip",
+              "restSeconds": 60,
+              "cues": [
+                "Use assistance if you cannot control the descent."
+              ],
+              "alternatives": [
+                {
+                  "name": "Close-grip bench press",
+                  "exerciseId": "close-grip-bench-press",
+                  "muscle": "Triceps",
+                  "equipment": "Barbells",
+                  "cues": [
+                    "Use a spotter and rack safeties."
+                  ]
+                },
+                {
+                  "name": "Push-up",
+                  "exerciseId": "pushup",
+                  "muscle": "Chest",
+                  "equipment": "Bodyweight",
+                  "cues": [
+                    "Use an elevated hand support to reduce difficulty."
+                  ]
+                }
+              ]
             },
             {
               "name": "Incline Smith Press",
@@ -263,7 +828,33 @@
               "reps": "6-10",
               "muscle": "Upper Chest",
               "equipment": "Smith Machine",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "smithincline",
+              "restSeconds": 60,
+              "cues": [
+                "Set the safety stops before lifting."
+              ],
+              "alternatives": [
+                {
+                  "name": "Incline dumbbell press",
+                  "exerciseId": "dbincline",
+                  "muscle": "Chest",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep your feet planted and wrists stacked over your forearms."
+                  ]
+                },
+                {
+                  "name": "Barbell bench press",
+                  "exerciseId": "bench",
+                  "muscle": "Chest",
+                  "equipment": "Barbells",
+                  "cues": [
+                    "Choose a load you can control throughout the movement.",
+                    "Use a spotter and appropriately positioned safety supports."
+                  ]
+                }
+              ]
             },
             {
               "name": "Shoulder Press",
@@ -271,7 +862,24 @@
               "reps": "6-10",
               "muscle": "Shoulders",
               "equipment": "Smith Machine/ Bar",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "dbshoulderpress",
+              "restSeconds": 60,
+              "cues": [
+                "Keep your ribs over your pelvis."
+              ],
+              "alternatives": [
+                {
+                  "name": "Barbell overhead press",
+                  "exerciseId": null,
+                  "muscle": "Shoulders",
+                  "equipment": "Barbell",
+                  "cues": [
+                    "Keep your torso stable as you press overhead.",
+                    "Lower the bar with control."
+                  ]
+                }
+              ]
             },
             {
               "name": "Pec Flys",
@@ -279,7 +887,32 @@
               "reps": "6-10",
               "muscle": "Chest",
               "equipment": "Pec Deck",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "pec-deck",
+              "restSeconds": 60,
+              "cues": [
+                "Keep a small bend in your elbows."
+              ],
+              "alternatives": [
+                {
+                  "name": "Dumbbell chest fly",
+                  "exerciseId": "chestfly",
+                  "muscle": "Chest",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Use a light load and maintain the elbow bend."
+                  ]
+                },
+                {
+                  "name": "Cable crossover",
+                  "exerciseId": "cablecrossover",
+                  "muscle": "Chest",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Keep your rib cage over your pelvis."
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -294,7 +927,14 @@
               "reps": "6-10",
               "muscle": "Back",
               "equipment": "Cable Tower",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": null,
+              "restSeconds": 60,
+              "cues": [
+                "Keep a slight bend in your elbows throughout.",
+                "Pull the cable down with control, then return slowly."
+              ],
+              "alternatives": []
             },
             {
               "name": "Pullups",
@@ -302,7 +942,23 @@
               "reps": "6-15",
               "muscle": "Back",
               "equipment": "Pull-up bar",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "pullups",
+              "restSeconds": 60,
+              "cues": [
+                "Use assistance when needed to maintain control."
+              ],
+              "alternatives": [
+                {
+                  "name": "Lat pulldown",
+                  "exerciseId": "latpulldown",
+                  "muscle": "Back",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Keep your elbows moving down toward your sides."
+                  ]
+                }
+              ]
             },
             {
               "name": "Archer Rows",
@@ -310,7 +966,14 @@
               "reps": "6-10",
               "muscle": "Shoulders",
               "equipment": "Smith Machine",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": null,
+              "restSeconds": 60,
+              "cues": [
+                "Keep your torso stable while you pull.",
+                "Control the return instead of dropping into it."
+              ],
+              "alternatives": []
             },
             {
               "name": "Hammer Curls",
@@ -318,7 +981,32 @@
               "reps": "6-10",
               "muscle": "Arms",
               "equipment": "DB's",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "hammer",
+              "restSeconds": 60,
+              "cues": [
+                "Keep your wrists neutral."
+              ],
+              "alternatives": [
+                {
+                  "name": "Dumbbell curl",
+                  "exerciseId": "dbcurl",
+                  "muscle": "Biceps",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep your upper arms steady."
+                  ]
+                },
+                {
+                  "name": "Cable curl",
+                  "exerciseId": "cable-curl",
+                  "muscle": "Biceps",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Keep your upper arm mostly still."
+                  ]
+                }
+              ]
             },
             {
               "name": "Bicep Curls",
@@ -326,7 +1014,32 @@
               "reps": "6-10",
               "muscle": "Arms",
               "equipment": "DB's",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "dbcurl",
+              "restSeconds": 60,
+              "cues": [
+                "Keep your upper arms steady."
+              ],
+              "alternatives": [
+                {
+                  "name": "Cable curl",
+                  "exerciseId": "cable-curl",
+                  "muscle": "Biceps",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Keep your upper arm mostly still."
+                  ]
+                },
+                {
+                  "name": "EZ-bar preacher curl",
+                  "exerciseId": "preachercurl",
+                  "muscle": "Biceps",
+                  "equipment": "Barbells",
+                  "cues": [
+                    "Keep the bottom position controlled."
+                  ]
+                }
+              ]
             },
             {
               "name": "T-bar Row",
@@ -334,7 +1047,32 @@
               "reps": "6-10",
               "muscle": "Back",
               "equipment": "T-bar/ Smith Machine",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "t-bar-row",
+              "restSeconds": 60,
+              "cues": [
+                "Keep your back position consistent."
+              ],
+              "alternatives": [
+                {
+                  "name": "Seated cable row",
+                  "exerciseId": "seatedrow",
+                  "muscle": "Back",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Let your shoulder blades move without shrugging."
+                  ]
+                },
+                {
+                  "name": "Chest-supported machine row",
+                  "exerciseId": "chest-supported-row",
+                  "muscle": "Back",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Let your shoulder blades move with the pull."
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -349,7 +1087,13 @@
               "reps": "6-10",
               "muscle": "Adductors",
               "equipment": "Adductor Machine",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "adductor",
+              "restSeconds": 60,
+              "cues": [
+                "Keep your pelvis still."
+              ],
+              "alternatives": []
             },
             {
               "name": "RDL's",
@@ -357,7 +1101,32 @@
               "reps": "6-10",
               "muscle": "Hamstrings",
               "equipment": "Smith Machine/Bar/DB's",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "rdl",
+              "restSeconds": 60,
+              "cues": [
+                "Stop the descent when you can no longer keep the hinge controlled."
+              ],
+              "alternatives": [
+                {
+                  "name": "Single-leg dumbbell Romanian deadlift",
+                  "exerciseId": "single-leg-romanian-deadlift",
+                  "muscle": "Hamstrings",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Use a nearby support until your balance is steady."
+                  ]
+                },
+                {
+                  "name": "Cable pull-through",
+                  "exerciseId": "cable-pull-through",
+                  "muscle": "Glutes",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Finish upright without leaning backward."
+                  ]
+                }
+              ]
             },
             {
               "name": "Leg Extensions",
@@ -365,15 +1134,47 @@
               "reps": "6-10",
               "muscle": "Quads",
               "equipment": "Leg Extension",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "legextension",
+              "restSeconds": 60,
+              "cues": [
+                "Keep your back against the support."
+              ],
+              "alternatives": [
+                {
+                  "name": "Leg press",
+                  "exerciseId": "legpress",
+                  "muscle": "Quadriceps",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Keep your knees aligned with your feet."
+                  ]
+                }
+              ]
             },
             {
               "name": "Leg curls",
               "sets": 3,
               "reps": "6-10",
-              "muscle": "Arms",
+              "muscle": "Hamstrings",
               "equipment": "DB's",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "legcurl",
+              "restSeconds": 60,
+              "cues": [
+                "Secure the thigh pad before starting."
+              ],
+              "alternatives": [
+                {
+                  "name": "Lying leg curl",
+                  "exerciseId": "lying-leg-curl",
+                  "muscle": "Hamstrings",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Use a comfortable knee range."
+                  ]
+                }
+              ]
             },
             {
               "name": "Hip Thrust",
@@ -381,7 +1182,23 @@
               "reps": "6-10",
               "muscle": "Glutes",
               "equipment": "Hip Thurst Machine/ Smith Machine",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "hipthrust",
+              "restSeconds": 60,
+              "cues": [
+                "Finish with your torso and thighs aligned."
+              ],
+              "alternatives": [
+                {
+                  "name": "Glute bridge",
+                  "exerciseId": "glute-bridge",
+                  "muscle": "Glutes",
+                  "equipment": "Bodyweight",
+                  "cues": [
+                    "Finish with your ribs and pelvis aligned."
+                  ]
+                }
+              ]
             },
             {
               "name": "Calf Raises",
@@ -389,7 +1206,23 @@
               "reps": "15-20",
               "muscle": "Calfs",
               "equipment": "DB's",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "calfraise",
+              "restSeconds": 60,
+              "cues": [
+                "Use a support for balance if needed."
+              ],
+              "alternatives": [
+                {
+                  "name": "Seated calf raise",
+                  "exerciseId": "seatedcalfraise",
+                  "muscle": "Calves",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Keep pressure through the balls of your feet."
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -404,7 +1237,32 @@
               "reps": "6-10",
               "muscle": "Tricep",
               "equipment": "Cable Tower",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "triceppushdown",
+              "restSeconds": 60,
+              "cues": [
+                "Keep your upper arms near your torso."
+              ],
+              "alternatives": [
+                {
+                  "name": "Cable overhead triceps extension",
+                  "exerciseId": "rope-overhead-tricep-extension",
+                  "muscle": "Triceps",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Keep your trunk stable as your elbows move."
+                  ]
+                },
+                {
+                  "name": "Dumbbell overhead triceps extension",
+                  "exerciseId": "overheadtri",
+                  "muscle": "Triceps",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep the load light enough to control overhead."
+                  ]
+                }
+              ]
             },
             {
               "name": "Dips",
@@ -412,7 +1270,32 @@
               "reps": "10-20",
               "muscle": "Lower Chest",
               "equipment": "Dip bar",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "dip",
+              "restSeconds": 60,
+              "cues": [
+                "Use assistance if you cannot control the descent."
+              ],
+              "alternatives": [
+                {
+                  "name": "Close-grip bench press",
+                  "exerciseId": "close-grip-bench-press",
+                  "muscle": "Triceps",
+                  "equipment": "Barbells",
+                  "cues": [
+                    "Use a spotter and rack safeties."
+                  ]
+                },
+                {
+                  "name": "Push-up",
+                  "exerciseId": "pushup",
+                  "muscle": "Chest",
+                  "equipment": "Bodyweight",
+                  "cues": [
+                    "Use an elevated hand support to reduce difficulty."
+                  ]
+                }
+              ]
             },
             {
               "name": "Low-to-High Cable fly",
@@ -420,7 +1303,13 @@
               "reps": "6-10",
               "muscle": "Upper Chest",
               "equipment": "Cables",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "cablecrossover",
+              "restSeconds": 60,
+              "cues": [
+                "Keep your rib cage over your pelvis."
+              ],
+              "alternatives": []
             },
             {
               "name": "Lateral Raises",
@@ -428,7 +1317,23 @@
               "reps": "6-10",
               "muscle": "Shoulders",
               "equipment": "DB's",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "latraise",
+              "restSeconds": 60,
+              "cues": [
+                "Choose a load that allows a smooth arc."
+              ],
+              "alternatives": [
+                {
+                  "name": "Cable lateral raise",
+                  "exerciseId": "cable-lateral-raise",
+                  "muscle": "Shoulders",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Lead with the elbow and keep your wrist relaxed."
+                  ]
+                }
+              ]
             },
             {
               "name": "Overhead Tricep Extensions",
@@ -436,7 +1341,32 @@
               "reps": "6-10",
               "muscle": "Tricep",
               "equipment": "Calbles/DB's",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "rope-overhead-tricep-extension",
+              "restSeconds": 60,
+              "cues": [
+                "Keep your trunk stable as your elbows move."
+              ],
+              "alternatives": [
+                {
+                  "name": "Dumbbell overhead triceps extension",
+                  "exerciseId": "overheadtri",
+                  "muscle": "Triceps",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep the load light enough to control overhead."
+                  ]
+                },
+                {
+                  "name": "Cable triceps pushdown",
+                  "exerciseId": "triceppushdown",
+                  "muscle": "Triceps",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Keep your upper arms near your torso."
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -451,7 +1381,14 @@
               "reps": "6-10",
               "muscle": "Back",
               "equipment": "Cable Tower",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": null,
+              "restSeconds": 60,
+              "cues": [
+                "Keep a slight bend in your elbows throughout.",
+                "Pull the cable down with control, then return slowly."
+              ],
+              "alternatives": []
             },
             {
               "name": "Pullups",
@@ -459,7 +1396,23 @@
               "reps": "10-20",
               "muscle": "Back",
               "equipment": "Pull-up bar",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "pullups",
+              "restSeconds": 60,
+              "cues": [
+                "Use assistance when needed to maintain control."
+              ],
+              "alternatives": [
+                {
+                  "name": "Lat pulldown",
+                  "exerciseId": "latpulldown",
+                  "muscle": "Back",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Keep your elbows moving down toward your sides."
+                  ]
+                }
+              ]
             },
             {
               "name": "Archer Rows",
@@ -467,7 +1420,14 @@
               "reps": "6-10",
               "muscle": "Shoulders",
               "equipment": "Smith Machine",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": null,
+              "restSeconds": 60,
+              "cues": [
+                "Keep your torso stable while you pull.",
+                "Control the return instead of dropping into it."
+              ],
+              "alternatives": []
             },
             {
               "name": "Hammer Curls",
@@ -475,7 +1435,32 @@
               "reps": "6-10",
               "muscle": "Arms",
               "equipment": "DB's",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "hammer",
+              "restSeconds": 60,
+              "cues": [
+                "Keep your wrists neutral."
+              ],
+              "alternatives": [
+                {
+                  "name": "Dumbbell curl",
+                  "exerciseId": "dbcurl",
+                  "muscle": "Biceps",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep your upper arms steady."
+                  ]
+                },
+                {
+                  "name": "Cable curl",
+                  "exerciseId": "cable-curl",
+                  "muscle": "Biceps",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Keep your upper arm mostly still."
+                  ]
+                }
+              ]
             },
             {
               "name": "Bicep Curls",
@@ -483,7 +1468,32 @@
               "reps": "6-10",
               "muscle": "Arms",
               "equipment": "DB's",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "dbcurl",
+              "restSeconds": 60,
+              "cues": [
+                "Keep your upper arms steady."
+              ],
+              "alternatives": [
+                {
+                  "name": "Cable curl",
+                  "exerciseId": "cable-curl",
+                  "muscle": "Biceps",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Keep your upper arm mostly still."
+                  ]
+                },
+                {
+                  "name": "EZ-bar preacher curl",
+                  "exerciseId": "preachercurl",
+                  "muscle": "Biceps",
+                  "equipment": "Barbells",
+                  "cues": [
+                    "Keep the bottom position controlled."
+                  ]
+                }
+              ]
             },
             {
               "name": "T-bar Row",
@@ -491,7 +1501,32 @@
               "reps": "6-10",
               "muscle": "Back",
               "equipment": "T-bar/ Smith Machine",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "t-bar-row",
+              "restSeconds": 60,
+              "cues": [
+                "Keep your back position consistent."
+              ],
+              "alternatives": [
+                {
+                  "name": "Seated cable row",
+                  "exerciseId": "seatedrow",
+                  "muscle": "Back",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Let your shoulder blades move without shrugging."
+                  ]
+                },
+                {
+                  "name": "Chest-supported machine row",
+                  "exerciseId": "chest-supported-row",
+                  "muscle": "Back",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Let your shoulder blades move with the pull."
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -506,7 +1541,13 @@
               "reps": "6-10",
               "muscle": "Adductors",
               "equipment": "Adductor Machine",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "adductor",
+              "restSeconds": 60,
+              "cues": [
+                "Keep your pelvis still."
+              ],
+              "alternatives": []
             },
             {
               "name": "Squats",
@@ -514,7 +1555,32 @@
               "reps": "6-10",
               "muscle": "Quads",
               "equipment": "Smith Machine/Bar/DB's",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "bbsquat",
+              "restSeconds": 60,
+              "cues": [
+                "Use rack safeties and a depth you can control."
+              ],
+              "alternatives": [
+                {
+                  "name": "Dumbbell goblet squat",
+                  "exerciseId": "gobletsquat",
+                  "muscle": "Quadriceps",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep the weight close to your torso."
+                  ]
+                },
+                {
+                  "name": "Leg press",
+                  "exerciseId": "legpress",
+                  "muscle": "Quadriceps",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Keep your knees aligned with your feet."
+                  ]
+                }
+              ]
             },
             {
               "name": "Leg Extensions",
@@ -522,15 +1588,47 @@
               "reps": "6-10",
               "muscle": "Quads",
               "equipment": "Leg Extension",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "legextension",
+              "restSeconds": 60,
+              "cues": [
+                "Keep your back against the support."
+              ],
+              "alternatives": [
+                {
+                  "name": "Leg press",
+                  "exerciseId": "legpress",
+                  "muscle": "Quadriceps",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Keep your knees aligned with your feet."
+                  ]
+                }
+              ]
             },
             {
               "name": "Leg curls",
               "sets": 3,
               "reps": "6-10",
-              "muscle": "Arms",
+              "muscle": "Hamstrings",
               "equipment": "Leg Curl Machine",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "legcurl",
+              "restSeconds": 60,
+              "cues": [
+                "Secure the thigh pad before starting."
+              ],
+              "alternatives": [
+                {
+                  "name": "Lying leg curl",
+                  "exerciseId": "lying-leg-curl",
+                  "muscle": "Hamstrings",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Use a comfortable knee range."
+                  ]
+                }
+              ]
             },
             {
               "name": "Calf Raises",
@@ -538,9 +1636,69 @@
               "reps": "15-20",
               "muscle": "Calfs",
               "equipment": "DB's",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "calfraise",
+              "restSeconds": 60,
+              "cues": [
+                "Use a support for balance if needed."
+              ],
+              "alternatives": [
+                {
+                  "name": "Seated calf raise",
+                  "exerciseId": "seatedcalfraise",
+                  "muscle": "Calves",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Keep pressure through the balls of your feet."
+                  ]
+                }
+              ]
             }
           ]
+        }
+      ],
+      "level": "Intermediate",
+      "goal": "Muscle",
+      "focus": {
+        "strength": 3,
+        "muscle": 5,
+        "conditioning": 1
+      },
+      "weekSchedule": [
+        {
+          "kind": "lift",
+          "label": "Push",
+          "dayIndex": 0
+        },
+        {
+          "kind": "lift",
+          "label": "Pull",
+          "dayIndex": 1
+        },
+        {
+          "kind": "lift",
+          "label": "Legs",
+          "dayIndex": 2
+        },
+        {
+          "kind": "lift",
+          "label": "Push",
+          "dayIndex": 3
+        },
+        {
+          "kind": "lift",
+          "label": "Pull",
+          "dayIndex": 4
+        },
+        {
+          "kind": "lift",
+          "label": "Legs",
+          "dayIndex": 5
+        },
+        {
+          "kind": "rest",
+          "label": "",
+          "dayIndex": null
         }
       ]
     },
@@ -560,7 +1718,33 @@
               "reps": "5",
               "muscle": "Chest",
               "equipment": "Barbell",
-              "rest": 150
+              "rest": 150,
+              "exerciseId": "bench",
+              "restSeconds": 150,
+              "cues": [
+                "Choose a load you can control throughout the movement.",
+                "Use a spotter and appropriately positioned safety supports."
+              ],
+              "alternatives": [
+                {
+                  "name": "Incline dumbbell press",
+                  "exerciseId": "dbincline",
+                  "muscle": "Chest",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep your feet planted and wrists stacked over your forearms."
+                  ]
+                },
+                {
+                  "name": "Dumbbell floor press",
+                  "exerciseId": "dumbbell-floor-press",
+                  "muscle": "Chest",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep wrists aligned above elbows."
+                  ]
+                }
+              ]
             },
             {
               "name": "Lat Pulldown",
@@ -568,7 +1752,32 @@
               "reps": "8",
               "muscle": "Back",
               "equipment": "Cable Machine",
-              "rest": 90
+              "rest": 90,
+              "exerciseId": "latpulldown",
+              "restSeconds": 90,
+              "cues": [
+                "Keep your elbows moving down toward your sides."
+              ],
+              "alternatives": [
+                {
+                  "name": "Pull-up",
+                  "exerciseId": "pullups",
+                  "muscle": "Back",
+                  "equipment": "Bodyweight",
+                  "cues": [
+                    "Use assistance when needed to maintain control."
+                  ]
+                },
+                {
+                  "name": "Seated cable row",
+                  "exerciseId": "seatedrow",
+                  "muscle": "Back",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Let your shoulder blades move without shrugging."
+                  ]
+                }
+              ]
             },
             {
               "name": "Face Pull",
@@ -576,7 +1785,23 @@
               "reps": "12-15",
               "muscle": "Shoulders",
               "equipment": "Cable Machine",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "facepull",
+              "restSeconds": 60,
+              "cues": [
+                "Keep your neck relaxed and shoulders controlled."
+              ],
+              "alternatives": [
+                {
+                  "name": "Dumbbell rear delt fly",
+                  "exerciseId": "reardeltfly",
+                  "muscle": "Shoulders",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Use a lighter load than for a row."
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -591,7 +1816,32 @@
               "reps": "30-40 min",
               "muscle": "Conditioning",
               "equipment": "Treadmill",
-              "rest": 0
+              "rest": 0,
+              "exerciseId": "tmwalk",
+              "restSeconds": 0,
+              "cues": [
+                "Use the rails for balance rather than hanging on them."
+              ],
+              "alternatives": [
+                {
+                  "name": "Stationary cycling",
+                  "exerciseId": "cycling",
+                  "muscle": "Quadriceps",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Build pace gradually."
+                  ]
+                },
+                {
+                  "name": "Elliptical trainer",
+                  "exerciseId": "elliptical",
+                  "muscle": "Full Body",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Begin at a slow pace to find the rhythm."
+                  ]
+                }
+              ]
             },
             {
               "name": "Pallof Press",
@@ -599,7 +1849,32 @@
               "reps": "10 each side",
               "muscle": "Obliques",
               "equipment": "Cable Machine or Band",
-              "rest": 45
+              "rest": 45,
+              "exerciseId": "pallof-press",
+              "restSeconds": 45,
+              "cues": [
+                "Use a stable stance and breathe through the hold."
+              ],
+              "alternatives": [
+                {
+                  "name": "Cable woodchop",
+                  "exerciseId": "cablewoodchop",
+                  "muscle": "Core",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Keep the motion smooth in both directions."
+                  ]
+                },
+                {
+                  "name": "Dead bug",
+                  "exerciseId": "deadbug",
+                  "muscle": "Core",
+                  "equipment": "Bodyweight",
+                  "cues": [
+                    "Shorten the reach if your trunk starts to move."
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -614,7 +1889,32 @@
               "reps": "5",
               "muscle": "Quads",
               "equipment": "Barbell",
-              "rest": 150
+              "rest": 150,
+              "exerciseId": "bbsquat",
+              "restSeconds": 150,
+              "cues": [
+                "Use rack safeties and a depth you can control."
+              ],
+              "alternatives": [
+                {
+                  "name": "Dumbbell goblet squat",
+                  "exerciseId": "gobletsquat",
+                  "muscle": "Quadriceps",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep the weight close to your torso."
+                  ]
+                },
+                {
+                  "name": "Leg press",
+                  "exerciseId": "legpress",
+                  "muscle": "Quadriceps",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Keep your knees aligned with your feet."
+                  ]
+                }
+              ]
             },
             {
               "name": "Leg Curl",
@@ -622,7 +1922,23 @@
               "reps": "10",
               "muscle": "Hamstrings",
               "equipment": "Machine",
-              "rest": 75
+              "rest": 75,
+              "exerciseId": "legcurl",
+              "restSeconds": 75,
+              "cues": [
+                "Secure the thigh pad before starting."
+              ],
+              "alternatives": [
+                {
+                  "name": "Lying leg curl",
+                  "exerciseId": "lying-leg-curl",
+                  "muscle": "Hamstrings",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Use a comfortable knee range."
+                  ]
+                }
+              ]
             },
             {
               "name": "Calf Raise",
@@ -630,7 +1946,23 @@
               "reps": "12-20",
               "muscle": "Calves",
               "equipment": "Machine",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "calfraise",
+              "restSeconds": 60,
+              "cues": [
+                "Use a support for balance if needed."
+              ],
+              "alternatives": [
+                {
+                  "name": "Seated calf raise",
+                  "exerciseId": "seatedcalfraise",
+                  "muscle": "Calves",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Keep pressure through the balls of your feet."
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -645,7 +1977,32 @@
               "reps": "20 sec sprint",
               "muscle": "Conditioning",
               "equipment": "Air Bike",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "assault-bike",
+              "restSeconds": 60,
+              "cues": [
+                "Start gradually before increasing effort."
+              ],
+              "alternatives": [
+                {
+                  "name": "Stationary cycling",
+                  "exerciseId": "cycling",
+                  "muscle": "Quadriceps",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Build pace gradually."
+                  ]
+                },
+                {
+                  "name": "Rowing machine",
+                  "exerciseId": "rowing",
+                  "muscle": "Full Body",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Practice the sequence slowly before increasing pace."
+                  ]
+                }
+              ]
             },
             {
               "name": "Hollow Body Hold",
@@ -653,7 +2010,23 @@
               "reps": "30 sec",
               "muscle": "Abs",
               "equipment": "Bodyweight",
-              "rest": 45
+              "rest": 45,
+              "exerciseId": "hollow-body-hold",
+              "restSeconds": 45,
+              "cues": [
+                "Bend your knees to make the hold easier."
+              ],
+              "alternatives": [
+                {
+                  "name": "Forearm plank",
+                  "exerciseId": "plank",
+                  "muscle": "Core",
+                  "equipment": "Bodyweight",
+                  "cues": [
+                    "Use your knees as a support if needed."
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -668,7 +2041,33 @@
               "reps": "10-12",
               "muscle": "Chest",
               "equipment": "Dumbbells",
-              "rest": 75
+              "rest": 75,
+              "exerciseId": "dumbbell-floor-press",
+              "restSeconds": 75,
+              "cues": [
+                "Keep wrists aligned above elbows."
+              ],
+              "alternatives": [
+                {
+                  "name": "Barbell bench press",
+                  "exerciseId": "bench",
+                  "muscle": "Chest",
+                  "equipment": "Barbells",
+                  "cues": [
+                    "Choose a load you can control throughout the movement.",
+                    "Use a spotter and appropriately positioned safety supports."
+                  ]
+                },
+                {
+                  "name": "Push-up",
+                  "exerciseId": "pushup",
+                  "muscle": "Chest",
+                  "equipment": "Bodyweight",
+                  "cues": [
+                    "Use an elevated hand support to reduce difficulty."
+                  ]
+                }
+              ]
             },
             {
               "name": "Chest-Supported Row",
@@ -676,7 +2075,13 @@
               "reps": "10-12",
               "muscle": "Back",
               "equipment": "Dumbbells or Machine",
-              "rest": 75
+              "rest": 75,
+              "exerciseId": "chest-supported-row",
+              "restSeconds": 75,
+              "cues": [
+                "Let your shoulder blades move with the pull."
+              ],
+              "alternatives": []
             },
             {
               "name": "Walking Lunge",
@@ -684,9 +2089,78 @@
               "reps": "12 each leg",
               "muscle": "Glutes",
               "equipment": "Dumbbells",
-              "rest": 75
+              "rest": 75,
+              "exerciseId": "lunge",
+              "restSeconds": 75,
+              "cues": [
+                "Keep the front foot fully planted."
+              ],
+              "alternatives": [
+                {
+                  "name": "Dumbbell reverse lunge",
+                  "exerciseId": "reverse-lunge",
+                  "muscle": "Quadriceps",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep your stance wide enough for balance."
+                  ]
+                },
+                {
+                  "name": "Dumbbell step-up",
+                  "exerciseId": "stepup",
+                  "muscle": "Quadriceps",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Choose a step height that lets you keep your balance."
+                  ]
+                }
+              ]
             }
           ]
+        }
+      ],
+      "level": "Intermediate",
+      "goal": "Endurance",
+      "focus": {
+        "strength": 3,
+        "muscle": 3,
+        "conditioning": 4
+      },
+      "weekSchedule": [
+        {
+          "kind": "lift",
+          "label": "Lift",
+          "dayIndex": 0
+        },
+        {
+          "kind": "conditioning",
+          "label": "Cond",
+          "dayIndex": 1
+        },
+        {
+          "kind": "lift",
+          "label": "Lift",
+          "dayIndex": 2
+        },
+        {
+          "kind": "conditioning",
+          "label": "Cond",
+          "dayIndex": 3
+        },
+        {
+          "kind": "lift",
+          "label": "Lift",
+          "dayIndex": 4
+        },
+        {
+          "kind": "rest",
+          "label": "",
+          "dayIndex": null
+        },
+        {
+          "kind": "rest",
+          "label": "",
+          "dayIndex": null
         }
       ]
     },
@@ -706,7 +2180,13 @@
               "reps": "1 min on / 1 min off",
               "muscle": "Conditioning",
               "equipment": "Treadmill",
-              "rest": 0
+              "rest": 0,
+              "exerciseId": "steadyrun",
+              "restSeconds": 60,
+              "cues": [
+                "Increase effort gradually."
+              ],
+              "alternatives": []
             },
             {
               "name": "Jump Rope",
@@ -714,7 +2194,23 @@
               "reps": "2 min",
               "muscle": "Conditioning",
               "equipment": "Jump Rope",
-              "rest": 30
+              "rest": 30,
+              "exerciseId": "jumprope",
+              "restSeconds": 30,
+              "cues": [
+                "Start with short intervals to establish rhythm."
+              ],
+              "alternatives": [
+                {
+                  "name": "Air bike",
+                  "exerciseId": "assault-bike",
+                  "muscle": "Full Body",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Start gradually before increasing effort."
+                  ]
+                }
+              ]
             },
             {
               "name": "Bench Press",
@@ -722,7 +2218,33 @@
               "reps": "6-8",
               "muscle": "Chest",
               "equipment": "Barbell",
-              "rest": 90
+              "rest": 90,
+              "exerciseId": "bench",
+              "restSeconds": 90,
+              "cues": [
+                "Choose a load you can control throughout the movement.",
+                "Use a spotter and appropriately positioned safety supports."
+              ],
+              "alternatives": [
+                {
+                  "name": "Incline dumbbell press",
+                  "exerciseId": "dbincline",
+                  "muscle": "Chest",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep your feet planted and wrists stacked over your forearms."
+                  ]
+                },
+                {
+                  "name": "Dumbbell floor press",
+                  "exerciseId": "dumbbell-floor-press",
+                  "muscle": "Chest",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep wrists aligned above elbows."
+                  ]
+                }
+              ]
             },
             {
               "name": "Lat Pulldown",
@@ -730,7 +2252,32 @@
               "reps": "8-10",
               "muscle": "Back",
               "equipment": "Cable Machine",
-              "rest": 75
+              "rest": 75,
+              "exerciseId": "latpulldown",
+              "restSeconds": 75,
+              "cues": [
+                "Keep your elbows moving down toward your sides."
+              ],
+              "alternatives": [
+                {
+                  "name": "Pull-up",
+                  "exerciseId": "pullups",
+                  "muscle": "Back",
+                  "equipment": "Bodyweight",
+                  "cues": [
+                    "Use assistance when needed to maintain control."
+                  ]
+                },
+                {
+                  "name": "Seated cable row",
+                  "exerciseId": "seatedrow",
+                  "muscle": "Back",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Let your shoulder blades move without shrugging."
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -745,7 +2292,32 @@
               "reps": "25-30 min",
               "muscle": "Conditioning",
               "equipment": "Treadmill",
-              "rest": 0
+              "rest": 0,
+              "exerciseId": "tmwalk",
+              "restSeconds": 0,
+              "cues": [
+                "Use the rails for balance rather than hanging on them."
+              ],
+              "alternatives": [
+                {
+                  "name": "Stationary cycling",
+                  "exerciseId": "cycling",
+                  "muscle": "Quadriceps",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Build pace gradually."
+                  ]
+                },
+                {
+                  "name": "Elliptical trainer",
+                  "exerciseId": "elliptical",
+                  "muscle": "Full Body",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Begin at a slow pace to find the rhythm."
+                  ]
+                }
+              ]
             },
             {
               "name": "Stationary Bike",
@@ -753,7 +2325,32 @@
               "reps": "10 min moderate pace",
               "muscle": "Conditioning",
               "equipment": "Bike",
-              "rest": 0
+              "rest": 0,
+              "exerciseId": "cycling",
+              "restSeconds": 0,
+              "cues": [
+                "Build pace gradually."
+              ],
+              "alternatives": [
+                {
+                  "name": "Treadmill walking",
+                  "exerciseId": "tmwalk",
+                  "muscle": "Quadriceps",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Use the rails for balance rather than hanging on them."
+                  ]
+                },
+                {
+                  "name": "Elliptical trainer",
+                  "exerciseId": "elliptical",
+                  "muscle": "Full Body",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Begin at a slow pace to find the rhythm."
+                  ]
+                }
+              ]
             },
             {
               "name": "Leg Press",
@@ -761,7 +2358,32 @@
               "reps": "8-10",
               "muscle": "Quads",
               "equipment": "Machine",
-              "rest": 90
+              "rest": 90,
+              "exerciseId": "legpress",
+              "restSeconds": 90,
+              "cues": [
+                "Keep your knees aligned with your feet."
+              ],
+              "alternatives": [
+                {
+                  "name": "Hack squat",
+                  "exerciseId": "hacksquat",
+                  "muscle": "Quadriceps",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Learn the safety stops before loading the machine."
+                  ]
+                },
+                {
+                  "name": "Dumbbell goblet squat",
+                  "exerciseId": "gobletsquat",
+                  "muscle": "Quadriceps",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep the weight close to your torso."
+                  ]
+                }
+              ]
             },
             {
               "name": "Leg Curl",
@@ -769,7 +2391,23 @@
               "reps": "10",
               "muscle": "Hamstrings",
               "equipment": "Machine",
-              "rest": 75
+              "rest": 75,
+              "exerciseId": "legcurl",
+              "restSeconds": 75,
+              "cues": [
+                "Secure the thigh pad before starting."
+              ],
+              "alternatives": [
+                {
+                  "name": "Lying leg curl",
+                  "exerciseId": "lying-leg-curl",
+                  "muscle": "Hamstrings",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Use a comfortable knee range."
+                  ]
+                }
+              ]
             },
             {
               "name": "Calf Raise",
@@ -777,7 +2415,23 @@
               "reps": "15-20",
               "muscle": "Calves",
               "equipment": "Machine",
-              "rest": 45
+              "rest": 45,
+              "exerciseId": "calfraise",
+              "restSeconds": 45,
+              "cues": [
+                "Use a support for balance if needed."
+              ],
+              "alternatives": [
+                {
+                  "name": "Seated calf raise",
+                  "exerciseId": "seatedcalfraise",
+                  "muscle": "Calves",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Keep pressure through the balls of your feet."
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -792,7 +2446,23 @@
               "reps": "500m",
               "muscle": "Conditioning",
               "equipment": "Rowing Machine",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "rowing",
+              "restSeconds": 60,
+              "cues": [
+                "Practice the sequence slowly before increasing pace."
+              ],
+              "alternatives": [
+                {
+                  "name": "Air bike",
+                  "exerciseId": "assault-bike",
+                  "muscle": "Full Body",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Start gradually before increasing effort."
+                  ]
+                }
+              ]
             },
             {
               "name": "Box Jumps",
@@ -800,7 +2470,13 @@
               "reps": "10",
               "muscle": "Conditioning",
               "equipment": "Plyo Box",
-              "rest": 45
+              "rest": 45,
+              "exerciseId": "box-jump",
+              "restSeconds": 45,
+              "cues": [
+                "Reset your stance before each jump."
+              ],
+              "alternatives": []
             },
             {
               "name": "Hollow Body Hold",
@@ -808,7 +2484,23 @@
               "reps": "30-45 sec",
               "muscle": "Abs",
               "equipment": "Bodyweight",
-              "rest": 30
+              "rest": 30,
+              "exerciseId": "hollow-body-hold",
+              "restSeconds": 30,
+              "cues": [
+                "Bend your knees to make the hold easier."
+              ],
+              "alternatives": [
+                {
+                  "name": "Forearm plank",
+                  "exerciseId": "plank",
+                  "muscle": "Core",
+                  "equipment": "Bodyweight",
+                  "cues": [
+                    "Use your knees as a support if needed."
+                  ]
+                }
+              ]
             },
             {
               "name": "Pallof Press",
@@ -816,7 +2508,32 @@
               "reps": "10 each side",
               "muscle": "Obliques",
               "equipment": "Cable Machine or Band",
-              "rest": 45
+              "rest": 45,
+              "exerciseId": "pallof-press",
+              "restSeconds": 45,
+              "cues": [
+                "Use a stable stance and breathe through the hold."
+              ],
+              "alternatives": [
+                {
+                  "name": "Cable woodchop",
+                  "exerciseId": "cablewoodchop",
+                  "muscle": "Core",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Keep the motion smooth in both directions."
+                  ]
+                },
+                {
+                  "name": "Dead bug",
+                  "exerciseId": "deadbug",
+                  "muscle": "Core",
+                  "equipment": "Bodyweight",
+                  "cues": [
+                    "Shorten the reach if your trunk starts to move."
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -831,7 +2548,13 @@
               "reps": "20 sec on / 40 sec off",
               "muscle": "Conditioning",
               "equipment": "Air Bike",
-              "rest": 0
+              "rest": 0,
+              "exerciseId": "assault-bike",
+              "restSeconds": 40,
+              "cues": [
+                "Start gradually before increasing effort."
+              ],
+              "alternatives": []
             },
             {
               "name": "Barbell Squat",
@@ -839,7 +2562,32 @@
               "reps": "5-6",
               "muscle": "Quads",
               "equipment": "Barbell",
-              "rest": 120
+              "rest": 120,
+              "exerciseId": "bbsquat",
+              "restSeconds": 120,
+              "cues": [
+                "Use rack safeties and a depth you can control."
+              ],
+              "alternatives": [
+                {
+                  "name": "Dumbbell goblet squat",
+                  "exerciseId": "gobletsquat",
+                  "muscle": "Quadriceps",
+                  "equipment": "Dumbbells",
+                  "cues": [
+                    "Keep the weight close to your torso."
+                  ]
+                },
+                {
+                  "name": "Leg press",
+                  "exerciseId": "legpress",
+                  "muscle": "Quadriceps",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Keep your knees aligned with your feet."
+                  ]
+                }
+              ]
             },
             {
               "name": "Dumbbell Row",
@@ -847,7 +2595,32 @@
               "reps": "8-10 each side",
               "muscle": "Back",
               "equipment": "Dumbbells",
-              "rest": 75
+              "rest": 75,
+              "exerciseId": "dbrow",
+              "restSeconds": 75,
+              "cues": [
+                "Think of drawing your elbow backward."
+              ],
+              "alternatives": [
+                {
+                  "name": "Seated cable row",
+                  "exerciseId": "seatedrow",
+                  "muscle": "Back",
+                  "equipment": "Cables",
+                  "cues": [
+                    "Let your shoulder blades move without shrugging."
+                  ]
+                },
+                {
+                  "name": "Chest-supported machine row",
+                  "exerciseId": "chest-supported-row",
+                  "muscle": "Back",
+                  "equipment": "Machines",
+                  "cues": [
+                    "Let your shoulder blades move with the pull."
+                  ]
+                }
+              ]
             },
             {
               "name": "Farmer Carry",
@@ -855,9 +2628,59 @@
               "reps": "40 meters",
               "muscle": "Full Body",
               "equipment": "Dumbbells or Kettlebells",
-              "rest": 60
+              "rest": 60,
+              "exerciseId": "farmers-carry",
+              "restSeconds": 60,
+              "cues": [
+                "Keep the path clear before starting."
+              ],
+              "alternatives": []
             }
           ]
+        }
+      ],
+      "level": "Beginner",
+      "goal": "Endurance",
+      "focus": {
+        "strength": 2,
+        "muscle": 2,
+        "conditioning": 5
+      },
+      "weekSchedule": [
+        {
+          "kind": "conditioning",
+          "label": "Cond",
+          "dayIndex": 0
+        },
+        {
+          "kind": "lift",
+          "label": "Lift",
+          "dayIndex": 1
+        },
+        {
+          "kind": "rest",
+          "label": "",
+          "dayIndex": null
+        },
+        {
+          "kind": "conditioning",
+          "label": "Cond",
+          "dayIndex": 2
+        },
+        {
+          "kind": "rest",
+          "label": "",
+          "dayIndex": null
+        },
+        {
+          "kind": "lift",
+          "label": "Lift",
+          "dayIndex": 3
+        },
+        {
+          "kind": "rest",
+          "label": "",
+          "dayIndex": null
         }
       ]
     }
