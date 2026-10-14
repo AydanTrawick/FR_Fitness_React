@@ -159,12 +159,46 @@ test("grouped units, live draft, save recovery, recap, PR, feeling and weekly go
       .click();
     let live = page.getByRole("dialog", { name: "Live workout session" });
     await expect(live).toBeVisible();
+    await live
+      .getByRole("button", { name: "Pause workout timer", exact: true })
+      .click();
+    const frozen = await live
+      .getByLabel("Elapsed workout time", { exact: true })
+      .textContent();
+    await page.waitForTimeout(1300);
+    await expect(
+      live.getByLabel("Elapsed workout time", { exact: true }),
+    ).toHaveText(frozen);
+    page.once("dialog", (dialog) => dialog.accept());
+    await page.reload();
+    await page
+      .getByRole("button", { name: "Resume workout", exact: true })
+      .click();
+    live = page.getByRole("dialog", { name: "Live workout session" });
+    await expect(
+      live.getByRole("button", { name: "Resume workout timer", exact: true }),
+    ).toBeVisible();
+    await expect(
+      live.getByLabel("Elapsed workout time", { exact: true }),
+    ).toHaveText(frozen);
+    await live
+      .getByRole("button", { name: "Resume workout timer", exact: true })
+      .click();
+    await expect
+      .poll(() =>
+        live.getByLabel("Elapsed workout time", { exact: true }).textContent(),
+      )
+      .not.toBe(frozen);
+    await expect(live.locator(".ws-effort button")).toHaveCount(10);
     await expect(live.locator(".ws-last-time")).toContainText("1 × 6 @ 110 lb");
     await expect(live.locator(".ws-live-sets .ws-set-row")).toHaveCount(1);
     await live
       .getByRole("button", { name: "Increase Weight (lb)", exact: true })
       .click();
-    await live.getByRole("button", { name: "RPE 8", exact: true }).click();
+    await live
+      .getByRole("spinbutton", { name: "Weight (lb)", exact: true })
+      .fill("112.5");
+    await live.getByRole("button", { name: "RPE 1", exact: true }).click();
     await live
       .getByRole("button", { name: "Complete set 1", exact: true })
       .click();
@@ -180,6 +214,7 @@ test("grouped units, live draft, save recovery, recap, PR, feeling and weekly go
     await live
       .getByRole("button", { name: "Increase Weight (lb)", exact: true })
       .click();
+    await live.getByRole("button", { name: "RPE 10", exact: true }).click();
     await live
       .getByRole("button", { name: "Increase Reps", exact: true })
       .click();
@@ -228,6 +263,10 @@ test("grouped units, live draft, save recovery, recap, PR, feeling and weekly go
       fullPage: false,
     });
     await live.getByRole("button", { name: "Next", exact: true }).click();
+    await expect(live.locator(".workout-encouragement")).toContainText(
+      "Keep going!",
+    );
+    await expect(live.locator(".workout-encouragement")).toHaveCount(0);
     await live
       .getByRole("button", { name: "Increase Weight (lb)", exact: true })
       .click();
@@ -310,7 +349,7 @@ test("grouped units, live draft, save recovery, recap, PR, feeling and weekly go
     const pr = page.getByRole("dialog", { name: "New personal record" });
     await expect(pr).toBeVisible();
     await expect(pr.getByLabel("PR weight", { exact: true })).toHaveValue(
-      "120",
+      "117.5",
     );
     await expect(pr.getByLabel("PR reps", { exact: true })).toHaveValue("7");
     await pr.getByRole("button", { name: "Close card editor" }).click();
@@ -321,7 +360,7 @@ test("grouped units, live draft, save recovery, recap, PR, feeling and weekly go
       "3sets2exercises21reps",
     );
     await expect(recap.locator(".ws-recap-volume > strong")).toHaveText(
-      "1,570",
+      "1,537.5",
     );
     await expect(
       recap.getByRole("heading", { name: "1 baseline set", exact: true }),
@@ -362,9 +401,12 @@ test("grouped units, live draft, save recovery, recap, PR, feeling and weekly go
     ).toBe(true);
     expect(
       newest
-        .map((r) => Math.round(Number(r.weight_kg) / 0.45359237))
+        .map((r) => Math.round((Number(r.weight_kg) / 0.45359237) * 10) / 10)
         .sort((a, b) => a - b),
-    ).toEqual([5, 115, 120]);
+    ).toEqual([5, 112.5, 117.5]);
+    expect(newest.map((r) => Number(r.rpe)).sort((a, b) => a - b)).toEqual([
+      1, 7, 10,
+    ]);
     expect(saved.filter((r) => r.notes === "Fixture human note").length).toBe(
       4,
     );

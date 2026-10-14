@@ -14,6 +14,9 @@ import {
   completedEntries,
   reconcileFinishedWorkout,
   validLive,
+  elapsedWorkoutSeconds,
+  setWorkoutPaused,
+  exerciseEncouragement,
   sessionNotes,
   readSessionNote,
   humanSessionNotes,
@@ -324,4 +327,32 @@ test("resuming an already-committed draft reuses authoritative rows without dupl
       ),
     /another saved session/,
   );
+});
+
+test("elapsed time excludes multiple pauses and paused drafts restore without advancing", () => {
+  const start = Date.parse(live().startedAt),
+    original = live();
+  assert.equal(elapsedWorkoutSeconds(original, start + 12000), 12);
+  const paused = setWorkoutPaused(original, true, start + 12000);
+  assert.equal(elapsedWorkoutSeconds(paused, start + 60000), 12);
+  const restored = JSON.parse(JSON.stringify(paused));
+  assert.ok(validLive(restored));
+  assert.equal(elapsedWorkoutSeconds(restored, start + 3600000), 12);
+  const resumed = setWorkoutPaused(restored, false, start + 60000);
+  assert.equal(elapsedWorkoutSeconds(resumed, start + 65000), 17);
+  const again = setWorkoutPaused(resumed, true, start + 70000);
+  const active = setWorkoutPaused(again, false, start + 90000);
+  assert.equal(elapsedWorkoutSeconds(active, start + 100000), 32);
+  assert.equal(active.pausedMs, 68000);
+  assert.equal(active.startedAt, original.startedAt);
+  assert.equal(setWorkoutPaused(paused, true, start + 15000), paused);
+  assert.ok(validLive(original));
+  assert.equal(validLive({ ...original, pausedMs: -1 }), false);
+  assert.equal(validLive({ ...original, pausedAt: start - 1 }), false);
+});
+test("encouragement celebrates actual completed exercises at the halfway milestone", () => {
+  assert.equal(exerciseEncouragement(0, 8), "Keep going!");
+  assert.equal(exerciseEncouragement(1, 8), "Great work!");
+  assert.equal(exerciseEncouragement(4, 8), "You're halfway there!");
+  assert.equal(exerciseEncouragement(7, 8), "Last exercise. Finish strong!");
 });

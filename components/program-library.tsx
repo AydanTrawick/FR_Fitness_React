@@ -31,6 +31,11 @@ import {
   type ProgramState,
 } from "@/lib/programs";
 import { download } from "@/lib/client";
+import {
+  ManualWeightInput,
+  WorkoutEncouragement,
+  useExerciseEncouragement,
+} from "./workout-controls";
 
 type Action = Record<string, string | number | boolean>;
 function usePrograms(initialAction = "") {
@@ -335,6 +340,7 @@ function Stepper({
   min = 0,
   max,
   onChange,
+  manual,
 }: {
   label: string;
   value: number;
@@ -342,6 +348,7 @@ function Stepper({
   min?: number;
   max: number;
   onChange: (n: number) => void;
+  manual?: { disabled: boolean; onInvalidChange: (invalid: boolean) => void };
 }) {
   return (
     <div className="pl-stepper">
@@ -349,16 +356,27 @@ function Stepper({
       <button
         type="button"
         aria-label={`Decrease ${label}`}
-        disabled={value <= min}
+        disabled={manual?.disabled || value <= min}
         onClick={() => onChange(Math.max(min, value - step))}
       >
         <Minus />
       </button>
-      <output aria-label={label}>{Math.round(value * 10) / 10}</output>
+      {manual ? (
+        <ManualWeightInput
+          key={label}
+          label={label}
+          value={value}
+          max={max}
+          onChange={onChange}
+          {...manual}
+        />
+      ) : (
+        <output aria-label={label}>{Math.round(value * 10) / 10}</output>
+      )}
       <button
         type="button"
         aria-label={`Increase ${label}`}
-        disabled={value >= max}
+        disabled={manual?.disabled || value >= max}
         onClick={() => onChange(Math.min(max, value + step))}
       >
         <Plus />
@@ -388,7 +406,8 @@ function SetEditor({
         ? last?.reps || prescription.value
         : prescription.value,
     ),
-    [rpe, setRpe] = useState(7);
+    [rpe, setRpe] = useState(7),
+    [weightInvalid, setWeightInvalid] = useState(false);
   const factor = unit === "lb" ? 2.2046226218 : 1;
   return (
     <div className="pl-set-editor">
@@ -407,10 +426,11 @@ function SetEditor({
       </div>
       <Stepper
         label={`Weight (${unit})`}
-        value={displayWeight(weightKg, unit)}
+        value={weightKg * factor}
         step={unit === "lb" ? 5 : 2.5}
         max={1000 * factor}
         onChange={(n) => setWeightKg(n / factor)}
+        manual={{ disabled: busy, onInvalidChange: setWeightInvalid }}
       />
       <Stepper
         label={prescription.label}
@@ -428,11 +448,13 @@ function SetEditor({
       />
       <fieldset className="pl-rpe">
         <legend>Effort · RPE</legend>
-        {[6, 7, 8, 9, 10].map((n) => (
+        {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
           <button
             type="button"
             key={n}
             aria-pressed={rpe === n}
+            aria-label={`RPE ${n}`}
+            disabled={busy}
             className={rpe === n ? "selected" : ""}
             onClick={() => setRpe(n)}
           >
@@ -442,7 +464,7 @@ function SetEditor({
       </fieldset>
       <button
         className="pl-btn pl-log"
-        disabled={busy}
+        disabled={busy || weightInvalid}
         onClick={() => onLog(weightKg, value, rpe)}
       >
         {busy ? "Saving…" : label}
@@ -870,6 +892,7 @@ export function ProgramWorkout({
     [deadline, setDeadline] = useState(0),
     [now, setNow] = useState(() => Date.now()),
     [restTotal, setRestTotal] = useState(0);
+  const { notice, celebrate } = useExerciseEncouragement();
   const session = state?.sessions.find(
     (s) => s.program_id === programId && s.day_index === day,
   );
@@ -943,6 +966,15 @@ export function ProgramWorkout({
         : firstPending;
   const rest = Math.max(0, Math.ceil((deadline - now) / 1000));
   const move = (next: number) => {
+    if (next > index)
+      celebrate(
+        session.exercises.filter(
+          (e, i) =>
+            session.sets.filter((s) => s.exercise_index === i).length ===
+            e.sets,
+        ).length,
+        session.exercises.length,
+      );
     setIndex(next);
     setChosenSet(null);
   };
@@ -1089,6 +1121,7 @@ export function ProgramWorkout({
         this week.
       </p>
       <ProgramFooter />
+      <WorkoutEncouragement notice={notice} />
     </main>
   );
 }

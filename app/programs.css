@@ -1219,3 +1219,15 @@
   background: #000b;
   backdrop-filter: blur(8px);
 }
+
+.pl-rpe {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(44px, 1fr));
+  gap: 9px;
+}
+.pl-stepper .workout-weight-field {
+  width: 100%;
+}
+.pl-stepper input.workout-weight-input {
+  font-size: 24px;
+}

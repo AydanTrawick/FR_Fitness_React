@@ -331,6 +331,8 @@ export type LiveWorkout = {
   date: string;
   unit: CardUnit;
   startedAt: string;
+  pausedAt?: number;
+  pausedMs?: number;
   current: number;
   selected: number;
   restEndsAt: number | null;
@@ -348,6 +350,11 @@ export function validLive(value: unknown): value is LiveWorkout {
     /^\d{4}-\d{2}-\d{2}$/.test(v.date) &&
     ["kg", "lb"].includes(v.unit) &&
     Number.isFinite(Date.parse(v.startedAt)) &&
+    (v.pausedAt === undefined ||
+      (Number.isSafeInteger(v.pausedAt) &&
+        v.pausedAt >= Date.parse(v.startedAt))) &&
+    (v.pausedMs === undefined ||
+      (Number.isSafeInteger(v.pausedMs) && v.pausedMs >= 0)) &&
     Number.isInteger(v.current) &&
     Number.isInteger(v.selected) &&
     Array.isArray(v.exercises) &&
@@ -398,6 +405,44 @@ export function validLive(value: unknown): value is LiveWorkout {
         ),
     )
   );
+}
+export function elapsedWorkoutSeconds(live: LiveWorkout, now: number) {
+  return Math.max(
+    0,
+    ((live.pausedAt ?? now) -
+      Date.parse(live.startedAt) -
+      (live.pausedMs || 0)) /
+      1000,
+  );
+}
+export function setWorkoutPaused(
+  live: LiveWorkout,
+  paused: boolean,
+  now: number,
+): LiveWorkout {
+  if (paused)
+    return live.pausedAt === undefined
+      ? { ...live, pausedAt: Math.max(now, Date.parse(live.startedAt)) }
+      : live;
+  if (live.pausedAt === undefined) return live;
+  return {
+    ...live,
+    pausedAt: undefined,
+    pausedMs: (live.pausedMs || 0) + Math.max(0, now - live.pausedAt),
+  };
+}
+export function exerciseEncouragement(completed: number, total: number) {
+  if (!completed) return "Keep going!";
+  if (total > 1 && completed === Math.ceil(total / 2))
+    return "You're halfway there!";
+  if (total > 2 && completed === total - 1)
+    return "Last exercise. Finish strong!";
+  return [
+    "Great work!",
+    "Keep going!",
+    "You've got this!",
+    "Every rep counts!",
+  ][(completed - 1) % 4];
 }
 export function completedEntries(live: LiveWorkout, endedAt: string): Entry[] {
   const note: SessionNote = {

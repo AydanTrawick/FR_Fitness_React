@@ -2,6 +2,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { WorkoutFullscreen } from "./workout-fullscreen";
 import {
+  ManualWeightInput,
+  WorkoutEncouragement,
+  useExerciseEncouragement,
+} from "./workout-controls";
+import {
   ArrowLeft,
   Check,
   ChevronLeft,
@@ -10,6 +15,8 @@ import {
   Plus,
   Minus,
   Pencil,
+  Pause,
+  Play,
   X,
 } from "lucide-react";
 import { api } from "@/lib/client";
@@ -20,6 +27,8 @@ import {
   describeLift,
   latestEntry,
   estimated1RM,
+  elapsedWorkoutSeconds,
+  setWorkoutPaused,
   type CatalogLift,
   type LiveWorkout,
   type LiveExercise,
@@ -354,6 +363,7 @@ function Stepper({
   min,
   max,
   onChange,
+  manual,
 }: {
   label: string;
   value: number;
@@ -362,6 +372,13 @@ function Stepper({
   min: number;
   max: number;
   onChange: (n: number) => void;
+  manual?: {
+    value: number;
+    max: number;
+    prefix: boolean;
+    onChange: (n: number) => void;
+    onInvalidChange: (invalid: boolean) => void;
+  };
 }) {
   return (
     <div className={"ws-stepper " + (display.length > 3 ? "long" : "")}>
@@ -375,7 +392,11 @@ function Stepper({
         >
           <Minus size={22} />
         </button>
-        <strong aria-live="polite">{display}</strong>
+        {manual ? (
+          <ManualWeightInput key={label} label={label} {...manual} />
+        ) : (
+          <strong aria-live="polite">{display}</strong>
+        )}
         <button
           className="ws-icon"
           aria-label={"Increase " + label}
@@ -412,9 +433,11 @@ export function LiveSession({
   error: string;
 }) {
   const [now, setNow] = useState(() => Date.now()),
+    [weightInvalid, setWeightInvalid] = useState(false),
     [confirmation, setConfirmation] = useState<"finish" | "discard" | null>(
       null,
     );
+  const { notice, celebrate } = useExerciseEncouragement();
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 1000);
     const before = document.body.style.overflow;
@@ -457,7 +480,7 @@ export function LiveSession({
     });
   }
   function complete(index: number, completedMs: number) {
-    if (busy) return;
+    if (busy || weightInvalid) return;
     const set = exercise.sets[index],
       mark = !set.done,
       sets = exercise.sets.map((s, i) =>
@@ -491,6 +514,11 @@ export function LiveSession({
     if (mark) workoutHaptic();
   }
   function navigate(index: number) {
+    if (index > live.current)
+      celebrate(
+        live.exercises.filter((e) => e.sets.every((s) => s.done)).length,
+        live.exercises.length,
+      );
     const next = live.exercises[index].sets.findIndex((s) => !s.done);
     onChange({ ...live, current: index, selected: Math.max(0, next) });
   }
@@ -522,8 +550,36 @@ export function LiveSession({
           <div>
             <p className="eyebrow">LIVE SESSION</p>
             <strong aria-label="Elapsed workout time">
-              {formatClock((now - Date.parse(live.startedAt)) / 1000, true)}
+              {formatClock(elapsedWorkoutSeconds(live, now), true)}
             </strong>
+            <button
+              className="ws-timer-toggle"
+              aria-label={
+                live.pausedAt === undefined
+                  ? "Pause workout timer"
+                  : "Resume workout timer"
+              }
+              disabled={busy}
+              onClick={() => {
+                const time = Date.now();
+                setNow(time);
+                onChange(
+                  setWorkoutPaused(live, live.pausedAt === undefined, time),
+                );
+              }}
+            >
+              {live.pausedAt === undefined ? (
+                <Pause size={16} />
+              ) : (
+                <Play size={16} />
+              )}
+              {live.pausedAt === undefined ? "Pause" : "Resume"}
+            </button>
+            {live.pausedAt !== undefined && (
+              <span className="ws-paused-label" role="status">
+                Timer paused
+              </span>
+            )}
           </div>
           <button
             className="ws-button secondary"
@@ -711,6 +767,16 @@ export function LiveSession({
                 max={1000}
                 step={2.26796185}
                 onChange={(weightKg) => changeSet({ weightKg })}
+                manual={{
+                  value: cardWeight(selected.weightKg, live.unit),
+                  max: cardWeight(1000, live.unit),
+                  prefix: exercise.bodyweight,
+                  onChange: (value) =>
+                    changeSet({
+                      weightKg: value * (live.unit === "lb" ? 0.45359237 : 1),
+                    }),
+                  onInvalidChange: setWeightInvalid,
+                }}
               />
               <Stepper
                 label="Reps"
@@ -724,11 +790,11 @@ export function LiveSession({
             </div>
             <small className="muted">
               Weight changes by 5 lb ({cardNumber(2.26796185)} kg). Reps change
-              by 1.
+              by 1. Tap the weight to type any value.
             </small>
             <div className="ws-effort" aria-label="Set effort">
               <span>Effort</span>
-              {[6, 7, 8, 9, 10].map((rpe) => (
+              {Array.from({ length: 10 }, (_, i) => i + 1).map((rpe) => (
                 <button
                   key={rpe}
                   type="button"
@@ -859,7 +925,7 @@ export function LiveSession({
         <div className="ws-live-bottom">
           <button
             className="ws-button primary full"
-            disabled={busy}
+            disabled={busy || (hasPending && weightInvalid)}
             onClick={() =>
               hasPending
                 ? complete(
@@ -887,6 +953,7 @@ export function LiveSession({
                   : "Finish workout"}
           </button>
         </div>
+        <WorkoutEncouragement notice={notice} />
       </div>
     </WorkoutFullscreen>
   );

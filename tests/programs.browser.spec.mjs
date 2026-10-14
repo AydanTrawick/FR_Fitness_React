@@ -148,6 +148,10 @@ test("library filters, account bookmarks/swaps, detail logging, mobile recovery 
       .getByRole("button", { name: "Increase Weight (lb)", exact: true })
       .click();
     await dialog
+      .getByRole("spinbutton", { name: "Weight (lb)", exact: true })
+      .fill("7.75");
+    await dialog.getByRole("button", { name: "RPE 1", exact: true }).click();
+    await dialog
       .getByRole("button", { name: "Save set 1", exact: true })
       .click();
     await expect(dialog).toHaveCount(0);
@@ -156,7 +160,8 @@ test("library filters, account bookmarks/swaps, detail logging, mobile recovery 
       session = current.sessions.find((s) => s.program_id === "FullBody");
     expect(session.exercises[0].name).toBe("Dumbbell goblet squat");
     expect(session.sets).toHaveLength(1);
-    expect(session.sets[0].weight_kg).toBeCloseTo(2.26796185, 7);
+    expect(session.sets[0].rpe).toBe(1);
+    expect(session.sets[0].weight_kg).toBeCloseTo(7.75 * 0.45359237, 7);
     expect(
       (
         await action(page.request, {
@@ -271,6 +276,21 @@ test("library filters, account bookmarks/swaps, detail logging, mobile recovery 
       await sql`SELECT COUNT(*)::int n FROM firstrep_workout_entries WHERE user_id=${ids[0]}`
     )[0].n;
     expect(entryCount).toBe(2);
+    await page.getByRole("button", { name: "RPE 10", exact: true }).click();
+    await page.getByRole("button", { name: "Log set 3", exact: true }).click();
+    await page
+      .getByRole("button", { name: "Next exercise", exact: true })
+      .click();
+    await expect(page.locator(".workout-encouragement")).toContainText(
+      "Great work!",
+    );
+    const afterNext = (await state(page.request)).sessions.find(
+      (s) => s.id === session.id,
+    );
+    expect(
+      afterNext.sets.find((s) => s.exercise_index === 0 && s.set_index === 2)
+        .rpe,
+    ).toBe(10);
     for (let i = 0; i < session.exercises.length; i++)
       for (let j = 0; j < session.exercises[i].sets; j++) {
         if (

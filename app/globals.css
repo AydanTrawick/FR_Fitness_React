@@ -3346,3 +3346,136 @@ button.ws-badge {
     max(20px, env(safe-area-inset-bottom));
   margin: 0;
 }
+
+/* Live workout timing and entry controls. */
+.ws-timer-toggle {
+  min-height: 44px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  margin: 8px auto 0;
+  padding: 8px 14px;
+  border: 1px solid var(--ws-border);
+  border-radius: 12px;
+  background: #1c1c20;
+  color: #bfcaff;
+  font-size: 13px;
+  cursor: pointer;
+}
+.ws-paused-label {
+  display: block;
+  margin-top: 5px;
+  font-size: 11px;
+  color: var(--ws-orange);
+}
+.ws-effort {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(44px, 1fr));
+  gap: 8px;
+}
+.ws-effort > span {
+  grid-column: 1/-1;
+  margin: 0;
+}
+.ws-effort button {
+  width: 100%;
+  min-width: 44px;
+  height: 48px;
+  border-radius: 30px;
+}
+.workout-weight-field {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+.workout-weight-field > span {
+  font-size: 22px;
+  color: #ccc;
+}
+input.workout-weight-input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 5px 2px;
+  border: 1px solid #4d5163;
+  border-radius: 10px;
+  background: #101014;
+  color: #f4f3ef;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 26px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  appearance: textfield;
+}
+input.workout-weight-input::-webkit-inner-spin-button,
+input.workout-weight-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input.workout-weight-input:focus-visible {
+  outline: 2px solid #7c8dff;
+  outline-offset: 2px;
+}
+input.workout-weight-input[aria-invalid="true"] {
+  border-color: #ff9b50;
+  outline-color: #ff9b50;
+}
+.ws-stepper.long input.workout-weight-input {
+  font-size: 21px;
+}
+.workout-encouragement {
+  position: fixed;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom) + 104px);
+  transform: translateX(-50%);
+  z-index: 320;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  padding: 18px 22px;
+  background: #242d49;
+  border: 1px solid #7c8dff;
+  border-radius: 18px;
+  box-shadow: 0 12px 35px #0006;
+  color: #f4f3ef;
+  font-size: 17px;
+  font-weight: 700;
+  pointer-events: none;
+  animation: workout-encouragement-in 0.18s ease-out;
+}
+.workout-encouragement svg {
+  color: #9dabff;
+  flex-shrink: 0;
+}
+@keyframes workout-encouragement-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+@media (max-width: 700px) {
+  .ws-stepper .workout-weight-field {
+    order: -1;
+    flex-basis: 100%;
+  }
+  .ws-stepper input.workout-weight-input {
+    margin-bottom: 6px;
+    font-size: 26px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .workout-encouragement {
+    animation: none;
+  }
+}
