@@ -3479,3 +3479,20 @@ input.workout-weight-input[aria-invalid="true"] {
     animation: none;
   }
 }
+
+.assistant-voice-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.assistant-talk{min-height:44px;touch-action:none;user-select:none;-webkit-user-select:none}
+.assistant-talk[aria-pressed="true"]{box-shadow:0 0 0 3px #5b8cff35}
+.assistant-talk.voice-error{border-color:#e48787}
+.chat-composer:has(.assistant-voice-controls){flex-wrap:wrap}
+.chat-composer:has(.assistant-voice-controls) textarea{flex:1 1 100%}
+@media(max-width:600px){.chat-composer .assistant-voice-controls{flex:1}.assistant-talk{font-size:12px;padding:10px 12px}.chat-composer:has(.assistant-voice-controls)>.btn{min-height:44px}}
+@keyframes assistant-mic-pulse{0%,100%{opacity:1}50%{opacity:.45}}
+.assistant-talk[aria-pressed="true"] svg{animation:assistant-mic-pulse 1.2s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){.assistant-talk[aria-pressed="true"] svg{animation:none}}
+@media(max-width:600px){
+  .chat-composer:has(.assistant-voice-controls){flex-direction:row}
+  .chat-composer .assistant-voice-controls{min-width:0;flex-wrap:nowrap}
+  .assistant-voice-controls .assistant-talk{min-width:0;white-space:normal;flex:1}
+  .assistant-voice-controls>.btn.icon{flex:0 0 44px}
+}

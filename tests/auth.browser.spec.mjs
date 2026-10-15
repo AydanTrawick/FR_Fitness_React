@@ -64,6 +64,18 @@ async function waitSplash(page) {
     .getByRole("status", { name: "Loading FirstRep Fitness" })
     .waitFor({ state: "detached", timeout: 10000 });
 }
+test("authentication rejects untrusted signup and passkey origins", async ({
+  request,
+}) => {
+  for (const path of ["sign-up/email", "passkey/verify-authentication"]) {
+    const response = await request.post(origin + "/api/auth/" + path, {
+      headers: { origin: "https://unrelated.example" },
+      data: {},
+    });
+    expect(response.status()).toBe(403);
+  }
+});
+
 test("verified signup, settings, passkeys, 2FA, reset, privacy, sessions and deletion", async ({
   page,
   context,

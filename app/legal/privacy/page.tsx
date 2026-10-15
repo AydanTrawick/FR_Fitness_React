@@ -2,7 +2,7 @@ export const metadata = { title: "Privacy Policy — FirstRep" };
 export default function Privacy() {
   return (
     <>
-      <p className="account-eyebrow">VERSION 2026-10-02</p>
+      <p className="account-eyebrow">VERSION 2026-10-07</p>
       <h1>Privacy Policy</h1>
       <p className="account-notice">
         Draft for review before public launch. The operator’s legal name,
@@ -13,8 +13,10 @@ export default function Privacy() {
       <p>
         We store your account details, chosen preferences, profile photo,
         workout and nutrition records, body measurements, saved workouts, and
-        security activity. Private is the default profile setting. Your health
-        and training records are restricted to your account.
+        progress check-ins, optional progress photos, coach conversations,
+        goals, Playbooks, and security activity. Private is the default profile
+        setting. Your health and training records are restricted to your
+        account.
       </p>
       <h2>How we use your information</h2>
       <p>
@@ -39,6 +41,16 @@ export default function Privacy() {
         use voice features. Optional PostHog analytics is enabled only after
         opting in and excludes health records and sign-in credentials.
       </p>
+      <p>
+        When you use Progress Coach, Anthropic processes your body profile,
+        recent check-ins, goals, conversation, and current Playbook to provide
+        personalized guidance. Optional progress photos require separate consent
+        and confirmation that you are 18 or older. Photos are resized and
+        stripped of location and other metadata before AI moderation and storage
+        in a private Cloudflare R2 bucket. Photo view links require your
+        signed-in account and expire within 10 minutes. Phase 1 does not perform
+        body analysis.
+      </p>
       <h2>Cookies and analytics</h2>
       <p>
         Essential cookies keep you signed in and protect authentication.
@@ -54,6 +66,14 @@ export default function Privacy() {
         immediately and permanently deletes its database records after a 30-day
         restoration period. Generated export files and profile images are
         removed with your account.
+      </p>
+      <p>
+        Delete all my photos in Progress removes photo records and analysis,
+        immediately revokes view access, and deletes files from private storage.
+        If storage is temporarily unavailable, deletion is queued for retry.
+        Permanent account deletion also queues progress photos for storage
+        removal; your check-in weights and Playbook remain until you delete your
+        account.
       </p>
       <h2>Security and contact</h2>
       <p>

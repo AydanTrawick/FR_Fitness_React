@@ -1,3 +1,4 @@
+import { getAuthURL } from "@/lib/auth/origin";
 import { z } from "zod";
 import { getAuth } from "@/lib/auth";
 import { db, HttpError } from "@/lib/database";
@@ -182,9 +183,7 @@ async function handle(
           "A password was added to FirstRep",
           "A new sign-in method was added. If this wasn’t you, review your security settings.",
           {
-            url:
-              (process.env.BETTER_AUTH_URL || "http://localhost:3000") +
-              "/settings/security",
+            url: getAuthURL() + "/settings/security",
           },
         ),
       );
@@ -242,9 +241,7 @@ async function handle(
           "FirstRep two-factor recovery requested",
           "There is a 24-hour wait before two-factor recovery can be completed. Cancel from your Security settings if you did not request this.",
           {
-            url:
-              (process.env.BETTER_AUTH_URL || "http://localhost:3000") +
-              "/settings/security",
+            url: getAuthURL() + "/settings/security",
           },
         ),
       );

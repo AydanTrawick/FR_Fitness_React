@@ -1,3 +1,4 @@
+import { getAuthURL } from "@/lib/auth/origin";
 import { accountMail } from "./mail";
 import { db } from "@/lib/database";
 import { generateRandomString } from "better-auth/crypto";
@@ -28,7 +29,7 @@ export async function emailUndo(
     expiresAt: new Date(Date.now() + 24 * 3600000),
   });
   const url =
-    (process.env.BETTER_AUTH_URL || "http://localhost:3000") +
+    getAuthURL() +
     "/auth/undo-email?change=" +
     rows[0].id +
     "&token=" +

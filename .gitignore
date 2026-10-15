@@ -52,3 +52,5 @@ node_modules*
 
 # Isolated local authentication acceptance-test server
 .next-auth-tests/
+.next-progress-tests/
+.next-progress-build/

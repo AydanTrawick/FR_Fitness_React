@@ -19,9 +19,13 @@
     "test:browser": "node --env-file=.env node_modules/@playwright/test/cli.js test tests/browser.spec.mjs --workers=1",
     "db:auth": "node --env-file=.env --env-file=.env.local scripts/migrate-auth.mjs",
     "test:auth": "node --env-file=.env --env-file=.env.local node_modules/@playwright/test/cli.js test tests/auth.browser.spec.mjs --workers=1 tests/auth-recovery.browser.spec.mjs",
-    "dev:auth-tests": "node scripts/auth-test-server.mjs"
+    "dev:auth-tests": "node scripts/auth-test-server.mjs",
+    "db:progress": "node --env-file=.env --env-file=.env.local scripts/migrate-progress.mjs",
+    "dev:progress-tests": "node scripts/progress-test-server.mjs",
+    "test:progress": "node --env-file=.env --env-file=.env.local node_modules/@playwright/test/cli.js test tests/progress.browser.spec.mjs --workers=1"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.132.0",
     "@aws-sdk/client-s3": "^3.1136.0",
     "@better-auth/passkey": "^1.7.7",
     "@hookform/resolvers": "^5.9.1",
@@ -50,6 +54,8 @@
     "react-markdown": "^10.1.0",
     "recharts": "^3.10.1",
     "resend": "^6.32.0",
+    "server-only": "^0.0.1",
+    "sharp": "^0.35.5",
     "zod": "^4.6.5"
   },
   "devDependencies": {

@@ -1,7 +1,8 @@
+import { getAuthURL } from "@/lib/auth/origin";
 import { db } from "@/lib/database";
 import { accountMail } from "./mail";
 import JSZip from "jszip";
-const origin = () => process.env.BETTER_AUTH_URL || "http://localhost:3000";
+const origin = () => getAuthURL();
 export async function audit(userId: string, event: string, request: Request) {
   await db()`INSERT INTO firstrep_audit_log(user_id,event,ip,user_agent) VALUES (${userId},${event},${request.headers.get("x-forwarded-for")?.split(",")[0]?.slice(0, 100) || ""},${request.headers.get("user-agent")?.slice(0, 500) || ""})`;
 }
@@ -20,13 +21,21 @@ export async function exportUserData(userId: string) {
     "firstrep_login_sessions",
     "firstrep_data_export",
     "firstrep_recovery_request",
+    "progress_coach_leases",
   ]);
   const tables =
     await sql`SELECT table_name FROM information_schema.columns WHERE table_schema='public' AND column_name='user_id' ORDER BY table_name`;
   for (const { table_name } of tables) {
     if (excluded.has(table_name)) continue;
-    data[table_name] =
-      await sql`SELECT * FROM ${sql(table_name)} WHERE user_id=${userId}`;
+    data[table_name] = (
+      await sql`SELECT * FROM ${sql(table_name)} WHERE user_id=${userId}`
+    ).map((row) => {
+      if (table_name !== "checkin_photos") return row;
+      // Private storage keys are server-only, including in account exports.
+      const publicMetadata = { ...row };
+      delete publicMetadata.storage_key;
+      return publicMetadata;
+    });
   }
   // Records owned through a parent session/workout are included as well.
   if (await tableExists("firstrep_saved_workout_exercises"))
@@ -35,6 +44,16 @@ export async function exportUserData(userId: string) {
   if (await tableExists("firstrep_set_logs"))
     data.firstrep_set_logs =
       await sql`SELECT l.* FROM firstrep_set_logs l JOIN firstrep_workout_sessions s ON s.id=l.session_id WHERE s.user_id=${userId}`;
+  if (await tableExists("playbook_items")) {
+    data.playbook_items =
+      await sql`SELECT i.* FROM playbook_items i JOIN playbooks p ON p.id=i.playbook_id WHERE p.user_id=${userId}`;
+    data.habit_logs =
+      await sql`SELECT l.* FROM habit_logs l JOIN playbook_items i ON i.id=l.playbook_item_id JOIN playbooks p ON p.id=i.playbook_id WHERE p.user_id=${userId}`;
+    data.adjustments =
+      await sql`SELECT a.* FROM adjustments a JOIN playbooks p ON p.id=a.playbook_id WHERE p.user_id=${userId}`;
+    data.photo_analyses =
+      await sql`SELECT a.* FROM photo_analyses a JOIN checkins c ON c.id=a.checkin_id WHERE c.user_id=${userId}`;
+  }
   data.devices =
     await sql`SELECT id,created_at,updated_at,expires_at,ip_address,user_agent FROM "session" WHERE user_id=${userId}`;
   data.connected_accounts =

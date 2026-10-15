@@ -25,6 +25,8 @@ export type Status = {
   foodSearch: boolean;
   equipment: boolean;
   voice: boolean;
+  voiceInput?: boolean;
+  voiceOutput?: boolean;
   email: boolean;
   feedbackStorage: boolean;
 };
@@ -144,32 +146,32 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       let pending = guest[kind].filter((row) => !ids.has(row.id));
       if (kind === "workout") {
         try {
-          pending = await Promise.all(pending.map(async (row) => {
-            if (row.exercise_id && row.performed_at) return row;
-            const result = await api<{ match: { id: string; name: string } | null }>(
-              `exercises/match?name=${encodeURIComponent(String(row.exercise))}`,
-            );
-            if (!result.match)
-              throw new Error(`Could not import ${row.exercise}. Choose its catalog exercise in the workout log first.`);
-            return {
-              ...row,
-              exercise_id: result.match.id,
-              exercise: result.match.name,
-              performed_at: `${row.date}T12:00:00.000Z`,
-            };
-          }));
+          pending = await Promise.all(
+            pending.map(async (row) => {
+              if (row.exercise_id && row.performed_at) return row;
+              const result = await api<{
+                match: { id: string; name: string } | null;
+              }>(
+                `exercises/match?name=${encodeURIComponent(String(row.exercise))}`,
+              );
+              if (!result.match)
+                throw new Error(
+                  `Could not import ${row.exercise}. Choose its catalog exercise in the workout log first.`,
+                );
+              return {
+                ...row,
+                exercise_id: result.match.id,
+                exercise: result.match.name,
+                performed_at: `${row.date}T12:00:00.000Z`,
+              };
+            }),
+          );
         } catch (error) {
           setError(errorText(error));
           return;
         }
       }
-      if (
-        !(await save(kind, [
-          ...logs[kind],
-          ...pending,
-        ]))
-      )
-        return;
+      if (!(await save(kind, [...logs[kind], ...pending]))) return;
       const remaining = readGuest();
       remaining[kind] = [];
       sessionStorage.setItem(guestKey, JSON.stringify(remaining));

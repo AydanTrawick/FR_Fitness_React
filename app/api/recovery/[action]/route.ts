@@ -1,3 +1,4 @@
+import { getAuthURL } from "@/lib/auth/origin";
 import { getAuth } from "@/lib/auth";
 import { z } from "zod";
 import { emailSchema } from "@/lib/auth/validation";
@@ -56,9 +57,7 @@ export async function POST(
           "FirstRep two-factor recovery requested",
           "A request to remove your authenticator will be eligible after a 24-hour wait. Sign in and cancel it from Security settings if you did not request this.",
           {
-            url:
-              (process.env.BETTER_AUTH_URL || "http://localhost:3000") +
-              "/settings/security",
+            url: getAuthURL() + "/settings/security",
           },
         ),
       );
@@ -96,8 +95,7 @@ export async function POST(
         "FirstRep two-factor recovery completed",
         "The lost authenticator has been removed and existing sessions signed out. Sign in again, then add a new authenticator.",
         {
-          url:
-            (process.env.BETTER_AUTH_URL || "http://localhost:3000") + "/auth",
+          url: getAuthURL() + "/auth",
         },
       ),
     );

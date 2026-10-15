@@ -1,5 +1,11 @@
 "use client";
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  type FormEvent,
+} from "react";
 import {
   Camera,
   Download,
@@ -21,22 +27,12 @@ import { importWorkout } from "@/lib/import-workout";
 import exerciseCatalog from "@/lib/exercises.json";
 import type { Exercise } from "@/lib/workouts";
 import content from "@/lib/content.json";
-import { toKg, today, type Entry } from "@/lib/tracking";
+import { today } from "@/lib/tracking";
+import type { PendingAction } from "@/lib/assistant/schema";
+import { useAssistantVoice } from "./use-assistant-voice";
+import { AssistantTalkButton } from "./assistant-talk-button";
+import { AssistantConfirmCard } from "./assistant-confirm-card";
 type Message = { role: "user" | "assistant"; content: string };
-type WorkoutDraft = {
-  exercise: string;
-  sets: number | null;
-  reps: number | null;
-  weight: number | null;
-  unit: "lb" | "kg" | null;
-  date: string | null;
-  rpe: number | null;
-  exerciseMatch?: {
-    match: { id: string; name: string } | null;
-    confidence: string;
-    candidates: { id: string; name: string }[];
-  };
-};
 export function AiTool({
   mode,
   onSignIn,
@@ -44,7 +40,7 @@ export function AiTool({
   mode: "plan" | "assistant";
   onSignIn: () => void;
 }) {
-  const { status, logs, save, ready } = useStore();
+  const { status, reload } = useStore();
   const [includeTrainingHistory, setIncludeTrainingHistory] = useState(false);
   const [historyAllowed, setHistoryAllowed] = useState(false);
   useEffect(() => {
@@ -73,10 +69,40 @@ export function AiTool({
   const [transcribing, setTranscribing] = useState(false);
   const [emailed, setEmailed] = useState(false);
   const [emailing, setEmailing] = useState(false);
-  const [workoutDraft, setWorkoutDraft] = useState<WorkoutDraft | null>(null);
-  const [savingWorkout, setSavingWorkout] = useState(false);
-  const [selectedExercise, setSelectedExercise] = useState("");
-  const [selectedExerciseId, setSelectedExerciseId] = useState("");
+  const [actions, setActions] = useState<PendingAction[]>([]);
+  const [choices, setChoices] = useState<{ id: string; name: string }[]>([]);
+  const [conversationId, setConversationId] = useState(() =>
+    crypto.randomUUID(),
+  );
+  const requestTurn = useRef<{
+    prompt: string;
+    id: string;
+    source: "text" | "voice";
+    activeActionId?: string;
+    confirmationPayload?: unknown;
+    shown?: boolean;
+  } | null>(null);
+  const sendingTurn = useRef(false);
+  const voice = useAssistantVoice({
+    canSpeak: status.voiceOutput ?? status.voice,
+    onTranscript: (text) => sendMessage(text, "voice"),
+  });
+  const editAction = useCallback(
+    (id: string, payload: PendingAction["payload"]) =>
+      setActions((current) =>
+        current.some((a) => a.id === id && a.payload !== payload)
+          ? current.map((a) => (a.id === id ? { ...a, payload } : a))
+          : current,
+      ),
+    [],
+  );
+  const resolveAction = useCallback(
+    (id: string, status: string) =>
+      setActions((current) =>
+        current.map((a) => (a.id === id ? { ...a, status } : a)),
+      ),
+    [],
+  );
   const recorder = useRef<MediaRecorder | null>(null);
   const chunks = useRef<Blob[]>([]);
   const bottom = useRef<HTMLDivElement>(null);
@@ -84,6 +110,11 @@ export function AiTool({
     bottom.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [messages, busy]);
   async function speak(text: string, index: number) {
+    if (mode === "assistant") {
+      voice.unlockAudio();
+      await voice.playReply(text);
+      return;
+    }
     setError("");
     setSpeaking(index);
     try {
@@ -159,98 +190,87 @@ export function AiTool({
       setEmailing(false);
     }
   }
-  async function submit(event: FormEvent) {
-    event.preventDefault();
+  async function sendMessage(
+    text: string,
+    source: "text" | "voice" = "text",
+  ): Promise<string | undefined> {
+    if (sendingTurn.current) return;
+    sendingTurn.current = true;
     setBusy(true);
     setError("");
-    const text = prompt;
+    if (source === "text") voice.stopPlayback();
     try {
-      const result = await api<{ text: string; workoutDraft?: WorkoutDraft }>(
-        "ai",
-        {
+      if (
+        !requestTurn.current ||
+        requestTurn.current.prompt !== text ||
+        requestTurn.current.source !== source
+      ) {
+        const active = actions.filter((a) => a.status === "pending").at(-1);
+        requestTurn.current = {
+          prompt: text,
+          id: crypto.randomUUID(),
+          source,
+          activeActionId: active?.id,
+          confirmationPayload: active?.payload,
+        };
+      }
+      if (!requestTurn.current.shown) {
+        setMessages((current) => [...current, { role: "user", content: text }]);
+        requestTurn.current.shown = true;
+      }
+      let reply: string;
+      if (mode === "assistant") {
+        const result = await api<{
+          replyText: string;
+          pendingActions: PendingAction[];
+          exerciseChoices?: { id: string; name: string }[];
+          actionResult?: { id: string; status: string };
+        }>("assistant/chat", {
+          prompt: text,
+          mode: source,
+          conversationId,
+          requestId: requestTurn.current.id,
+          history: messages.slice(-12),
+          includeTrainingHistory: historyAllowed && includeTrainingHistory,
+          ...(source === "voice"
+            ? {
+                activeActionId: requestTurn.current.activeActionId,
+                confirmationPayload: requestTurn.current.confirmationPayload,
+              }
+            : {}),
+        });
+        reply = result.replyText;
+        setActions(result.pendingActions);
+        setChoices(result.exerciseChoices ?? []);
+        if (result.actionResult?.status === "confirmed") void reload();
+      } else {
+        const result = await api<{ text: string }>("ai", {
           mode,
           prompt: text,
           history: messages.slice(-12),
           includeTrainingHistory: historyAllowed && includeTrainingHistory,
           localDate: today(),
-        },
-      );
-      setMessages([
-        ...messages,
-        { role: "user", content: text },
-        { role: "assistant", content: result.text },
+        });
+        reply = result.text;
+      }
+      setMessages((current) => [
+        ...current,
+        { role: "assistant", content: reply },
       ]);
+      requestTurn.current = null;
       setPrompt("");
-      setWorkoutDraft(result.workoutDraft ?? null);
-      setSelectedExercise(
-        result.workoutDraft?.exerciseMatch?.match?.name ??
-          result.workoutDraft?.exercise ??
-          "",
-      );
-      setSelectedExerciseId(
-        result.workoutDraft?.exerciseMatch?.match?.id ?? "",
-      );
+      return reply;
     } catch (e) {
       setError(errorText(e));
+      if (source === "voice") throw e;
     } finally {
+      sendingTurn.current = false;
       setBusy(false);
     }
   }
-  async function confirmWorkout(event: FormEvent<HTMLFormElement>) {
+  async function submit(event: FormEvent) {
     event.preventDefault();
-    if (!workoutDraft || !ready || savingWorkout) return;
-    setSavingWorkout(true);
-    setError("");
-    const fields = Object.fromEntries(new FormData(event.currentTarget));
-    let matched: { id: string; name: string };
-    try {
-      const resolution = await api<{
-        match: { id: string; name: string } | null;
-        candidates: { id: string; name: string }[];
-      }>(
-        `exercises/match?name=${encodeURIComponent(selectedExerciseId || selectedExercise)}`,
-      );
-      if (!resolution.match)
-        throw new Error("Choose a recognized catalog exercise before logging.");
-      matched = resolution.match;
-    } catch (error) {
-      setError(errorText(error));
-      setSavingWorkout(false);
-      return;
-    }
-    const row: Entry = {
-      id: crypto.randomUUID(),
-      date: String(fields.date),
-      exercise: matched.name,
-      exercise_id: matched.id,
-      performed_at:
-        String(fields.date) === today()
-          ? new Date().toISOString()
-          : `${fields.date}T12:00:00.000Z`,
-      sets: Number(fields.sets),
-      reps: Number(fields.reps),
-      weight_kg: toKg(Number(fields.weight), String(fields.unit)),
-      rpe: Number(fields.rpe),
-      notes: "",
-    };
-    try {
-      if (await save("workout", [...logs.workout, row])) {
-        setWorkoutDraft(null);
-        setMessages((current) => [
-          ...current,
-          {
-            role: "assistant",
-            content: `Logged ${row.sets} sets of ${row.exercise} for ${row.reps} reps at ${fields.weight} ${fields.unit} on ${row.date}.`,
-          },
-        ]);
-      } else {
-        setError(
-          "The workout could not be saved. Check the tracker notice and try again.",
-        );
-      }
-    } finally {
-      setSavingWorkout(false);
-    }
+    await sendMessage(prompt);
   }
   const latest = [...messages].reverse().find((m) => m.role === "assistant");
   return (
@@ -344,9 +364,18 @@ export function AiTool({
                 className="btn secondary small"
                 disabled={busy}
                 onClick={() => {
+                  voice.stopPlayback();
                   setMessages([]);
                   setError("");
-                  setWorkoutDraft(null);
+                  actions.forEach((action) => {
+                    void api(`assistant/actions/${action.id}/cancel`, {
+                      conversationId,
+                    }).catch(() => {});
+                  });
+                  setActions([]);
+                  setChoices([]);
+                  setConversationId(crypto.randomUUID());
+                  requestTurn.current = null;
                 }}
               >
                 Start over
@@ -414,16 +443,20 @@ export function AiTool({
                     <span className="eyebrow">
                       {message.role === "user" ? "YOU" : "FIRSTREP"}
                     </span>
-                    {message.role === "assistant" && status.voice && (
-                      <button
-                        className="btn icon"
-                        aria-label="Listen to this reply"
-                        disabled={speaking === i}
-                        onClick={() => speak(message.content, i)}
-                      >
-                        <Volume2 size={14} />
-                      </button>
-                    )}
+                    {message.role === "assistant" &&
+                      status.voice &&
+                      (mode === "plan" || voice.canSpeak) && (
+                        <button
+                          className="btn icon"
+                          aria-label="Listen to this reply"
+                          disabled={
+                            mode === "assistant" ? voice.muted : speaking === i
+                          }
+                          onClick={() => speak(message.content, i)}
+                        >
+                          <Volume2 size={14} />
+                        </button>
+                      )}
                   </div>
                   <div className="markdown">
                     <ReactMarkdown>{message.content}</ReactMarkdown>
@@ -433,149 +466,53 @@ export function AiTool({
               {busy && <p className="muted">FirstRep is thinking…</p>}
               <div ref={bottom} />
             </div>
-            {mode === "assistant" && workoutDraft && (
-              <form
-                key={JSON.stringify(workoutDraft)}
-                className="stack"
-                onSubmit={confirmWorkout}
-                aria-label="Review workout log"
-              >
-                <h3>Review workout log</h3>
-                <p className="muted">
-                  Nothing is saved until you confirm. Fill in any missing
-                  details.
+            {mode === "assistant" &&
+              actions.filter((action) => action.status === "pending").length >
+                1 && (
+                <p className="notice">
+                  More than one draft is open. Saying yes confirms only the most
+                  recent card. Use a card’s Confirm button to save another.
                 </p>
-                <div className="form-grid">
-                  <Field label="Training date">
-                    <input
-                      name="date"
-                      type="date"
-                      defaultValue={workoutDraft.date ?? today()}
-                      required
-                    />
-                  </Field>
-                  <Field label="Exercise">
-                    <input
-                      name="exercise"
-                      value={selectedExercise}
-                      onChange={(event) => {
-                        setSelectedExercise(event.target.value);
-                        setSelectedExerciseId("");
-                      }}
-                      maxLength={300}
-                      required
-                    />
-                  </Field>
-                  {!workoutDraft.exerciseMatch?.match &&
-                    !!workoutDraft.exerciseMatch?.candidates.length && (
-                      <Field label="Did you mean…?">
-                        <select
-                          defaultValue=""
-                          onChange={(event) => {
-                            const candidate =
-                              workoutDraft.exerciseMatch?.candidates.find(
-                                (item) => item.id === event.target.value,
-                              );
-                            if (candidate) {
-                              setSelectedExercise(candidate.name);
-                              setSelectedExerciseId(candidate.id);
-                            }
-                          }}
-                        >
-                          <option value="" disabled>
-                            Choose an exercise
-                          </option>
-                          {workoutDraft.exerciseMatch.candidates.map(
-                            (candidate) => (
-                              <option key={candidate.id} value={candidate.id}>
-                                {candidate.name} ({candidate.id})
-                              </option>
-                            ),
-                          )}
-                        </select>
-                      </Field>
-                    )}
-                  <Field label="Sets">
-                    <input
-                      name="sets"
-                      type="number"
-                      min="1"
-                      max="100"
-                      step="1"
-                      defaultValue={workoutDraft.sets ?? ""}
-                      required
-                    />
-                  </Field>
-                  <Field label="Reps per set">
-                    <input
-                      name="reps"
-                      type="number"
-                      min="1"
-                      max="1000"
-                      step="1"
-                      defaultValue={workoutDraft.reps ?? ""}
-                      required
-                    />
-                  </Field>
-                  <Field label="Weight">
-                    <input
-                      name="weight"
-                      type="number"
-                      min="0"
-                      max="2205"
-                      step="any"
-                      defaultValue={workoutDraft.weight ?? ""}
-                      required
-                    />
-                  </Field>
-                  <Field label="Weight unit">
-                    <select
-                      name="unit"
-                      defaultValue={workoutDraft.unit ?? ""}
-                      required
-                    >
-                      <option value="" disabled>
-                        Choose unit
-                      </option>
-                      <option value="lb">lb</option>
-                      <option value="kg">kg</option>
-                    </select>
-                  </Field>
-                  <Field label="RPE (effort, 1–10)">
-                    <input
-                      name="rpe"
-                      type="number"
-                      min="1"
-                      max="10"
-                      step="0.5"
-                      defaultValue={workoutDraft.rpe ?? 7}
-                      required
-                    />
-                  </Field>
-                </div>
-                {workoutDraft.rpe === null && (
-                  <p className="muted">
-                    RPE defaults to 7 because the workout tracker requires it.
-                    Adjust it before confirming if needed.
-                  </p>
-                )}
-                <div className="row">
-                  <button
-                    className="btn primary"
-                    disabled={savingWorkout || !ready}
-                  >
-                    {savingWorkout ? "Saving…" : "Confirm and log workout"}
-                  </button>
+              )}
+            {mode === "assistant" &&
+              actions.map((action) => (
+                <AssistantConfirmCard
+                  key={`${action.id}:${action.status}`}
+                  action={action}
+                  conversationId={conversationId}
+                  onSaved={reload}
+                  onEdited={editAction}
+                  onResolved={resolveAction}
+                />
+              ))}
+            {mode === "assistant" && choices.length > 0 && (
+              <div className="row wrap" aria-label="Exercise choices">
+                {choices.map((choice) => (
                   <button
                     type="button"
                     className="btn secondary"
-                    disabled={savingWorkout}
-                    onClick={() => setWorkoutDraft(null)}
+                    key={choice.id}
+                    onClick={() =>
+                      setPrompt(
+                        `Use ${choice.name} (${choice.id}) for that workout request.`,
+                      )
+                    }
                   >
-                    Cancel
+                    {choice.name}
                   </button>
-                </div>
-              </form>
+                ))}
+                <button
+                  type="button"
+                  className="btn secondary"
+                  onClick={() =>
+                    setPrompt(
+                      "Use the custom exercise name I originally stated for that workout request.",
+                    )
+                  }
+                >
+                  Use custom name
+                </button>
+              </div>
             )}
             {error && (
               <p role="alert" className="notice error">
@@ -602,6 +539,36 @@ export function AiTool({
                 </span>
               )}
             </div>
+            {mode === "assistant" && (
+              <div
+                id="assistant-voice-status"
+                role="status"
+                aria-live="polite"
+                className="muted"
+                style={{ padding: "8px 0" }}
+              >
+                {voice.state === "idle"
+                  ? status.voiceInput || status.voice
+                    ? "Hold Space away from the text box to talk, or use the microphone button."
+                    : "Voice is not configured yet. Text chat is available."
+                  : voice.state === "listening"
+                    ? "Listening. Your microphone stops when you send."
+                    : voice.state === "permission"
+                      ? "Allow microphone access in your browser."
+                      : voice.state === "speaking"
+                        ? "Speaking. Start talking to interrupt."
+                        : voice.state === "transcribing"
+                          ? "Transcribing your recording…"
+                          : voice.state === "thinking"
+                            ? "FirstRep is thinking…"
+                            : "Voice needs attention. You can still type below."}
+              </div>
+            )}
+            {mode === "assistant" && voice.error && (
+              <p role="alert" className="notice error">
+                {voice.error}
+              </p>
+            )}
             <form onSubmit={submit} className="chat-composer">
               <textarea
                 aria-label="Your request"
@@ -617,7 +584,10 @@ export function AiTool({
                 required
                 rows={3}
               />
-              {status.voice && (
+              {mode === "assistant" && (status.voiceInput || status.voice) && (
+                <AssistantTalkButton voice={voice} disabled={busy} />
+              )}
+              {mode === "plan" && status.voice && (
                 <button
                   type="button"
                   className={`btn ${recording ? "primary" : "secondary"}`}
@@ -635,18 +605,30 @@ export function AiTool({
                       : "Speak"}
                 </button>
               )}
-              <button className="btn primary" disabled={busy || savingWorkout}>
+              <button
+                className="btn primary"
+                disabled={
+                  busy ||
+                  (mode === "assistant" &&
+                    [
+                      "permission",
+                      "listening",
+                      "transcribing",
+                      "thinking",
+                    ].includes(voice.state))
+                }
+              >
                 <Send size={16} />
                 {busy ? "Working…" : "Send"}
               </button>
             </form>
             <p className="footnote">
               Submitted text is sent to Anthropic. AI replies are drafts; review
-              food exclusions and exercise suitability. Workout entries are
-              saved only after you review and confirm them. Conversations last
-              while this screen is open.
-              {status.voice &&
-                " Voice recordings and replies are sent to ElevenLabs."}
+              food exclusions and exercise suitability. Workout and food entries
+              are saved only after you review and confirm them. Conversations
+              last while this screen is open.{" "}
+              {mode === "assistant" &&
+                "Voice audio is sent to ElevenLabs for transcription and speech. FirstRep processes audio in memory and does not save recordings. Educational tools. Not medical advice."}
             </p>
           </>
         )}

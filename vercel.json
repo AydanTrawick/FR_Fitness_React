@@ -3,6 +3,7 @@
     {
       "path": "/api/jobs/accounts",
       "schedule": "0 9 * * *"
-    }
+    },
+    { "path": "/api/jobs/progress", "schedule": "30 9 * * *" }
   ]
 }

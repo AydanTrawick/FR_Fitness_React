@@ -125,6 +125,18 @@ function History({
     event.preventDefault();
     const fields = Object.fromEntries(new FormData(event.currentTarget));
     if (!edit) return;
+    for (const key of ["rpe", "protein_g", "carbs_g", "fat_g"]) {
+      if (key in fields && fields[key] === "")
+        (fields as Record<string, unknown>)[key] = null;
+    }
+    if (
+      kind === "food" &&
+      ["protein_g", "carbs_g", "fat_g"].some(
+        (key) => String(fields[key] ?? "") !== String(edit[key] ?? ""),
+      )
+    ) {
+      (fields as Record<string, unknown>).calories = null;
+    }
     const session = kind === "workout" ? readSessionNote(edit.notes) : null;
     if (session) fields.notes = sessionNotes(fields.notes, session);
     let matched: ExerciseMatch["match"] = null;
@@ -221,6 +233,15 @@ function History({
                         : (edit[key] ?? "")
                     }
                   />
+                ) : ["rpe", "protein_g", "carbs_g", "fat_g"].includes(key) ? (
+                  <input
+                    name={key}
+                    type="number"
+                    min={numericLimits[key][0]}
+                    max={numericLimits[key][1]}
+                    step={numericLimits[key][2]}
+                    defaultValue={edit[key] ?? ""}
+                  />
                 ) : (
                   <NumberInput
                     name={key}
@@ -303,7 +324,7 @@ function History({
                             maximumFractionDigits: 1,
                           })
                         ) : (
-                          row[key]
+                          (row[key] ?? "—")
                         )}
                       </td>
                     ))}
@@ -313,7 +334,9 @@ function History({
                         : kind === "workout"
                           ? volume(row)
                           : calories(row)
-                      ).toLocaleString(undefined, { maximumFractionDigits: 1 })}
+                      )?.toLocaleString(undefined, {
+                        maximumFractionDigits: 1,
+                      }) ?? "—"}
                     </td>
                     <td>
                       <div className="row">
@@ -680,13 +703,14 @@ export function FoodTracker() {
     .filter((row) => row.date === date)
     .reduce(
       (s, r) => ({
-        calories: s.calories + calories(r),
+        calories: s.calories + (calories(r) ?? 0),
         protein: s.protein + Number(r.protein_g),
         carbs: s.carbs + Number(r.carbs_g),
         fat: s.fat + Number(r.fat_g),
       }),
       { calories: 0, protein: 0, carbs: 0, fat: 0 },
     );
+  const macroEnergy = totals.protein * 4 + totals.carbs * 4 + totals.fat * 9;
   const per100 =
     mode === "usda"
       ? choice?.macros
@@ -740,6 +764,12 @@ export function FoodTracker() {
       <div className="two-col">
         <Card>
           <h3>Log your food</h3>
+          {logs.food.some((r) => r.date === date && calories(r) == null) && (
+            <p className="muted">
+              Totals include known values only. Unstated nutrients and calories
+              are unknown.
+            </p>
+          )}
           <div className="tabs">
             {[
               ["common", "Common foods"],
@@ -907,14 +937,30 @@ export function FoodTracker() {
             className="nutrition-ring"
             style={{
               background:
-                totals.calories > 0
-                  ? `conic-gradient(#5b8cff 0 ${((totals.protein * 4) / totals.calories) * 100}%, #a995c0 ${((totals.protein * 4) / totals.calories) * 100}% ${((totals.protein * 4 + totals.carbs * 4) / totals.calories) * 100}%, #d9bd89 ${((totals.protein * 4 + totals.carbs * 4) / totals.calories) * 100}% 100%)`
+                macroEnergy > 0 &&
+                !logs.food.some(
+                  (r) =>
+                    r.date === date &&
+                    [r.protein_g, r.carbs_g, r.fat_g].some((v) => v == null),
+                )
+                  ? `conic-gradient(#5b8cff 0 ${((totals.protein * 4) / macroEnergy) * 100}%, #a995c0 ${((totals.protein * 4) / macroEnergy) * 100}% ${((totals.protein * 4 + totals.carbs * 4) / macroEnergy) * 100}%, #d9bd89 ${((totals.protein * 4 + totals.carbs * 4) / macroEnergy) * 100}% 100%)`
                   : "#283146",
             }}
           >
             <div>
-              <strong>{Math.round(totals.calories).toLocaleString()}</strong>
-              <span>calories logged</span>
+              <strong>
+                {logs.food.filter((r) => r.date === date).length &&
+                logs.food
+                  .filter((r) => r.date === date)
+                  .every((r) => calories(r) == null)
+                  ? "—"
+                  : Math.round(totals.calories).toLocaleString()}
+              </strong>
+              <span>
+                {logs.food.some((r) => r.date === date && calories(r) == null)
+                  ? "known calories"
+                  : "calories logged"}
+              </span>
             </div>
           </div>
           {[
@@ -927,7 +973,14 @@ export function FoodTracker() {
                 <i className={`macro-dot ${color}`} />
                 {label}
               </span>
-              <strong>{Number(value).toFixed(1)} g</strong>
+              <strong>
+                {logs.food.filter((r) => r.date === date).length &&
+                logs.food
+                  .filter((r) => r.date === date)
+                  .every((r) => r[`${color}_g`] == null)
+                  ? "Not provided"
+                  : `${Number(value).toFixed(1)} g`}
+              </strong>
             </div>
           ))}
           <p className="muted">

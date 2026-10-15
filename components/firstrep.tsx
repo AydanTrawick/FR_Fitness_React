@@ -39,6 +39,9 @@ const navigation = [
     items: [
       { id: "home", label: "Dashboard", Icon: LayoutDashboard },
       { id: "analysis", label: "Your Analysis", Icon: Activity },
+      { id: "progress", label: "Progress", Icon: Scale },
+      { id: "coach", label: "Progress Coach", Icon: Sparkles },
+      { id: "playbook", label: "Your Playbook", Icon: BookOpen },
     ],
   },
   {
@@ -78,8 +81,8 @@ function Shell() {
     return () => window.removeEventListener("hashchange", sync);
   }, []);
   function go(id: string) {
-    if (id === "analysis") {
-      router.push("/analysis");
+    if (["analysis", "progress", "coach", "playbook"].includes(id)) {
+      router.push(`/${id}`);
       return;
     }
     setPage(id);
@@ -125,7 +128,11 @@ function Shell() {
               <p>{group.section}</p>
               {group.items.map(({ id, label, Icon }) => (
                 <a
-                  href={id === "analysis" ? "/analysis" : `#${id}`}
+                  href={
+                    ["analysis", "progress", "coach", "playbook"].includes(id)
+                      ? `/${id}`
+                      : `#${id}`
+                  }
                   className={page === id ? "nav-item active" : "nav-item"}
                   aria-current={page === id ? "page" : undefined}
                   key={id}
@@ -257,6 +264,7 @@ function Shell() {
               {page === "equipment" && <Equipment />}
               {(page === "plans" || page === "assistant") && (
                 <AiTool
+                  key={page}
                   mode={page === "plans" ? "plan" : "assistant"}
                   onSignIn={() => router.push("/settings/profile")}
                 />

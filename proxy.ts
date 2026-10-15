@@ -6,6 +6,10 @@ export function proxy(request: NextRequest) {
   const protectedPath =
     path === "/" ||
     path === "/analysis" ||
+    path === "/progress" ||
+    path.startsWith("/progress/") ||
+    path === "/coach" ||
+    path === "/playbook" ||
     path.startsWith("/settings") ||
     path === "/onboarding";
   if (
@@ -29,6 +33,7 @@ export function proxy(request: NextRequest) {
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https:",
     "font-src 'self'",
+    "media-src 'self' blob:",
     "connect-src 'self' https://challenges.cloudflare.com " +
       analyticsOrigin +
       " " +
