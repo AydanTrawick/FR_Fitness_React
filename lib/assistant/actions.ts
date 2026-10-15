@@ -50,7 +50,7 @@ export async function createAction(
       ? prepareFood(input, context(user))
       : await resolveWorkout(input, user, sql);
   const rows =
-    await sql`INSERT INTO pending_log_actions(user_id,conversation_id,kind,source,payload,idempotency_key) VALUES(${user.id},${conversationId},${kind},${source},${sql.json(payload)},${key}) ON CONFLICT(idempotency_key) DO NOTHING RETURNING id,kind,status,payload,expires_at`;
+    await sql`INSERT INTO pending_log_actions(user_id,conversation_id,kind,source,payload,idempotency_key) VALUES(${user.id},${conversationId},${kind},${source},${JSON.stringify(payload)}::jsonb,${key}) ON CONFLICT(idempotency_key) DO NOTHING RETURNING id,kind,status,payload,expires_at`;
   const row =
     rows[0] ??
     (
@@ -125,7 +125,7 @@ export async function changeAction(
         resultIds.push(rowId);
       }
     }
-    await tx`UPDATE pending_log_actions SET status='confirmed',confirmed_at=NOW(),result_ids=${resultIds},payload=${tx.json(confirmedPayload)} WHERE id=${id}`;
+    await tx`UPDATE pending_log_actions SET status='confirmed',confirmed_at=NOW(),result_ids=${resultIds},payload=${JSON.stringify(confirmedPayload)}::jsonb WHERE id=${id}`;
     return { status: "confirmed", kind: action.kind, resultIds };
   });
 }

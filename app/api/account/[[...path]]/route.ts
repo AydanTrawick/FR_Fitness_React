@@ -161,7 +161,8 @@ async function handle(
     }
     if (path === "preferences") {
       const values = preferencesSchema.parse(body);
-      await sql`INSERT INTO firstrep_user_settings(user_id,preferences) VALUES (${user.id},${sql.json(values)}) ON CONFLICT(user_id) DO UPDATE SET preferences=EXCLUDED.preferences,updated_at=NOW()`;
+      // Drizzle configures the shared client for pre-serialized JSON values.
+      await sql`INSERT INTO firstrep_user_settings(user_id,preferences) VALUES (${user.id},${JSON.stringify(values)}::jsonb) ON CONFLICT(user_id) DO UPDATE SET preferences=EXCLUDED.preferences,updated_at=NOW()`;
       await audit(user.id, "preferences-updated", request);
       return response({ saved: true });
     }

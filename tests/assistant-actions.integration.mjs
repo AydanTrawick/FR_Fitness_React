@@ -20,7 +20,12 @@ function query(parts, ...values) {
   );
   return pg.query(text, values).then((result) => result.rows);
 }
-query.json = (value) => JSON.stringify(value);
+// Drizzle replaces the shared postgres client's JSON serializers with identity
+// functions. Raw object parameters then fail in postgres before reaching SQL.
+// Require pre-serialized JSON so this integration catches that production bug.
+query.json = () => {
+  throw new TypeError("Shared Drizzle JSON serializer requires strings");
+};
 let chain = Promise.resolve();
 query.begin = (callback) => {
   const run = chain.then(async () => {
