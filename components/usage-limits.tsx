@@ -273,25 +273,6 @@ function UsageLimitsDialog() {
           <>
             <section
               className={styles.group}
-              aria-labelledby="usage-plans-heading"
-            >
-              <h3 id="usage-plans-heading">
-                <span className={styles.icon}>
-                  <FileText size={23} />
-                </span>
-                AI Plan Builder
-              </h3>
-              {group(["planHour", "planDay", "planIp"]).map((meter) => (
-                <Meter key={meter.id} meter={meter} now={now} />
-              ))}
-              <p className={styles.note}>
-                Includes meal and workout plans, Progress Coach turns, and
-                Playbook generation. Network usage is shared with others
-                on your connection.
-              </p>
-            </section>
-            <section
-              className={styles.group}
               aria-labelledby="usage-voice-heading"
             >
               <h3 id="usage-voice-heading">
@@ -309,6 +290,25 @@ function UsageLimitsDialog() {
                 Transcription, an AI reply, and audio playback each use one
                 request. Text and voice share these usage limits. Spoken replies use
                 characters, not audio minutes.
+              </p>
+            </section>
+            <section
+              className={styles.group}
+              aria-labelledby="usage-plans-heading"
+            >
+              <h3 id="usage-plans-heading">
+                <span className={styles.icon}>
+                  <FileText size={23} />
+                </span>
+                AI Plan Builder
+              </h3>
+              {group(["planHour", "planDay", "planIp"]).map((meter) => (
+                <Meter key={meter.id} meter={meter} now={now} />
+              ))}
+              <p className={styles.note}>
+                Includes meal and workout plans, Progress Coach turns, and
+                Playbook generation. Network usage is shared with others
+                on your connection.
               </p>
             </section>
           </>
