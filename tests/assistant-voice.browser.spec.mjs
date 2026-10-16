@@ -402,3 +402,35 @@ test('Space records outside text inputs and remains typing inside them', async (
  const input=page.getByRole('textbox',{name:'Your request'});await input.focus();await page.keyboard.press('Space');
  await expect(input).toHaveValue(' ');expect(stats.transcriptions).toBe(1);
 });
+
+test("rate limits explain the actual wait and keep the composer available", async ({ page }) => {
+  await setup(page);
+  await page.route("**/api/assistant/chat", (route) => route.fulfill({ status: 429, headers: { "Retry-After": "720" }, json: {
+    error: "rate_limited", message: "Too many attempts.", retryAfterSeconds: 720, scope: "voice",
+  } }));
+  await page.getByRole("textbox", { name: "Your request" }).fill("What is RPE?");
+  await page.getByRole("button", { name: "Send", exact: true }).click();
+  await expect(page.getByRole("alert").filter({ hasText: "Try again in 12 min." })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Send", exact: true })).toBeEnabled();
+});
+test("TTS character allowance pauses audio while keeping text replies visible", async ({ page }) => {
+  await setup(page);
+  await page.route("**/api/assistant/chat", (route) => route.fulfill({ json: {
+    replyText: "Keep your movement controlled.", pendingActions: [], ttsLimited: true,
+  } }));
+  await page.getByRole("textbox", { name: "Your request" }).fill("What should I focus on?");
+  await page.getByRole("button", { name: "Send", exact: true }).click();
+  await expect(page.getByText("Keep your movement controlled.", { exact: true })).toBeVisible();
+  await expect(page.getByText("Audio is paused for today. Your text replies are still available.", { exact: true })).toBeVisible();
+});
+test("both streaming and native playback handle a capped TTS response without an audio error", async ({ page }) => {
+  await setup(page);
+  await page.route("**/api/assistant/speak**", (route) => route.fulfill({ json: {
+    replyText: "RPE is a way to describe how hard a set feels.", ttsLimited: true,
+  } }));
+  await page.getByRole("textbox", { name: "Your request" }).fill("What is RPE?");
+  await page.getByRole("button", { name: "Send", exact: true }).click();
+  await page.getByRole("button", { name: "Listen to this reply", exact: true }).click();
+  await expect(page.getByText("Audio is paused for today. Your text replies are still available.", { exact: true })).toBeVisible();
+  await expect(page.getByText(/Could not play the reply/)).toHaveCount(0);
+});

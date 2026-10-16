@@ -3,7 +3,8 @@ import { requireUser, checkOrigin, HttpError } from "@/lib/server";
 import { assistantResponse, assistantError } from "@/lib/assistant/http";
 import { streamSpeech } from "@/lib/assistant/speech";
 import { speechTicket, readSpeechTicket } from "@/lib/assistant/speech-ticket";
-import { limitVoice } from "@/lib/assistant/voice-limit";
+import { limits } from "@/lib/ratelimit/limiters";
+import { spokenText } from "@/lib/assistant/voice";
 export const runtime = "nodejs";
 export async function POST(request: Request) {
   try {
@@ -17,7 +18,12 @@ export async function POST(request: Request) {
       .strict()
       .parse(await request.json());
     if (body.transport === "native") {
-      await limitVoice(user.id, "speech-prepare");
+      await limits.previewVoice(user.id);
+      if (!(await limits.tts(user.id, spokenText(body.replyText), false)))
+        return assistantResponse({
+          replyText: body.replyText,
+          ttsLimited: true,
+        });
       if (!process.env.BETTER_AUTH_SECRET)
         throw new HttpError("Speech playback is unavailable.", 503);
       return assistantResponse({
@@ -26,7 +32,9 @@ export async function POST(request: Request) {
           speechTicket(user.id, body.replyText, process.env.BETTER_AUTH_SECRET),
       });
     }
-    await limitVoice(user.id, "speak");
+    await limits.voice(user.id);
+    if (!(await limits.tts(user.id, spokenText(body.replyText))))
+      return assistantResponse({ replyText: body.replyText, ttsLimited: true });
     return await streamSpeech(
       body.replyText,
       process.env,
@@ -41,7 +49,6 @@ export async function GET(request: Request) {
   try {
     const user = await requireUser();
     checkOrigin(request);
-    await limitVoice(user.id, "speak");
     let text: string;
     try {
       text = readSpeechTicket(
@@ -55,6 +62,9 @@ export async function GET(request: Request) {
         400,
       );
     }
+    await limits.voice(user.id);
+    if (!(await limits.tts(user.id, spokenText(text))))
+      return assistantResponse({ replyText: text, ttsLimited: true });
     return await streamSpeech(text, process.env, fetch, request.signal);
   } catch (error) {
     return assistantError(error);

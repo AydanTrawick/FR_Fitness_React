@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { usageChanged, usageFetch } from "@/lib/ratelimit/usage-client";
+import { requestError } from "@/lib/ratelimit/client";
 import {
   MIN_CLIP_MS,
   MAX_CLIP_MS,
@@ -23,7 +25,8 @@ export function useAssistantVoice({
 }) {
   const [state, setState] = useState<VoiceState>("idle"),
     [error, setError] = useState(""),
-    [muted, setMuted] = useState(false);
+    [muted, setMuted] = useState(false),
+    [ttsLimited, setTtsLimited] = useState(false);
   const recorder = useRef<MediaRecorder | null>(null),
     stream = useRef<MediaStream | null>(null),
     audio = useRef<HTMLAudioElement | null>(null),
@@ -104,6 +107,7 @@ export function useAssistantVoice({
   async function playReply(reply: string) {
     if (isMuted.current || !canSpeak || dead.current) return;
     stopPlayback();
+    setError("");
     const turn = ++generation.current,
       abort = new AbortController();
     network.current = abort;
@@ -131,16 +135,25 @@ export function useAssistantVoice({
         typeof MediaSource !== "undefined" &&
         MediaSource.isTypeSupported("audio/mpeg")
       ) {
-        const res = await fetch("/api/assistant/speak", {
+        const res = await usageFetch("/api/assistant/speak", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ replyText: text }),
           signal: abort.signal,
         });
-        if (!res.ok)
-          throw new Error(
-            (await res.json()).error || "Could not play the reply.",
-          );
+        if (
+          !res.ok ||
+          res.headers.get("content-type")?.includes("application/json")
+        ) {
+          const data = await res.json();
+          if (res.ok && data.ttsLimited) {
+            setTtsLimited(true);
+            change("idle");
+            return;
+          }
+          throw requestError(res, data);
+        }
+        setTtsLimited(false);
         if (!res.body) throw new Error("Audio streaming is unavailable.");
         const media = new MediaSource();
         objectUrl.current = URL.createObjectURL(media);
@@ -203,15 +216,54 @@ export function useAssistantVoice({
       } else {
         // Native progressive MP3 playback works on iOS without buffering the full
         // POST response. A user-bound encrypted ticket bridges POST to audio GET.
-        const res = await fetch("/api/assistant/speak", {
+        const res = await usageFetch("/api/assistant/speak", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ replyText: text, transport: "native" }),
           signal: abort.signal,
         });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Could not play the reply.");
+        if (!res.ok) throw requestError(res, data);
+        if (data.ttsLimited) {
+          setTtsLimited(true);
+          change("idle");
+          return;
+        }
+        setTtsLimited(false);
         if (abort.signal.aborted) return;
+        player.onerror = async () => {
+          if (abort.signal.aborted || generation.current !== turn) return;
+          try {
+            // Native audio elements cannot read JSON errors. Probe the free
+            // preparation endpoint again if a quota changed after preparation.
+            const check = await usageFetch("/api/assistant/speak", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ replyText: text, transport: "native" }),
+              signal: abort.signal,
+            });
+            const details = await check.json();
+            if (check.ok && details.ttsLimited) {
+              setTtsLimited(true);
+              change("idle");
+              return;
+            }
+            if (!check.ok) throw requestError(check, details);
+            throw new Error(
+              "Could not play the reply. Tap Listen to retry; the text is still here.",
+            );
+          } catch (error) {
+            if (!abort.signal.aborted && !dead.current) {
+              setError(
+                error instanceof Error
+                  ? error.message
+                  : "Could not play the reply.",
+              );
+              change("error");
+            }
+          }
+        };
+        player.onloadeddata = () => usageChanged("assistant/speak");
         player.src = data.url;
         await player.play();
       }
@@ -292,14 +344,15 @@ export function useAssistantVoice({
             blob.type.includes("mp4") ? "voice.mp4" : "voice.webm",
           );
           form.set("durationMs", String(Math.round(duration)));
-          const res = await fetch("/api/assistant/transcribe", {
+          const res = await usageFetch("/api/assistant/transcribe", {
             method: "POST",
             body: form,
             signal: abort.signal,
           });
           const data = await res.json();
-          if (!res.ok || !data.text?.trim())
-            throw new Error(data.error || "Didn't catch that, try again.");
+          if (!res.ok) throw requestError(res, data);
+          if (!data.text?.trim())
+            throw new Error("Didn't catch that, try again.");
           if (dead.current || generation.current !== turn) return;
           change("thinking");
           const reply = await callback.current(data.text.trim());
@@ -374,6 +427,8 @@ export function useAssistantVoice({
     canSpeak,
     error,
     muted,
+    ttsLimited,
+    setTtsLimited,
     start,
     stop,
     toggle,

@@ -774,3 +774,5 @@
     height: 340px;
   }
 }
+
+.pc-header > .row { gap: 10px; flex-wrap: wrap; justify-content: flex-end; }

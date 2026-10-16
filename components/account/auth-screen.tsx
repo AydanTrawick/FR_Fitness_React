@@ -1,6 +1,12 @@
 "use client";
 import { BrandLogo } from "@/components/brand-logo";
-import { useState, useEffect, useCallback, type FormEvent } from "react";
+import {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  type FormEvent,
+} from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -23,6 +29,7 @@ import {
 import { PasswordInput } from "./password-input";
 import { Turnstile } from "./turnstile";
 import { loginErrorMessage } from "@/lib/auth/login-error";
+import { requestError } from "@/lib/ratelimit/client";
 
 export async function authRequest(path: string, body: unknown) {
   const res = await fetch("/api/auth/" + path, {
@@ -40,8 +47,7 @@ export async function authRequest(path: string, body: unknown) {
     body: JSON.stringify(body),
   });
   const data = await res.json();
-  if (!res.ok)
-    throw new Error(data.message || "Unable to continue. Please try again.");
+  if (!res.ok) throw requestError(res, data);
   return data;
 }
 export function AuthScreen({
@@ -62,6 +68,7 @@ export function AuthScreen({
   const [step, setStep] = useState(initialStep);
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
+  const inFlight = useRef(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [remember, setRemember] = useState(true);
@@ -107,6 +114,8 @@ export function AuthScreen({
       .catch(() => {});
   }, [complete, initialStep]);
   async function run(action: () => Promise<void>) {
+    if (inFlight.current) return;
+    inFlight.current = true;
     setBusy(true);
     setError("");
     setNotice("");
@@ -115,6 +124,7 @@ export function AuthScreen({
     } catch (e) {
       setError(e instanceof Error ? e.message : "Please try again.");
     } finally {
+      inFlight.current = false;
       setBusy(false);
     }
   }
@@ -380,24 +390,26 @@ export function AuthScreen({
           {step === "register" && (
             <form
               className="account-form"
-              onSubmit={signup.handleSubmit(
-                (values) =>
-                  void run(async () => {
-                    if (siteKey && !captcha)
-                      throw new Error("Complete the security check first.");
-                    await authRequest("sign-up/email", {
-                      ...values,
-                      ...(captcha ? { captchaToken: captcha } : {}),
-                      fetchOptions: undefined,
-                    });
-                    setEmail(values.email);
-                    setCodeType("email-verification");
-                    setStep("code");
-                    setNotice(
-                      "If this email can be used, a verification code is on its way.",
-                    );
-                  }),
-              )}
+              onSubmit={(event) =>
+                void signup.handleSubmit(
+                  (values) =>
+                    void run(async () => {
+                      if (siteKey && !captcha)
+                        throw new Error("Complete the security check first.");
+                      await authRequest("sign-up/email", {
+                        ...values,
+                        ...(captcha ? { captchaToken: captcha } : {}),
+                        fetchOptions: undefined,
+                      });
+                      setEmail(values.email);
+                      setCodeType("email-verification");
+                      setStep("code");
+                      setNotice(
+                        "If this email can be used, a verification code is on its way.",
+                      );
+                    }),
+                )(event)
+              }
             >
               <label htmlFor="signup-name">Display name</label>
               <input

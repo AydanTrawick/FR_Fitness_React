@@ -1,3 +1,5 @@
+import { limits } from "@/lib/ratelimit/limiters";
+import { rateErrorResponse } from "@/lib/ratelimit/respond";
 import Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
 import { requireAccountSession } from "@/lib/auth-session";
@@ -5,7 +7,6 @@ import { checkOrigin } from "@/lib/server";
 import { db, HttpError } from "@/lib/database";
 import {
   acquireLease,
-  coachLimit,
   draftGoal,
   latestPlaybook,
   profileAndWeight,
@@ -60,13 +61,14 @@ const SYSTEM = `You are FirstRep's Progress Coach. Be warm, concise, respectful 
 Health: no diagnoses, drug dosing, extreme restriction, punishment for eating or aggressive targets. Loss <=1% bodyweight/week; lean bulk gain <=1 lb/week; explain unsafe timelines and offer a realistic one via the Goal Card. Calories must meet sex-specific floors (men 1500, women 1200) AND estimated BMR. Do not prescribe numeric calorie or macro targets or weight changes to under-18s. For injury or health concerns suggest a qualified professional. For disordered eating, respond with care, regular nourishment and support resources; do not propose aggressive targets. Keep photo and body language neutral and encouraging, no ideal-body comparisons. Short replies (usually under 120 words). Use at most one write/proposal tool per turn.`;
 export async function POST(request: Request) {
   let release: (() => Promise<void>) | undefined;
+  let releasePlan: (() => Promise<void>) | undefined;
   try {
     checkOrigin(request);
     const { user } = await requireAccountSession(request);
     const body = z
       .object({ prompt: z.string().trim().min(1).max(3000) })
       .parse(await request.json());
-    await coachLimit(user.id);
+    releasePlan = await limits.beginPlan(user.id, request);
     const baseline = await profileAndWeight(user.id);
     anthropic(); // Fail before opening the stream if no provider is configured.
     release = await acquireLease(user.id);
@@ -80,6 +82,7 @@ export async function POST(request: Request) {
       await sql`SELECT nutrition_paused FROM user_body_profile WHERE user_id=${user.id}`
     )[0]?.nutrition_paused;
     const leaseRelease = release;
+    const planRelease = releasePlan;
     const signal = AbortSignal.any([
       request.signal,
       AbortSignal.timeout(260000),
@@ -250,6 +253,7 @@ export async function POST(request: Request) {
           send("error", { error: note });
         } finally {
           clearInterval(heartbeat);
+          await planRelease?.();
           await leaseRelease?.();
           if (!cancelled) controller.close();
         }
@@ -258,7 +262,8 @@ export async function POST(request: Request) {
         cancelled = true;
       },
     });
-    release = undefined; // The stream owns the lease until its finalizer.
+    release = undefined; // The stream owns both leases until its finalizer.
+    releasePlan = undefined;
     return new Response(stream, {
       headers: {
         "Content-Type": "text/event-stream",
@@ -267,7 +272,10 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
+    await releasePlan?.();
     await release?.();
+    const limited = rateErrorResponse(error);
+    if (limited) return limited;
     const status =
       error instanceof HttpError
         ? error.status

@@ -22,7 +22,10 @@
     "dev:auth-tests": "node scripts/auth-test-server.mjs",
     "db:progress": "node --env-file=.env --env-file=.env.local scripts/migrate-progress.mjs",
     "dev:progress-tests": "node scripts/progress-test-server.mjs",
-    "test:progress": "node --env-file=.env --env-file=.env.local node_modules/@playwright/test/cli.js test tests/progress.browser.spec.mjs --workers=1"
+    "test:progress": "node --env-file=.env --env-file=.env.local node_modules/@playwright/test/cli.js test tests/progress.browser.spec.mjs --workers=1",
+    "test:ratelimit-routes": "node --experimental-strip-types --experimental-vm-modules tests/ratelimit-routes.integration.mjs",
+    "test:ratelimit-redis": "node --experimental-strip-types tests/ratelimit.redis.integration.mjs",
+    "test:usage-redis": "node --experimental-strip-types tests/usage.redis.integration.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.132.0",
@@ -35,6 +38,7 @@
     "@radix-ui/react-tabs": "^1.1.21",
     "@react-email/render": "^2.1.0",
     "@sentry/nextjs": "^11.4.0",
+    "@upstash/ratelimit": "^2.2.0",
     "@upstash/redis": "^1.39.0",
     "@zxcvbn-ts/core": "^4.2.0",
     "@zxcvbn-ts/language-common": "^4.1.3",

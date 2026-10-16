@@ -1,9 +1,11 @@
+import { usageFetch } from "./ratelimit/usage-client.ts";
+import { requestError } from "./ratelimit/client.ts";
 export async function api<T = Record<string, unknown>>(
   path: string,
   body?: unknown,
   method = "POST",
 ): Promise<T> {
-  const response = await fetch(
+  const response = await usageFetch(
     `/api/${path}`,
     body === undefined
       ? { cache: "no-store" }
@@ -14,19 +16,21 @@ export async function api<T = Record<string, unknown>>(
         },
   );
   const data = await response.json();
-  if (!response.ok)
-    throw new Error(data.error ?? "The request could not be completed.");
+  if (!response.ok) throw requestError(response, data);
   return data;
 }
 export async function apiBlob(path: string, body: unknown): Promise<Blob> {
-  const response = await fetch(`/api/${path}`, {
+  const response = await usageFetch(`/api/${path}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  if (!response.ok) {
+  if (
+    !response.ok ||
+    response.headers.get("content-type")?.includes("application/json")
+  ) {
     const data = await response.json().catch(() => ({}));
-    throw new Error(data.error ?? "The request could not be completed.");
+    throw requestError(response, data);
   }
   return response.blob();
 }

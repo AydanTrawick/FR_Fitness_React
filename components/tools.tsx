@@ -1,4 +1,7 @@
 "use client";
+import { UsageLimits } from "./usage-limits";
+import { usageFetch } from "@/lib/ratelimit/usage-client";
+import { requestError, AUDIO_PAUSED_MESSAGE } from "@/lib/ratelimit/client";
 import {
   useEffect,
   useRef,
@@ -153,12 +156,12 @@ export function AiTool({
             new Blob(chunks.current, { type: mr.mimeType || "audio/webm" }),
             "voice.webm",
           );
-          const res = await fetch("/api/transcribe", {
+          const res = await usageFetch("/api/transcribe", {
             method: "POST",
             body: form,
           });
           const data = await res.json();
-          if (!res.ok) throw new Error(data.error);
+          if (!res.ok) throw requestError(res, data);
           if (data.text)
             setPrompt((p) => (p ? `${p} ${data.text}` : data.text));
         } catch (e) {
@@ -219,9 +222,11 @@ export function AiTool({
         requestTurn.current.shown = true;
       }
       let reply: string;
+      let ttsLimited = false;
       if (mode === "assistant") {
         const result = await api<{
           replyText: string;
+          ttsLimited?: boolean;
           pendingActions: PendingAction[];
           exerciseChoices?: { id: string; name: string }[];
           actionResult?: { id: string; status: string };
@@ -240,6 +245,8 @@ export function AiTool({
             : {}),
         });
         reply = result.replyText;
+        ttsLimited = result.ttsLimited === true;
+        voice.setTtsLimited(ttsLimited);
         setActions(result.pendingActions);
         setChoices(result.exerciseChoices ?? []);
         if (result.actionResult?.status === "confirmed") void reload();
@@ -259,7 +266,7 @@ export function AiTool({
       ]);
       requestTurn.current = null;
       setPrompt("");
-      return reply;
+      return ttsLimited ? undefined : reply;
     } catch (e) {
       setError(errorText(e));
       if (source === "voice") throw e;
@@ -276,6 +283,7 @@ export function AiTool({
   return (
     <>
       <PageTitle
+        action={<UsageLimits key={status.user?.id} signedIn={!!status.user} />}
         eyebrow={
           mode === "plan"
             ? "A PLAN THAT FITS YOUR LIFE"
@@ -564,6 +572,11 @@ export function AiTool({
                             : "Voice needs attention. You can still type below."}
               </div>
             )}
+            {mode === "assistant" && voice.ttsLimited && (
+              <p role="status" className="notice">
+                {AUDIO_PAUSED_MESSAGE}
+              </p>
+            )}
             {mode === "assistant" && voice.error && (
               <p role="alert" className="notice error">
                 {voice.error}
@@ -671,7 +684,7 @@ export function Equipment() {
       form.set("file", file);
       const res = await fetch("/api/equipment", { method: "POST", body: form });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
+      if (!res.ok) throw requestError(res, data);
       setPrediction(data);
     } catch (e) {
       setError(errorText(e));

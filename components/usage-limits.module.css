@@ -1,0 +1,296 @@
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid #2c3a4c;
+  border-radius: 999px;
+  background: #111b29;
+  color: #c6d7eb;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.trigger:hover {
+  border-color: #4b91f5;
+  color: #f4f7fd;
+  background: #162438;
+}
+.trigger:focus-visible,
+.dialog button:focus-visible {
+  outline: 2px solid #78b0ff;
+  outline-offset: 4px;
+}
+.overlay.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background: #020509d9;
+  backdrop-filter: blur(5px);
+}
+.dialog.dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 901;
+  width: min(650px, calc(100vw - 32px));
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  box-sizing: border-box;
+  padding: 32px;
+  margin: 0;
+  border: 1px solid #263549;
+  border-radius: 26px;
+  background: #0b111b;
+  color: #eaf0f9;
+  box-shadow: 0 30px 120px #0008;
+  font-family: inherit;
+}
+.dialog .eyebrow {
+  margin: 0 52px 9px 0;
+  color: #519cff;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  font-weight: 750;
+}
+.dialog .title {
+  margin: 0 52px 12px 0;
+  color: #f1f5fc;
+  font-size: 32px;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  font-weight: 800;
+}
+.dialog .description {
+  max-width: 460px;
+  margin: 0;
+  color: #9baac0;
+  font-size: 15px;
+  line-height: 1.65;
+}
+.close {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid #202d40;
+  border-radius: 14px;
+  background: #131e2d;
+  color: #cbd7e7;
+  cursor: pointer;
+}
+.status {
+  min-height: 18px;
+  margin: 12px 0 18px;
+  font-size: 12px;
+  color: #a7b7cb;
+}
+.group {
+  margin-top: 16px;
+  padding: 22px;
+  border: 1px solid #1e2c40;
+  border-radius: 22px;
+  background: #101a28;
+}
+.group h3 {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin: 0 0 22px;
+  color: #eaf0f9;
+  font-size: 19px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+.icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  background: #1a304c;
+  color: #509cff;
+}
+.meter + .meter {
+  margin-top: 21px;
+}
+.meterLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 5px 12px;
+  color: #c8d4e4;
+  font-size: 13px;
+  font-weight: 600;
+}
+.amount {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  color: #a2b3ca;
+  font-size: 12px;
+  font-weight: 400;
+}
+.amount strong {
+  color: #edf4ff;
+  font-size: 16px;
+  font-weight: 750;
+}
+.track {
+  height: 8px;
+  margin: 9px 0 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #223247;
+}
+.fill {
+  height: 100%;
+  border-radius: inherit;
+  background: #4b96fb;
+  transition: width 0.25s ease;
+}
+.low .fill {
+  background: #ff923f;
+}
+.low .amount strong {
+  color: #ffaf71;
+}
+.unknownTrack {
+  background: repeating-linear-gradient(
+    135deg,
+    #26344a,
+    #26344a 5px,
+    #1c293b 5px,
+    #1c293b 10px
+  );
+}
+.meterDetails {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 3px 10px;
+  color: #96a8c0;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-variant-numeric: tabular-nums;
+}
+.dialog .resetDate {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: #96a8c0;
+  line-height: 1.6;
+}
+.dialog .note {
+  margin: 18px 0 0;
+  font-size: 11px;
+  line-height: 1.65;
+  color: #9aaac1;
+}
+.explainer {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin: 20px 0;
+  padding: 17px;
+  border: 1px dashed #2a3c55;
+  border-radius: 16px;
+  color: #9bacc3;
+}
+.explainer svg {
+  flex: none;
+  margin-top: 2px;
+}
+.dialog .explainer p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.65;
+}
+.actions {
+  display: flex;
+  gap: 12px;
+}
+.refresh,
+.done {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 48px;
+  padding: 12px 18px;
+  border-radius: 14px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.refresh {
+  border: 1px solid #2a3c55;
+  background: #131e2d;
+  color: #b8c9df;
+}
+.refresh:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+.done {
+  flex: 1;
+  border: 1px solid #4b96fb;
+  background: #4b96fb;
+  color: #061020;
+}
+.done:hover {
+  background: #70acff;
+}
+@media (max-width: 520px) {
+  .dialog.dialog {
+    padding: 24px 18px;
+    border-radius: 22px;
+    max-height: calc(100dvh - 24px);
+  }
+  .dialog .title {
+    font-size: 29px;
+  }
+  .dialog .description {
+    font-size: 13px;
+    padding-right: 12px;
+  }
+  .close {
+    top: 17px;
+    right: 17px;
+  }
+  .group {
+    padding: 18px 15px;
+    border-radius: 18px;
+  }
+  .group h3 {
+    font-size: 17px;
+    gap: 10px;
+  }
+  .meterLabel {
+    font-size: 12px;
+  }
+  .trigger {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fill {
+    transition: none;
+  }
+}

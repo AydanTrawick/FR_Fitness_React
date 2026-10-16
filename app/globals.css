@@ -3496,3 +3496,10 @@ input.workout-weight-input[aria-invalid="true"] {
   .assistant-voice-controls .assistant-talk{min-width:0;white-space:normal;flex:1}
   .assistant-voice-controls>.btn.icon{flex:0 0 44px}
 }
+
+@media (max-width: 700px) {
+  .topbar.has-usage > .row:first-child { min-width: 0; }
+  .topbar.has-usage > .row:last-child { flex-shrink: 0; }
+  .topbar.has-usage > .row > .muted, .topbar.has-usage .status-chip { display: none; }
+  .topbar.has-usage strong { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}

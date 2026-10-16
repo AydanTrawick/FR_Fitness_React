@@ -1,4 +1,7 @@
 "use client";
+import { UsageLimits } from "../usage-limits";
+import { usageFetch } from "@/lib/ratelimit/usage-client";
+import { requestError } from "@/lib/ratelimit/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -99,9 +102,12 @@ export default function ProgressWorkspace({
             FirstRep<span className="accent">.</span>
           </strong>
         </Link>
-        <Link className="pc-back" href="/">
-          ← Dashboard
-        </Link>
+        <div className="row">
+          <UsageLimits />
+          <Link className="pc-back" href="/">
+            ← Dashboard
+          </Link>
+        </div>
       </header>
       <nav className="pc-nav" aria-label="Progress navigation">
         {(["progress", "coach", "playbook"] as const).map((m) => (
@@ -1083,12 +1089,12 @@ function Coach({
     const update = (fn: (message: CoachMessage) => CoachMessage) =>
       setMessages((m) => m.map((x) => (x.id === pendingId ? fn(x) : x)));
     try {
-      const response = await fetch("/api/coach", {
+      const response = await usageFetch("/api/coach", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: text }),
       });
-      if (!response.ok) throw new Error((await response.json()).error);
+      if (!response.ok) throw requestError(response, await response.json());
       if (!response.body) throw new Error("The coach stream was unavailable.");
       const reader = response.body.getReader();
       const decoder = new TextDecoder();

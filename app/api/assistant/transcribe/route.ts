@@ -1,13 +1,13 @@
 import { requireUser, checkOrigin } from "@/lib/server";
 import { assistantResponse, assistantError } from "@/lib/assistant/http";
 import { transcribeAudio } from "@/lib/assistant/speech";
-import { limitVoice } from "@/lib/assistant/voice-limit";
+import { limits } from "@/lib/ratelimit/limiters";
 export const runtime = "nodejs";
 export async function POST(request: Request) {
   try {
     const user = await requireUser();
     checkOrigin(request);
-    await limitVoice(user.id, "transcribe");
+    await limits.voice(user.id);
     const length = Number(request.headers.get("content-length") ?? 0);
     if (length > 5100000)
       return assistantResponse(

@@ -1,7 +1,8 @@
 import { revalidateTag } from "next/cache";
-import { checkOrigin, requireUser, rateLimit } from "@/lib/server";
+import { checkOrigin, requireUser } from "@/lib/server";
 import { chatInput } from "@/lib/assistant/schema";
-import { voiceCommand } from "@/lib/assistant/voice";
+import { spokenText } from "@/lib/assistant/voice";
+import { limits } from "@/lib/ratelimit/limiters";
 import { assistantChat } from "@/lib/assistant/chat";
 import { assistantResponse, assistantError } from "@/lib/assistant/http";
 export const runtime = "nodejs";
@@ -10,14 +11,16 @@ export async function POST(request: Request) {
     const user = await requireUser();
     checkOrigin(request);
     const body = chatInput.parse(await request.json());
-    // Confirmation bypasses Claude and should not consume the model quota.
-    if (body.mode === "voice" && voiceCommand(body.prompt))
-      rateLimit(`assistant-control:${user.id}`, 120);
-    else rateLimit(`assistant-chat:${user.id}`, 30);
+    await limits.voice(user.id);
     const result = await assistantChat(user, body);
     if ("actionResult" in result && result.actionResult?.status === "confirmed")
       revalidateTag(`analysis-${user.id}`, { expire: 0 });
-    return assistantResponse(result);
+    return assistantResponse({
+      ...result,
+      ...(!(await limits.tts(user.id, spokenText(result.replyText), false))
+        ? { ttsLimited: true }
+        : {}),
+    });
   } catch (e) {
     return assistantError(e);
   }

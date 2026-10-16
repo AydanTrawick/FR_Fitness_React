@@ -26,7 +26,11 @@ import {
   TERMS_VERSION,
 } from "./auth/validation";
 
-import { authOriginConfig, authRequestOrigins, getAuthURL } from "./auth/origin";
+import {
+  authOriginConfig,
+  authRequestOrigins,
+  getAuthURL,
+} from "./auth/origin";
 const factor = twoFactor({
   issuer: "FirstRep Fitness",
   allowPasswordless: true,
@@ -243,11 +247,13 @@ function createAuth() {
       max: 60,
       customStorage: sharedRateStorage,
       customRules: {
-        "/sign-in/*": { window: 60, max: 5 },
-        "/sign-up/email": { window: 60, max: 5 },
-        "/request-password-reset": { window: 3600, max: 3 },
-        "/email-otp/send-verification-otp": { window: 3600, max: 3 },
-        "/email-otp/request-password-reset": { window: 3600, max: 3 },
+        // These routes use the shared sliding-window guards before Better Auth.
+        "/send-verification-email": false,
+        "/sign-in/*": false,
+        "/sign-up/email": false,
+        "/request-password-reset": false,
+        "/email-otp/send-verification-otp": false,
+        "/email-otp/request-password-reset": false,
         "/two-factor/*": { window: 60, max: 5 },
       },
     },

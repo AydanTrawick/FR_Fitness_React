@@ -21,6 +21,7 @@ import { ExerciseLibrary } from "./exercise-library";
 import Dashboard from "./dashboard";
 import { BmiTracker, FoodTracker, WorkoutTracker } from "./trackers";
 import { Guides, Programs } from "./library";
+import { UsageLimits } from "./usage-limits";
 import { AiTool, Equipment } from "./tools";
 import { StoreProvider, useStore } from "./store";
 const exercisePages = new Set(["exercises", "favorites", "builder", "saved"]);
@@ -182,7 +183,9 @@ function Shell() {
         </div>
       </aside>
       <div className="main-shell">
-        <header className="topbar">
+        <header
+          className={`topbar ${status.user && !["plans", "assistant"].includes(page) ? "has-usage" : ""}`}
+        >
           <div className="row">
             <button
               className="btn icon mobile-menu"
@@ -196,6 +199,9 @@ function Shell() {
             <strong>{label}</strong>
           </div>
           <div className="row">
+            {!["plans", "assistant"].includes(page) && (
+              <UsageLimits key={status.user?.id} signedIn={!!status.user} />
+            )}
             <span className="status-chip">
               <span className="dot" />
               {status.user ? "Account connected" : "Guest session"}

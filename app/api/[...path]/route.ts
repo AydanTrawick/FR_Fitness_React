@@ -1,3 +1,5 @@
+import { limits } from "@/lib/ratelimit/limiters";
+import { rateErrorResponse } from "@/lib/ratelimit/respond";
 import { exerciseApi } from "@/lib/exercise-server";
 import { PLAN_BUILDER_SYSTEM } from "@/lib/ai-plan-builder";
 import { revalidateTag } from "next/cache";
@@ -50,6 +52,7 @@ async function handle(
   request: Request,
   context: { params: Promise<{ path: string[] }> },
 ) {
+  let releasePlan: (() => Promise<void>) | undefined;
   try {
     const { path } = await context.params;
     const route = path.join("/");
@@ -322,10 +325,12 @@ async function handle(
           "Voice replies are not connected yet. Add the server’s ElevenLabs configuration to enable them.",
           503,
         );
-      rateLimit(`speech:${user.id}`, 30);
+      await limits.voice(user.id);
       const body = z
         .object({ text: z.string().trim().min(1).max(5000) })
         .parse(await request.json());
+      if (!(await limits.tts(user.id, body.text)))
+        return response({ replyText: body.text, ttsLimited: true });
       const res = await providerFetch(
         `https://api.elevenlabs.io/v1/text-to-speech/${encodeURIComponent(process.env.ELEVENLABS_VOICE_ID)}?output_format=mp3_44100_128`,
         {
@@ -353,7 +358,7 @@ async function handle(
           "Voice input is not connected yet. Add the server’s ElevenLabs configuration to enable it.",
           503,
         );
-      rateLimit(`transcribe:${user.id}`, 30);
+      await limits.voice(user.id);
       const form = await request.formData();
       const audio = form.get("audio");
       if (!(audio instanceof File) || audio.size > 15000000)
@@ -400,7 +405,6 @@ async function handle(
           "AI tools are not connected yet. Add the server’s Anthropic configuration to enable them.",
           503,
         );
-      rateLimit(`ai:${user.id}`, 30);
       const body = z
         .object({
           mode: z.enum(["plan", "assistant"]),
@@ -423,6 +427,7 @@ async function handle(
           "Use the updated Training assistant to review logging drafts.",
           410,
         );
+      releasePlan = await limits.beginPlan(user.id, request);
       let trainingContext = "";
       if (body.includeTrainingHistory) {
         const consent =
@@ -474,6 +479,8 @@ async function handle(
     }
     throw new HttpError("Not found.", 404);
   } catch (error) {
+    const limited = rateErrorResponse(error);
+    if (limited) return limited;
     if (error instanceof HttpError)
       return response({ error: error.message }, error.status);
     if (error instanceof z.ZodError)
@@ -499,6 +506,8 @@ async function handle(
       },
       500,
     );
+  } finally {
+    await releasePlan?.();
   }
 }
 export const GET = handle;

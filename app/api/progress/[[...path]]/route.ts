@@ -1,3 +1,5 @@
+import { limits } from "@/lib/ratelimit/limiters";
+import { rateErrorResponse } from "@/lib/ratelimit/respond";
 import { z } from "zod";
 import { requireAccountSession } from "@/lib/auth-session";
 import { checkOrigin } from "@/lib/server";
@@ -31,6 +33,7 @@ async function handle(
   context: { params: Promise<{ path?: string[] }> },
 ) {
   let release: (() => Promise<void>) | undefined;
+  let releasePlan: (() => Promise<void>) | undefined;
   try {
     if (request.method !== "GET") checkOrigin(request);
     const { user } = await requireAccountSession(request);
@@ -80,7 +83,7 @@ async function handle(
     }
     if (route === "goals/confirm" && method === "POST") {
       const body = z.object({ id: z.uuid() }).parse(await request.json());
-      await coachLimit(user.id);
+      releasePlan = await limits.beginPlan(user.id, request);
       return json({
         playbook_id: await confirmGoal(user.id, body.id, request.signal),
       });
@@ -107,6 +110,8 @@ async function handle(
     }
     throw new HttpError("Not found.", 404);
   } catch (error) {
+    const limited = rateErrorResponse(error);
+    if (limited) return limited;
     if (error instanceof HttpError)
       return json({ error: error.message }, error.status);
     if (error instanceof z.ZodError || error instanceof SyntaxError)
@@ -123,6 +128,7 @@ async function handle(
       503,
     );
   } finally {
+    await releasePlan?.();
     await release?.();
   }
 }
