@@ -117,7 +117,7 @@ test("personal balances, accessible bars, recovery labels, mobile layout and key
     return r.fulfill({ json: balance() });
   });
   await page.getByRole("button", { name: "Usage limits", exact: true }).click();
-  const dialog = page.getByRole("dialog", { name: "Fair-use limits" });
+  const dialog = page.getByRole("dialog", { name: "Equal Usage Limits" });
   await expect(dialog.getByRole("progressbar")).toHaveCount(6);
   await expect(
     dialog.getByRole("progressbar", {
@@ -136,7 +136,7 @@ test("personal balances, accessible bars, recovery labels, mobile layout and key
     }),
   ).toBeVisible();
   await expect(
-    dialog.getByText("Full allowance in 1h 0m", { exact: false }).first(),
+    dialog.getByText("Usage fully resets in 1h 0m", { exact: false }).first(),
   ).toBeVisible();
   await page.screenshot({
     path: `test-results/usage-${safari ? "iphone" : "desktop"}.png`,
@@ -231,9 +231,9 @@ test("Redis outage shows unknown balances instead of inventing credits; retry re
     return r.fulfill({ json: data });
   });
   await page.getByRole("button", { name: "Usage limits", exact: true }).click();
-  const dialog = page.getByRole("dialog", { name: "Fair-use limits" });
+  const dialog = page.getByRole("dialog", { name: "Equal Usage Limits" });
   await expect(
-    dialog.getByText(/Your allowance can’t be confirmed/),
+    dialog.getByText(/Your usage can’t be confirmed/),
   ).toBeVisible();
   await expect(dialog.getByRole("progressbar")).toHaveCount(0);
   offline = false;
@@ -250,7 +250,7 @@ test("expired session discards displayed balances", async ({ page }) => {
     ),
   );
   await page.getByRole("button", { name: "Usage limits", exact: true }).click();
-  const dialog = page.getByRole("dialog", { name: "Fair-use limits" });
+  const dialog = page.getByRole("dialog", { name: "Equal Usage Limits" });
   await expect(dialog.getByRole("progressbar")).toHaveCount(6);
   expired = true;
   await dialog.getByRole("button", { name: "Refresh", exact: true }).click();

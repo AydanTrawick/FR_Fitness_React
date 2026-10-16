@@ -67,18 +67,18 @@ function Meter({ meter, now }: { meter: UsageMeter; now: number }) {
       <div className={styles.meterDetails}>
         <span>
           {unknown
-            ? "We couldn’t read this allowance."
+            ? "We couldn’t read your usage."
             : `${number(meter.used!)} used`}
         </span>
         {!unknown &&
           (reset ? (
             <span className={styles.reset}>
               <Clock3 size={12} aria-hidden="true" />
-              {meter.availableAt ? "More available in " : "Full allowance in "}
+              {meter.availableAt ? "More available in " : "Usage fully resets in "}
               {recoveryCountdown(reset, now)}
             </span>
           ) : (
-            <span>Full allowance available</span>
+            <span>No usage recorded</span>
           ))}
       </div>
       {!unknown && meter.fullAt && (
@@ -152,7 +152,7 @@ function UsageLimitsDialog() {
       } catch (error) {
         if (live && !controller.signal.aborted) {
           // A failed refresh invalidates the old counters instead of presenting
-          // stale credits as the current allowance.
+          // stale counters as current usage.
           setSnapshot(null);
           setError(
             error instanceof Error
@@ -248,10 +248,10 @@ function UsageLimitsDialog() {
           </button>
         </DialogClose>
         <p className={styles.eyebrow}>YOUR USAGE</p>
-        <DialogTitle className={styles.title}>Fair-use limits</DialogTitle>
+        <DialogTitle className={styles.title}>Equal Usage Limits</DialogTitle>
         <DialogDescription className={styles.description}>
-          A little room for everyone. Track your remaining allowance here.
-          Limits replenish automatically.
+          FirstRep Fitness is currently free for all users. Below are your hourly
+          and daily usage limits.
         </DialogDescription>
         <div
           className={styles.status}
@@ -261,10 +261,10 @@ function UsageLimitsDialog() {
           }
         >
           {loading && !snapshot
-            ? "Checking your allowance…"
+            ? "Checking your usage…"
             : error ||
               (snapshot?.available === false
-                ? "Usage is temporarily unavailable. Your allowance can’t be confirmed right now."
+                ? "Your usage can’t be confirmed right now. Please try again shortly."
                 : snapshot
                   ? `Updated ${Math.max(0, Math.floor((now - snapshot.checkedAt) / 1000))}s ago`
                   : "")}
@@ -286,7 +286,7 @@ function UsageLimitsDialog() {
               ))}
               <p className={styles.note}>
                 Includes meal and workout plans, Progress Coach turns, and
-                Playbook generation. The network allowance is shared with others
+                Playbook generation. Network usage is shared with others
                 on your connection.
               </p>
             </section>
@@ -307,7 +307,7 @@ function UsageLimitsDialog() {
               )}
               <p className={styles.note}>
                 Transcription, an AI reply, and audio playback each use one
-                request. Text and voice share this allowance. Spoken replies use
+                request. Text and voice share these usage limits. Spoken replies use
                 characters, not audio minutes.
               </p>
             </section>
@@ -316,9 +316,9 @@ function UsageLimitsDialog() {
         <div className={styles.explainer}>
           <Clock3 size={20} aria-hidden="true" />
           <p>
-            Allowance returns gradually. Recovery times assume no new usage.
+            Usage resets gradually. Reset times assume no new usage.
             When audio runs out, your coach can still answer in text within your
-            request allowance.
+            request limits.
           </p>
         </div>
         <div className={styles.actions}>
