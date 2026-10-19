@@ -4,6 +4,7 @@ export type SetLog = {
   exerciseId: string;
   name: string;
   primary: string;
+  primaryMuscles?: string[];
   secondary: string[];
   pattern: Pattern | null;
   reps: number | null;
@@ -17,6 +18,7 @@ export type Session = {
   completedAt: string | null;
   dateOnly?: string;
   legacy?: boolean;
+  durationSeconds?: number;
   planId?: string | null;
   sets: SetLog[];
 };
@@ -69,6 +71,11 @@ export type Metrics = {
   variety: number;
   frequency: number;
   previousFrequency: number;
+  durationByWeekday: {
+    day: string;
+    minutes: number | null;
+    sessions: number;
+  }[];
   avgGap: number | null;
   longestGap: number | null;
   body: { date: string; weight: number; average: number }[];

@@ -1,3 +1,5 @@
+import { renderWorkoutDesign } from "./workout-card-designs";
+import type { WorkoutCardStyle } from "./share-cards";
 import {
   cardDate,
   cardNumber,
@@ -273,7 +275,10 @@ export function renderWorkoutCard(
   title: string,
   unit: CardUnit,
   page = 0,
+  style: WorkoutCardStyle = "log",
 ) {
+  if (style !== "log")
+    return renderWorkoutDesign(canvas, data, title, unit, page, style);
   const ctx = base(canvas),
     layout = workoutPages(ctx, data, title, unit);
   let y = layout.top;

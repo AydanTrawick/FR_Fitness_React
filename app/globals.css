@@ -3503,3 +3503,11 @@ input.workout-weight-input[aria-invalid="true"] {
   .topbar.has-usage > .row > .muted, .topbar.has-usage .status-chip { display: none; }
   .topbar.has-usage strong { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 }
+
+.share-card-styles { border: 0; padding: 0; margin: 0; display: grid; gap: 8px; }
+.share-card-styles legend { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.share-card-styles label { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; cursor: pointer; }
+.share-card-styles label.selected { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
+.share-card-styles input { width: 16px; height: 16px; margin: 0; accent-color: var(--accent); }
+.share-card-styles strong, .share-card-styles small { display: block; }
+.share-card-styles small { color: var(--muted); margin-top: 3px; font-size: 11px; }

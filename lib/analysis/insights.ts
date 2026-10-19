@@ -25,7 +25,7 @@ export function getInsights(m: Metrics, now = new Date()): Insight[] {
     add(
       "pattern",
       `Make room for ${low.name}`,
-      `${low.name} accounts for ${low.value.toFixed(1)}% of classified volume; ${high.name} accounts for ${high.value.toFixed(1)}%. Consider including a ${low.name} movement.`,
+      `${low.name} accounts for ${low.value.toFixed(1)}% of classified working sets; ${high.name} accounts for ${high.value.toFixed(1)}%. Consider including a ${low.name} movement.`,
       `${low.value.toFixed(1)}% / ${high.value.toFixed(1)}%`,
       `/?pattern=${low.name}#exercises`,
     );
@@ -100,7 +100,7 @@ export function getInsights(m: Metrics, now = new Date()): Insight[] {
     add(
       "duration",
       "Sessions are getting longer",
-      `Median duration is ${m.snapshot.duration.toFixed(0)} minutes, up from ${m.previous.duration.toFixed(0)}, with volume changing less than 5%. Rest periods may be stretching.`,
+      `Average duration is ${m.snapshot.duration.toFixed(0)} minutes, up from ${m.previous.duration.toFixed(0)}, with volume changing less than 5%. Rest periods may be stretching.`,
       `${m.snapshot.duration.toFixed(0)} vs ${m.previous.duration.toFixed(0)} min`,
       undefined,
       undefined,

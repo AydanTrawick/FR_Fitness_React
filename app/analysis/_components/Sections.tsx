@@ -149,3 +149,27 @@ export function LibraryUsage({ metrics: m }: { metrics: Metrics }) {
     </section>
   );
 }
+
+export function DurationByWeekday({ metrics: m }: { metrics: Metrics }) {
+  return (
+    <section className="analysis-card">
+      <h2>Time in the gym by day</h2>
+      <p className="analysis-muted">
+        Average recorded session duration in the selected range. Paused time is
+        excluded.
+      </p>
+      <ul className="analysis-library">
+        {m.durationByWeekday.map((d) => (
+          <li key={d.day}>
+            <span>{d.day}</span>
+            <span>
+              {d.minutes === null
+                ? "No timed sessions"
+                : `${d.minutes.toFixed(1)} min · ${d.sessions} ${d.sessions === 1 ? "session" : "sessions"}`}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}

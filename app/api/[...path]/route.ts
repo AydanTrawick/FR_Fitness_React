@@ -1,3 +1,5 @@
+import { readSessionNote } from "@/lib/workout-session";
+import { targetMuscles } from "@/lib/exercise-taxonomy";
 import { limits } from "@/lib/ratelimit/limiters";
 import { rateErrorResponse } from "@/lib/ratelimit/respond";
 import { exerciseApi } from "@/lib/exercise-server";
@@ -117,11 +119,16 @@ async function handle(
             rows.some(
               (row) =>
                 !previousIds.has(row.id) &&
-                (!row.exercise_id || !row.performed_at),
+                (!row.performed_at ||
+                  (!row.exercise_id &&
+                    !targetMuscles.some(
+                      (muscle) =>
+                        muscle === readSessionNote(row.notes)?.targetMuscle,
+                    ))),
             )
           )
             throw new HttpError(
-              "Choose a catalog exercise before logging a workout.",
+              "Choose a catalog exercise or provide the target muscle for your custom exercise.",
             );
           const requestedIds = [
             ...new Set(

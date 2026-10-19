@@ -19,6 +19,8 @@ import {
   Play,
   X,
 } from "lucide-react";
+import { targetMuscles } from "@/lib/exercise-taxonomy";
+import { muscleGroup } from "@/lib/workout-session";
 import { api } from "@/lib/client";
 import { today, type Entry } from "@/lib/tracking";
 import { cardNumber, cardWeight, type CardUnit } from "@/lib/share-cards";
@@ -80,6 +82,8 @@ export function WorkoutSetup({
 }) {
   const [name, setName] = useState("My workout"),
     [query, setQuery] = useState(""),
+    [targetMuscle, setTargetMuscle] = useState(""),
+    [customPattern, setCustomPattern] = useState(""),
     [queue, setQueue] = useState<LiveExercise[]>([]),
     [rest, setRest] = useState(90),
     [templates, setTemplates] = useState<Workout[]>([]),
@@ -137,7 +141,7 @@ export function WorkoutSetup({
     for (const row of history.filter((r) => r.date === date)) {
       const info = describeLift(row, index),
         lift = info.id ? index.get(info.id) : null;
-      if (!lift) continue;
+      if (!lift && !info.targetMuscle) continue;
       const value = grouped.get(info.key) || { ...info, rest, sets: [] };
       value.sets.push(
         ...Array.from(
@@ -296,6 +300,73 @@ export function WorkoutSetup({
             </button>
           ))}
         </div>
+        {query.trim() &&
+          !catalog.some(
+            (e) => e.name.toLowerCase() === query.trim().toLowerCase(),
+          ) && (
+            <div className="stack">
+              <p>Exercise missing? Add “{query.trim()}” to this session.</p>
+              <Field label="Custom exercise target muscle">
+                <select
+                  value={targetMuscle}
+                  onChange={(e) => setTargetMuscle(e.target.value)}
+                >
+                  <option value="">Choose the body area</option>
+                  {targetMuscles.map((m) => (
+                    <option key={m} value={m}>
+                      {m}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+              <Field label="Custom exercise movement (optional)">
+                <select
+                  value={customPattern}
+                  onChange={(e) => setCustomPattern(e.target.value)}
+                >
+                  <option value="">Unspecified</option>
+                  {["push", "pull", "hinge", "squat", "carry", "core"].map(
+                    (p) => (
+                      <option key={p}>{p}</option>
+                    ),
+                  )}
+                </select>
+              </Field>
+              <button
+                className="ws-button secondary"
+                type="button"
+                disabled={
+                  !targetMuscle ||
+                  query.trim().length > 300 ||
+                  queue.length >= 100 ||
+                  queue.some(
+                    (e) => e.name.toLowerCase() === query.trim().toLowerCase(),
+                  )
+                }
+                onClick={() => {
+                  setQueue((old) => [
+                    ...old,
+                    {
+                      key: describeLift({ exercise: query.trim() }, index).key,
+                      id: null,
+                      name: query.trim(),
+                      muscle: muscleGroup(targetMuscle),
+                      targetMuscle,
+                      movementPattern: customPattern || undefined,
+                      bodyweight: false,
+                      rest,
+                      sets: [newSet()],
+                    },
+                  ]);
+                  setQuery("");
+                  setTargetMuscle("");
+                  setCustomPattern("");
+                }}
+              >
+                Add custom exercise
+              </button>
+            </div>
+          )}
         {!catalog.length && (
           <p className="muted">
             The catalog is loading or unavailable. Reload the page to try again.

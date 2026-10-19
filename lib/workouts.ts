@@ -59,6 +59,8 @@ export type Workout = WorkoutInput & {
   updatedAt: string;
 };
 export type Exercise = {
+  aliases?: string[];
+  movementPattern?: string | null;
   id: string;
   name: string;
   images: string[];

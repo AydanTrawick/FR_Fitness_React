@@ -126,6 +126,35 @@ test("workout and PR previews export branded PNGs; long sessions keep all cards"
     expect([workoutMeta.width, workoutMeta.height, workoutMeta.format]).toEqual(
       [1080, 2160, "png"],
     );
+    for (const [style, label] of [
+      ["volume", "Volume Split"],
+      ["ladder", "Set Ladder"],
+      ["receipt", "Gym Receipt"],
+      ["facts", "Workout Facts"],
+    ]) {
+      await dialog.getByRole("radio", { name: new RegExp(label) }).check();
+      const button = dialog.getByRole("button", {
+        name: /Download (PNG card|\d+ PNG cards)/,
+      });
+      await expect(button).toBeEnabled();
+      await dialog
+        .locator("canvas")
+        .screenshot({ path: `test-results/card-${style}-preview.png` });
+      const pending = page.waitForEvent("download");
+      await button.click();
+      const file = await pending;
+      expect(file.suggestedFilename()).toContain(
+        `firstrep-${style}-2026-10-13`,
+      );
+      await file.saveAs(
+        `test-results/card-${style}.${file.suggestedFilename().endsWith("zip") ? "zip" : "png"}`,
+      );
+      if (file.suggestedFilename().endsWith("png")) {
+        const meta = await sharp(`test-results/card-${style}.png`).metadata();
+        expect([meta.width, meta.height]).toEqual([1080, 2160]);
+      }
+    }
+    await dialog.getByRole("radio", { name: /Workout log/ }).check();
     await dialog.getByRole("button", { name: "Close card editor" }).click();
     await page
       .locator("#workout-day-2026-10-12")

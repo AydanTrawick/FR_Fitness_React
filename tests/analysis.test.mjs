@@ -71,12 +71,12 @@ test("range changes snapshot, weekly series, strength and body data", () => {
   assert.ok(short.strength[0].points.length < long.strength[0].points.length);
   assert.ok(short.body.length < long.body.length);
 });
-test("median ignores duration outliers and legacy duration stays null", () => {
+test("average duration includes every timed session and legacy duration stays null", () => {
   const raw = seedHistory(3);
   raw.sessions[2].completedAt = new Date(
     Date.parse(raw.sessions[2].startedAt) + 600 * 60000,
   ).toISOString();
-  assert.equal(metrics(raw).snapshot.duration, 45);
+  assert.equal(metrics(raw).snapshot.duration, 230);
   raw.sessions.forEach((s) => (s.legacy = true));
   assert.equal(metrics(raw).snapshot.duration, null);
 });

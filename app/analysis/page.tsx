@@ -14,6 +14,7 @@ import VolumeChart, {
   ChartBoundary,
 } from "./_components/VolumeChart";
 import {
+  DurationByWeekday,
   EmptyState,
   ConsistencyHeatmap,
   InsightCards,
@@ -32,7 +33,11 @@ export default async function AnalysisPage({
   await requirePageSession("/analysis");
   const user = await currentUser();
   const params = await searchParams;
-  const options = analysisOptions({ tz: user?.timezone, unit: user?.weightUnit, ...params });
+  const options = analysisOptions({
+    tz: user?.timezone,
+    unit: user?.weightUnit,
+    ...params,
+  });
   const data = user
     ? await getAnalysisData(
         user.id,
@@ -76,6 +81,7 @@ export default async function AnalysisPage({
           ) : (
             <>
               <SnapshotCards metrics={m!} unit={options.unit} />
+              <DurationByWeekday metrics={m!} />
               {m!.legacy && (
                 <p className="analysis-muted">
                   Earlier logs are grouped by training day. Their session
@@ -101,12 +107,12 @@ export default async function AnalysisPage({
                     <section className="analysis-card">
                       <h2>Muscle balance</h2>
                       <p className="analysis-muted">
-                        Share of attributed volume · primary 100%, secondary 50%
+                        Share of working-set workload · primary 1, secondary 0.5
                       </p>
                       {m!.muscles.length ? (
                         <Bars rows={m!.muscles} />
                       ) : (
-                        <p>No weighted working sets in this range.</p>
+                        <p>No working sets in this range.</p>
                       )}
                     </section>
                     <PatternRadar metrics={m!} />

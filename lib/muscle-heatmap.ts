@@ -4,13 +4,20 @@ export type MuscleRow = {
   secondary_muscles: string[];
   sets: number;
 };
-export type MuscleTotals = Record<string, { sets: number; exercises: string[] }>;
+export type MuscleTotals = Record<
+  string,
+  { sets: number; exercises: string[] }
+>;
 
 export function scoreMuscles(rows: MuscleRow[]): MuscleTotals {
   const totals: MuscleTotals = {};
   for (const row of rows) {
-    const primary = new Set(row.primary_muscles.map((muscle) => muscle.toLowerCase().trim()));
-    const secondary = new Set(row.secondary_muscles.map((muscle) => muscle.toLowerCase().trim()));
+    const primary = new Set(
+      row.primary_muscles.map((muscle) => muscle.toLowerCase().trim()),
+    );
+    const secondary = new Set(
+      row.secondary_muscles.map((muscle) => muscle.toLowerCase().trim()),
+    );
     for (const muscle of primary) {
       const total = (totals[muscle] ??= { sets: 0, exercises: [] });
       total.sets += Number(row.sets);
@@ -48,7 +55,10 @@ export const muscleSlugs = {
 } as const satisfies Record<string, readonly Muscle[]>;
 
 export function toSlugTotals(muscles: MuscleTotals) {
-  const result: Record<string, { sets: number; exercises: string[]; muscles: string[] }> = {};
+  const result: Record<
+    string,
+    { sets: number; exercises: string[]; muscles: string[] }
+  > = {};
   for (const [muscle, slugs] of Object.entries(muscleSlugs)) {
     const total = muscles[muscle];
     if (!total) continue;
@@ -56,17 +66,17 @@ export function toSlugTotals(muscles: MuscleTotals) {
       const target = (result[slug] ??= { sets: 0, exercises: [], muscles: [] });
       target.sets += total.sets;
       target.muscles.push(muscle);
-      target.exercises = [...new Set([...target.exercises, ...total.exercises])].sort();
+      target.exercises = [
+        ...new Set([...target.exercises, ...total.exercises]),
+      ].sort();
     }
   }
   return result;
 }
 
-export function weeklySets(sets: number, range: "7d" | "30d") {
-  return range === "30d" ? sets / (30 / 7) : sets;
-}
-export function colorBucket(sets: number, range: "7d" | "30d") {
-  const weekly = weeklySets(sets, range);
-  return weekly <= 0 ? 0 : weekly < 10 ? 1 : weekly < 20 ? 2 : 3;
+// Workload score: one point per primary working set; half per secondary set.
+export function colorBucket(score: number, _range?: "7d" | "30d") {
+  void _range; // Date range selects the records; workload points keep the same scale.
+  return score <= 0 ? 0 : score < 10 ? 1 : score < 20 ? 2 : 3;
 }
 import type { Muscle } from "@plexapro/react-body-highlighter";

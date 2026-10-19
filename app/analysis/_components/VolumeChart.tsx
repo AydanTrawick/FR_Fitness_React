@@ -89,7 +89,7 @@ export default function VolumeChart({
             {metric === "volume"
               ? `${unit} lifted`
               : metric === "duration"
-                ? "median minutes"
+                ? "average minutes"
                 : "completed sessions"}
           </p>
         </div>
@@ -158,7 +158,7 @@ export default function VolumeChart({
         </div>
       </ChartBoundary>
       <DataTable
-        headers={["Week", `Volume (${unit})`, "Sessions", "Median minutes"]}
+        headers={["Week", `Volume (${unit})`, "Sessions", "Average minutes"]}
         rows={data.map((p) => [p.date, p.volume, p.sessions, p.duration])}
       />
     </section>
@@ -170,11 +170,11 @@ export function PatternRadar({ metrics: m }: { metrics: Metrics }) {
     <section className="analysis-card">
       <h2>Movement pattern balance</h2>
       <p className="analysis-muted">
-        Share of classified volume · reference is equal distribution, not a
-        target
+        Share of classified working sets · reference is equal distribution, not
+        a target
       </p>
       {!data.some((p) => p.value > 0) ? (
-        <p>No weighted sets with movement patterns in this range.</p>
+        <p>No working sets with movement patterns in this range.</p>
       ) : (
         <>
           <div className="analysis-radar">

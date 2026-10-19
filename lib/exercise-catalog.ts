@@ -1,3 +1,4 @@
+import { exercisePattern } from "./exercise-taxonomy.ts";
 import type { Exercise } from "./workouts";
 
 export const EXERCISE_DATA_URL =
@@ -27,6 +28,7 @@ export type ExerciseRow = {
     source?: string;
   } | null;
   source: string;
+  aliases?: string[];
 };
 
 export function exerciseImageUrl(path: string): string {
@@ -41,6 +43,8 @@ export function toLibraryExercise(row: ExerciseRow): Exercise {
   const difficulty = row.level?.toLowerCase();
   return {
     id: row.id,
+    aliases: row.aliases,
+    movementPattern: exercisePattern(row),
     name: row.name,
     images: row.images.length
       ? row.images.map(exerciseImageUrl)

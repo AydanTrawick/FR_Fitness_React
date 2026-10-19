@@ -3,6 +3,7 @@ import { useState, type FormEvent } from "react";
 import { Check, Plus, Trash2 } from "lucide-react";
 import { today, toKg, type Entry } from "@/lib/tracking";
 import { api, errorText } from "@/lib/client";
+import { targetMuscles } from "@/lib/exercise-taxonomy";
 import { sessionNotes } from "@/lib/workout-session";
 import type { CardUnit } from "@/lib/share-cards";
 import content from "@/lib/content.json";
@@ -33,6 +34,9 @@ export function WorkoutQuickLog({
   const [unit, setUnit] = useState<CardUnit>(initialUnit);
   const [date, setDate] = useState(today);
   const [exercise, setExercise] = useState("");
+  const [targetMuscle, setTargetMuscle] = useState("");
+  const [custom, setCustom] = useState(false);
+  const [movementPattern, setMovementPattern] = useState("");
   const [selectedExerciseId, setSelectedExerciseId] = useState("");
   const [candidates, setCandidates] = useState<ExerciseMatch["candidates"]>([]);
   const [sets, setSets] = useState<WorkoutSet[]>(() => [firstWorkoutSet()]);
@@ -51,9 +55,11 @@ export function WorkoutQuickLog({
     const fields = Object.fromEntries(new FormData(form));
     let matched: ExerciseMatch["match"];
     try {
-      const result = await resolveExercise(selectedExerciseId || exercise);
+      const result = custom
+        ? { match: null, candidates: [] }
+        : await resolveExercise(selectedExerciseId || exercise);
       matched = result.match;
-      if (!matched) {
+      if (!matched && !(custom && targetMuscle)) {
         setCandidates(result.candidates);
         throw new Error(
           result.candidates.length
@@ -72,8 +78,8 @@ export function WorkoutQuickLog({
         ({
           id: crypto.randomUUID(),
           date,
-          exercise: matched.name,
-          exercise_id: matched.id,
+          exercise: matched?.name || exercise.trim(),
+          exercise_id: matched?.id ?? null,
           performed_at: performedAt,
           sets: 1,
           reps: Number(set.reps),
@@ -85,6 +91,9 @@ export function WorkoutQuickLog({
             unit,
             startedAt: loggedAt,
             endedAt: loggedAt,
+            ...(custom
+              ? { targetMuscle, movementPattern: movementPattern || undefined }
+              : {}),
           }),
         }) as Entry,
     );
@@ -94,6 +103,9 @@ export function WorkoutQuickLog({
       setExercise("");
       setSelectedExerciseId("");
       setCandidates([]);
+      setCustom(false);
+      setTargetMuscle("");
+      setMovementPattern("");
     }
   }
   return (
@@ -150,6 +162,46 @@ export function WorkoutQuickLog({
               ))}
           </datalist>
         </Field>
+        <label>
+          <input
+            type="checkbox"
+            checked={custom}
+            onChange={(e) => {
+              setCustom(e.target.checked);
+              setCandidates([]);
+            }}
+          />{" "}
+          Log an exercise outside the library
+        </label>
+        {custom && (
+          <div className="form-grid">
+            <Field label="Target muscle">
+              <select
+                required
+                value={targetMuscle}
+                onChange={(e) => setTargetMuscle(e.target.value)}
+              >
+                <option value="">Choose the body area</option>
+                {targetMuscles.map((m) => (
+                  <option key={m}>{m}</option>
+                ))}
+              </select>
+            </Field>
+            <Field label="Movement (optional)">
+              <select
+                value={movementPattern}
+                onChange={(e) => setMovementPattern(e.target.value)}
+              >
+                <option value="">Unspecified</option>
+                {["push", "pull", "hinge", "squat", "carry", "core"].map(
+                  (p) => (
+                    <option key={p}>{p}</option>
+                  ),
+                )}
+              </select>
+            </Field>
+          </div>
+        )}
         {candidates.length > 0 && (
           <Field label="Did you mean…?">
             <select

@@ -20,6 +20,9 @@ export type SessionNote = {
   startedAt: string;
   endedAt?: string;
   feeling?: Feeling;
+  durationSeconds?: number;
+  targetMuscle?: string;
+  movementPattern?: string;
 };
 const marker = "\n[FirstRep session:";
 export function readSessionNote(notes: unknown): SessionNote | null {
@@ -38,6 +41,19 @@ export function readSessionNote(notes: unknown): SessionNote | null {
     )
       return null;
     return {
+      ...(Number.isFinite(data.durationSeconds) && data.durationSeconds >= 0
+        ? { durationSeconds: data.durationSeconds }
+        : {}),
+      ...(typeof data.targetMuscle === "string" &&
+      data.targetMuscle.length <= 40
+        ? { targetMuscle: data.targetMuscle }
+        : {}),
+      ...(typeof data.movementPattern === "string" &&
+      ["push", "pull", "hinge", "squat", "carry", "core"].includes(
+        data.movementPattern,
+      )
+        ? { movementPattern: data.movementPattern }
+        : {}),
       id: data.id,
       name: data.name,
       unit: data.unit,
@@ -67,6 +83,7 @@ export type CatalogLift = {
   id: string;
   name: string;
   primary_muscle?: string | null;
+  aliases?: string[];
   equipment?: string | null;
   category?: string | null;
   metadata?: { timed?: boolean } | null;
@@ -77,6 +94,8 @@ export type LiftInfo = {
   name: string;
   muscle: Muscle;
   bodyweight: boolean;
+  targetMuscle?: string;
+  movementPattern?: string;
 };
 const norm = (name: string) =>
   name.toLowerCase().replace(/[_-]/g, " ").replace(/\s+/g, " ").trim();
@@ -95,6 +114,7 @@ export function catalogIndex(catalog: CatalogLift[]) {
   const index = new Map<string, CatalogLift>();
   for (const lift of catalog) {
     index.set(lift.id, lift);
+    for (const alias of lift.aliases ?? []) index.set(alias, lift);
     if (!index.has(norm(lift.name))) index.set(norm(lift.name), lift);
   }
   for (const [alias, name] of Object.entries({
@@ -123,7 +143,12 @@ export function describeLift(
       lift?.id ||
       (typeof row.exercise_id === "string" ? row.exercise_id : null),
     name: lift?.name || String(row.exercise),
-    muscle: muscleGroup(lift?.primary_muscle),
+    targetMuscle:
+      lift?.primary_muscle || readSessionNote(row.notes)?.targetMuscle,
+    movementPattern: readSessionNote(row.notes)?.movementPattern,
+    muscle: muscleGroup(
+      lift?.primary_muscle || readSessionNote(row.notes)?.targetMuscle,
+    ),
     bodyweight:
       /body\s*(only|weight)/.test(equipment || "") ||
       /pull[\s_-]*ups?|chin[\s_-]*ups?|push[\s_-]*ups?|\bdips?\b|leg[\s_-]+raises?/i.test(
@@ -376,8 +401,10 @@ export function validLive(value: unknown): value is LiveWorkout {
         typeof e.key === "string" &&
         typeof e.name === "string" &&
         e.name.length <= 300 &&
-        e.id !== null &&
-        typeof e.id === "string" &&
+        (typeof e.id === "string" ||
+          (e.id === null &&
+            typeof e.targetMuscle === "string" &&
+            e.targetMuscle.length > 0)) &&
         Object.hasOwn(muscleColors, e.muscle) &&
         typeof e.bodyweight === "boolean" &&
         Number.isFinite(e.rest) &&
@@ -451,6 +478,7 @@ export function completedEntries(live: LiveWorkout, endedAt: string): Entry[] {
     unit: live.unit,
     startedAt: live.startedAt,
     endedAt,
+    durationSeconds: elapsedWorkoutSeconds(live, Date.parse(endedAt)),
   };
   return live.exercises.flatMap((e) =>
     e.sets
@@ -465,7 +493,11 @@ export function completedEntries(live: LiveWorkout, endedAt: string): Entry[] {
         reps: s.reps,
         weight_kg: s.weightKg,
         rpe: s.rpe,
-        notes: sessionNotes("", note),
+        notes: sessionNotes("", {
+          ...note,
+          targetMuscle: e.targetMuscle,
+          movementPattern: e.movementPattern,
+        }),
       })),
   );
 }

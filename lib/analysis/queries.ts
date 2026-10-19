@@ -3,45 +3,30 @@ import { db } from "../server";
 import catalog from "../exercises.json";
 import { computeMetrics } from "./metrics";
 import { getInsights } from "./insights";
-import { movementPattern } from "./catalog";
+import { activityIndex, analysisSet, entrySessions } from "./activity";
+import { canonicalCatalog, type TaxonomyExercise } from "../exercise-taxonomy";
 import type {
   AnalysisData,
   RawData,
   Range,
-  Session,
-  SetLog,
   BodyMetric,
   LibraryItem,
   Schedule,
-  Pattern,
 } from "./types";
 type Row = Record<string, unknown>;
 const byId = new Map(catalog.map((e) => [e.id, e]));
-const byName = new Map(catalog.map((e) => [e.name.toLowerCase(), e]));
-function set(row: Row): SetLog {
-  const e =
-    byId.get(String(row.exercise_id)) ??
-    byName.get(String(row.exercise ?? "").toLowerCase());
-  // Unknown movement metadata stays unknown; don't infer a training pattern from a name.
-  const metadata = e as (typeof e & { movement_pattern?: Pattern }) | undefined;
-  return {
-    exerciseId: e?.id ?? String(row.exercise_id ?? row.exercise),
-    name: e?.name ?? String(row.exercise ?? row.exercise_id),
-    primary: e?.primary ?? "Unclassified",
-    secondary: e?.secondary ?? [],
-    pattern:
-      metadata?.movement_pattern ?? (e ? movementPattern[e.id] : null) ?? null,
-    reps: row.reps == null ? null : Number(row.reps),
-    weight:
-      (row.weight ?? row.weight_kg) == null
-        ? null
-        : Number(row.weight ?? row.weight_kg),
-    warmup: row.is_warmup === true,
-    count: Number(row.sets ?? 1),
-  };
-}
 export async function fetchRaw(userId: string): Promise<RawData> {
   const sql = db();
+  const catalogRows = await sql<
+    TaxonomyExercise[]
+  >`SELECT id,name,primary_muscle,primary_muscles,secondary_muscles,movement_pattern,force,category,source FROM exercises`;
+  const fallback = catalog.map((e) => ({
+    id: e.id,
+    name: e.name,
+    primary_muscle: e.primary,
+    secondary_muscles: e.secondary,
+  }));
+  const index = activityIndex([...fallback, ...canonicalCatalog(catalogRows)]);
   const groups = await Promise.allSettled([
     sql`SELECT
    (SELECT coalesce(jsonb_agg(to_jsonb(w)), '[]'::jsonb) FROM firstrep_workout_entries w WHERE user_id=${userId}) AS legacy,
@@ -66,23 +51,9 @@ export async function fetchRaw(userId: string): Promise<RawData> {
       startedAt: String(s.started_at),
       completedAt: s.completed_at ? String(s.completed_at) : null,
       planId: s.plan_id ? String(s.plan_id) : null,
-      sets: (s.sets as Row[]).map(set),
+      sets: (s.sets as Row[]).map((row) => analysisSet(row, index)),
     }));
-    const days = new Map<string, Session>();
-    for (const r of data.legacy as Row[]) {
-      const d = String(r.date).slice(0, 10);
-      const session = days.get(d) ?? {
-        id: `legacy-${d}`,
-        startedAt: d + "T12:00:00Z",
-        completedAt: d + "T12:00:00Z",
-        dateOnly: d,
-        legacy: true,
-        sets: [],
-      };
-      session.sets.push(set(r));
-      days.set(d, session);
-    }
-    raw.sessions.push(...days.values());
+    raw.sessions.push(...entrySessions(data.legacy as Row[], index));
     raw.schedule = (data.schedule as Row[]).map(
       (s) =>
         ({
@@ -106,14 +77,25 @@ export async function fetchRaw(userId: string): Promise<RawData> {
     console.error("Analysis body query failed", groups[1].reason);
     raw.errors.push("body");
   }
-  if (groups[2].status === "fulfilled")
-    raw.library = groups[2].value.map((r) => ({
-      id: String(r.id),
-      name: String(r.name ?? byId.get(String(r.id))?.name ?? r.id),
-      kind: r.kind as LibraryItem["kind"],
-      savedAt: r.savedAt ? String(r.savedAt) : null,
-    }));
-  else {
+  if (groups[2].status === "fulfilled") {
+    const items = groups[2].value.map((r) => {
+      const exercise =
+        r.kind === "exercise" ? index.get(String(r.id)) : undefined;
+      return {
+        id: exercise?.id ?? String(r.id),
+        name:
+          exercise?.name ??
+          String(r.name ?? byId.get(String(r.id))?.name ?? r.id),
+        kind: r.kind as LibraryItem["kind"],
+        savedAt: r.savedAt ? String(r.savedAt) : null,
+      };
+    });
+    raw.library = [
+      ...new Map(
+        items.map((item) => [item.kind + "|" + item.id, item]),
+      ).values(),
+    ];
+  } else {
     console.error("Analysis library query failed", groups[2].reason);
     raw.errors.push("library");
   }
@@ -127,7 +109,7 @@ export async function getAnalysisData(
 ): Promise<AnalysisData> {
   const raw = await unstable_cache(
     () => fetchRaw(userId),
-    ["analysis-v1", userId, range],
+    ["analysis-v2", userId, range],
     { revalidate: 300, tags: [`analysis-${userId}`] },
   )();
   const metrics = computeMetrics(raw, range, timezone);

@@ -13,7 +13,7 @@ export default function SnapshotCards({
         [
           ["sessions", m.legacy ? "Training days / sessions" : "Sessions", ""],
           ["volume", "Total volume", unit],
-          ["duration", "Avg duration (median)", "min"],
+          ["duration", "Avg duration", "min"],
           ["consistency", "Consistency", "%"],
         ] as const
       ).map(([key, label, suffix]) => {

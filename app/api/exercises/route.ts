@@ -1,6 +1,8 @@
 import { db } from "@/lib/server";
 import { exerciseImageUrl, type ExerciseRow } from "@/lib/exercise-catalog";
 
+import { canonicalCatalog } from "@/lib/exercise-taxonomy";
+
 export const runtime = "nodejs";
 
 export async function GET(request: Request) {
@@ -27,24 +29,30 @@ export async function GET(request: Request) {
              equipment, is_compound, force, level, mechanic, category,
              instructions, images, metadata, source
       FROM exercises
-      WHERE (
-        ${muscle} = '' OR lower(primary_muscle) = lower(${muscle})
-        OR EXISTS (
-          SELECT 1 FROM unnest(secondary_muscles) AS secondary
-          WHERE lower(secondary) = lower(${muscle})
-        )
-      )
-      AND (${equipment} = '' OR lower(equipment) = lower(${equipment}))
-      AND (${search} = '' OR position(lower(${search}) in lower(name)) > 0)
       ORDER BY name, id
-      LIMIT ${requestedLimit}
     `;
     return Response.json(
       {
-        exercises: exercises.map((exercise) => ({
-          ...exercise,
-          images: exercise.images.map(exerciseImageUrl),
-        })),
+        exercises: canonicalCatalog(exercises)
+          .filter(
+            (e) =>
+              (!muscle ||
+                e.primary_muscle?.toLowerCase() === muscle.toLowerCase() ||
+                e.primary_muscles.some(
+                  (m) => m.toLowerCase() === muscle.toLowerCase(),
+                ) ||
+                e.secondary_muscles.some(
+                  (m) => m.toLowerCase() === muscle.toLowerCase(),
+                )) &&
+              (!equipment ||
+                e.equipment?.toLowerCase() === equipment.toLowerCase()) &&
+              (!search || e.name.toLowerCase().includes(search.toLowerCase())),
+          )
+          .slice(0, requestedLimit)
+          .map((exercise) => ({
+            ...exercise,
+            images: exercise.images.map(exerciseImageUrl),
+          })),
       },
       { headers: { "Cache-Control": "public, s-maxage=300" } },
     );

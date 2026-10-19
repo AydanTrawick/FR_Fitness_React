@@ -34,6 +34,11 @@ export function localDate(value: string, timezone: string) {
 }
 const day = (value: string) =>
   Date.parse(value.slice(0, 10) + "T12:00:00Z") / 86400000;
+export function average(values: number[]): number | null {
+  return values.length
+    ? values.reduce((sum, value) => sum + value, 0) / values.length
+    : null;
+}
 export function median(values: number[]): number | null {
   if (!values.length) return null;
   const a = [...values].sort((a, b) => a - b);
@@ -57,12 +62,16 @@ export function sessionVolume(session: Session): number | null {
     ? sets.reduce((n, s) => n + s.reps! * s.weight! * s.count, 0)
     : null;
 }
-const duration = (s: Session) =>
-  !s.legacy &&
-  s.completedAt &&
-  Date.parse(s.completedAt) >= Date.parse(s.startedAt)
-    ? (Date.parse(s.completedAt) - Date.parse(s.startedAt)) / 60000
-    : null;
+export const duration = (s: Session) =>
+  s.durationSeconds !== undefined &&
+  Number.isFinite(s.durationSeconds) &&
+  s.durationSeconds >= 0
+    ? s.durationSeconds / 60
+    : !s.legacy &&
+        s.completedAt &&
+        Date.parse(s.completedAt) >= Date.parse(s.startedAt)
+      ? (Date.parse(s.completedAt) - Date.parse(s.startedAt)) / 60000
+      : null;
 export function computeMetrics(
   raw: RawData,
   range: Range,
@@ -97,7 +106,7 @@ export function computeMetrics(
     return {
       sessions: rows.length,
       volume: volumes.length ? volumes.reduce((a, b) => a + b, 0) : null,
-      duration: median(
+      duration: average(
         rows.map(duration).filter((v): v is number => v !== null),
       ),
       consistency:
@@ -136,18 +145,24 @@ export function computeMetrics(
         count: 0,
       };
       exercise.set(set.exerciseId, e);
-      if (set.weight === null || set.reps === null) continue;
-      const v = set.weight * set.reps * set.count;
-      if (set.primary)
-        muscles.set(set.primary, (muscles.get(set.primary) ?? 0) + v);
-      for (const secondary of set.secondary)
-        muscles.set(secondary, (muscles.get(secondary) ?? 0) + v * 0.5);
+      const v = set.count;
+      const primaries = new Set(set.primaryMuscles ?? [set.primary]);
+      for (const primary of primaries)
+        if (primary) muscles.set(primary, (muscles.get(primary) ?? 0) + v);
+      for (const secondary of new Set(set.secondary))
+        if (!primaries.has(secondary))
+          muscles.set(secondary, (muscles.get(secondary) ?? 0) + v * 0.5);
       if (set.pattern)
         patternVolume.set(
           set.pattern,
           (patternVolume.get(set.pattern) ?? 0) + v,
         );
-      if (set.weight > 0 && set.reps > 0)
+      if (
+        set.weight !== null &&
+        set.reps !== null &&
+        set.weight > 0 &&
+        set.reps > 0
+      )
         best.set(
           set.exerciseId,
           Math.max(
@@ -225,7 +240,10 @@ export function computeMetrics(
       ...item,
       count: selected.filter((s) => used.includes(s)).length,
       daysSince: used.length ? age(used.at(-1)!) : null,
-      unused: item.kind === "workout" ? !raw.sessions.some(s => s.planId === item.id) : used.length === 0,
+      unused:
+        item.kind === "workout"
+          ? !raw.sessions.some((s) => s.planId === item.id)
+          : used.length === 0,
     };
   });
   return {
@@ -242,8 +260,10 @@ export function computeMetrics(
     weekly: [...weekly].map(([date, rows]) => ({
       date,
       sessions: rows.length,
-      volume: rows.some(s => sessionVolume(s) !== null) ? rows.reduce((sum, s) => sum + (sessionVolume(s) ?? 0), 0) : null,
-      duration: median(
+      volume: rows.some((s) => sessionVolume(s) !== null)
+        ? rows.reduce((sum, s) => sum + (sessionVolume(s) ?? 0), 0)
+        : null,
+      duration: average(
         rows.map(duration).filter((v): v is number => v !== null),
       ),
     })),
@@ -270,6 +290,25 @@ export function computeMetrics(
     frequency: completed.filter((s) => age(s) < 28).length / 4,
     previousFrequency:
       completed.filter((s) => age(s) >= 28 && age(s) < 56).length / 4,
+    durationByWeekday: [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ].map((weekday, i) => {
+      const values = selected
+        .filter((s) => new Date(date(s) + "T12:00:00Z").getUTCDay() === i)
+        .map(duration)
+        .filter((v): v is number => v !== null);
+      return {
+        day: weekday,
+        minutes: average(values),
+        sessions: values.length,
+      };
+    }),
     avgGap: gaps.length ? gaps.reduce((a, b) => a + b, 0) / gaps.length : null,
     longestGap: gaps.length ? Math.max(...gaps) : null,
     body,

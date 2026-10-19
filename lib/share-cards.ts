@@ -96,3 +96,55 @@ export function validPR(data: PRCardData) {
         data.previous < data.weight))
   );
 }
+
+export const workoutCardStyles = [
+  { id: "log", name: "Workout log", description: "Every set, at a glance" },
+  { id: "volume", name: "Volume Split", description: "Where the work went" },
+  { id: "ladder", name: "Set Ladder", description: "Your weights, set by set" },
+  {
+    id: "receipt",
+    name: "Gym Receipt",
+    description: "An itemized session receipt",
+  },
+  {
+    id: "facts",
+    name: "Workout Facts",
+    description: "Your session, by the numbers",
+  },
+] as const;
+export type WorkoutCardStyle = (typeof workoutCardStyles)[number]["id"];
+export function exerciseCardStats(exercise: CardExercise) {
+  const sets = exercise.sets;
+  const first = sets[0]?.weightKg ?? 0;
+  const last = sets.at(-1)?.weightKg ?? 0;
+  const jump =
+    first > 0 && last > first + 1e-8 ? ((last - first) / first) * 100 : null;
+  const top = sets.reduce<CardSet | null>(
+    (best, set) =>
+      !best ||
+      set.weightKg > best.weightKg ||
+      (set.weightKg === best.weightKg && set.reps > best.reps)
+        ? set
+        : best,
+    null,
+  );
+  return {
+    exercise,
+    count: sets.reduce((sum, s) => sum + s.count, 0),
+    volumeKg: sets.reduce((sum, s) => sum + s.weightKg * s.reps * s.count, 0),
+    first,
+    last,
+    jump,
+    top,
+  };
+}
+// Compare first and final recorded working weights within this session only.
+// A zero starting load has no meaningful percentage increase.
+export function biggestCardJump(exercises: CardExercise[]) {
+  return (
+    exercises
+      .map(exerciseCardStats)
+      .filter((s) => s.jump !== null)
+      .sort((a, b) => b.jump! - a.jump!)[0] ?? null
+  );
+}

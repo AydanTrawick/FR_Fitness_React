@@ -349,7 +349,13 @@ export function ExerciseLibrary({
   const [catalogReady, setCatalogReady] = useState(false);
   const [notice, setNotice] = useState("");
   const byId = useMemo(
-    () => new Map(exercises.map((e) => [e.id, e])),
+    () =>
+      new Map(
+        exercises.flatMap((e) => [
+          [e.id, e] as const,
+          ...(e.aliases ?? []).map((id) => [id, e] as const),
+        ]),
+      ),
     [exercises],
   );
   useEffect(() => {
@@ -536,13 +542,21 @@ export function ExerciseLibrary({
       return;
     }
     void run(async () => {
-      const favorite = !favorites.includes(e.id);
-      await api("library/favorites", { exerciseId: e.id, favorite }, "PUT");
+      const favorite = !isFavorite(e);
+      const ids = favorite
+        ? [e.id]
+        : [e.id, ...(e.aliases ?? [])].filter((id) => favorites.includes(id));
+      for (const id of ids)
+        await api("library/favorites", { exerciseId: id, favorite }, "PUT");
       setFavorites((old) =>
-        favorite ? [...old, e.id] : old.filter((id) => id !== e.id),
+        favorite
+          ? [...old, e.id]
+          : old.filter((id) => ![e.id, ...(e.aliases ?? [])].includes(id)),
       );
     });
   };
+  const isFavorite = (e: Exercise) =>
+    [e.id, ...(e.aliases ?? [])].some((id) => favorites.includes(id));
   const save = () => {
     if (!userId) {
       onSignIn();
@@ -621,15 +635,15 @@ export function ExerciseLibrary({
     });
   };
   const filtered = filterExercises(
-    page === "favorites"
-      ? exercises.filter((e) => favorites.includes(e.id))
-      : exercises,
+    page === "favorites" ? exercises.filter((e) => isFavorite(e)) : exercises,
     query,
     muscle,
     equipment,
     difficulty,
     sort,
-  ).filter((e) => !pattern || movementPattern[e.id] === pattern);
+  ).filter(
+    (e) => !pattern || (e.movementPattern ?? movementPattern[e.id]) === pattern,
+  );
   const listed = workouts
     .filter(
       (w) =>
@@ -994,7 +1008,7 @@ export function ExerciseLibrary({
                 <ExerciseCard
                   key={e.id}
                   exercise={e}
-                  favorite={favorites.includes(e.id)}
+                  favorite={isFavorite(e)}
                   busy={busy || loading}
                   toggle={() => toggle(e)}
                   add={() => add(e)}
@@ -1178,9 +1192,9 @@ export function ExerciseLibrary({
             >
               <Heart
                 size={16}
-                fill={favorites.includes(detail.id) ? "currentColor" : "none"}
+                fill={isFavorite(detail) ? "currentColor" : "none"}
               />
-              {favorites.includes(detail.id)
+              {isFavorite(detail)
                 ? "Remove from Favorites"
                 : "Add to Favorites"}
             </button>

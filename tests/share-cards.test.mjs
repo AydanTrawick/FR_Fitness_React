@@ -69,3 +69,34 @@ test("PR cards require real numeric input and only show an improvement over a lo
   ])
     assert.equal(validPR({ ...pr, ...patch }), false);
 });
+
+test("session jump statistics require a real first-to-final weight increase", async () => {
+  const { exerciseCardStats, biggestCardJump } =
+    await import("../lib/share-cards.ts");
+  const lift = (name, weights) => ({
+    name,
+    sets: weights.map((weightKg, i) => ({
+      number: i + 1,
+      count: 1,
+      reps: 8,
+      weightKg,
+    })),
+  });
+  for (const weights of [[50], [50, 50], [70, 50], [50, 70, 50], [0, 50]])
+    assert.equal(
+      exerciseCardStats(lift("Flat or decreasing", weights)).jump,
+      null,
+    );
+  const a = lift("Bench", [50, 60]),
+    b = lift("Deadlift", [100, 140]);
+  assert.equal(exerciseCardStats(a).jump, 20);
+  assert.equal(biggestCardJump([a, b]).exercise.name, "Deadlift");
+  assert.equal(biggestCardJump([lift("Held", [50, 50])]), null);
+  assert.equal(
+    exerciseCardStats({
+      name: "Legacy",
+      sets: [{ number: 1, count: 3, reps: 10, weightKg: 50 }],
+    }).volumeKg,
+    1500,
+  );
+});

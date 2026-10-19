@@ -18,6 +18,8 @@ import { Field } from "./ui";
 import { errorText } from "@/lib/client";
 import { today, type Entry } from "@/lib/tracking";
 import {
+  workoutCardStyles,
+  type WorkoutCardStyle,
   validPR,
   cardWeight,
   workoutCardData,
@@ -159,6 +161,7 @@ function ShareCardEditor({
   const [previous, setPrevious] = useState(
     initialPR?.previous === undefined ? "" : String(initialPR.previous),
   );
+  const [style, setStyle] = useState<WorkoutCardStyle>("log");
   const [page, setPage] = useState(0);
   const [pages, setPages] = useState(1);
   const [ready, setReady] = useState(false);
@@ -209,6 +212,7 @@ function ShareCardEditor({
             title.trim() || "Workout log",
             unit,
             page,
+            style,
           );
           setPages(total);
         }
@@ -224,7 +228,7 @@ function ShareCardEditor({
     return () => {
       cancelled = true;
     };
-  }, [kind, previewPR, workout, title, unit, page]);
+  }, [kind, previewPR, workout, title, unit, page, style]);
 
   async function exportCard() {
     if (!valid || busy || !ready) return;
@@ -246,25 +250,46 @@ function ShareCardEditor({
           "firstrep-pr-" + slug + "-" + date + ".png",
         );
       } else {
-        const total = renderWorkoutCard(output, workout, title.trim(), unit);
+        const total = renderWorkoutCard(
+          output,
+          workout,
+          title.trim(),
+          unit,
+          0,
+          style,
+        );
         if (total === 1)
           downloadCardBlob(
             await canvasPNG(output),
-            "firstrep-workout-" + date + ".png",
+            "firstrep-" +
+              (style === "log" ? "workout" : style) +
+              "-" +
+              date +
+              ".png",
           );
         else {
           const JSZip = (await import("jszip")).default;
           const zip = new JSZip();
           for (let i = 0; i < total; i++) {
-            renderWorkoutCard(output, workout, title.trim(), unit, i);
+            renderWorkoutCard(output, workout, title.trim(), unit, i, style);
             zip.file(
-              "firstrep-workout-" + date + "-" + (i + 1) + ".png",
+              "firstrep-" +
+                (style === "log" ? "workout" : style) +
+                "-" +
+                date +
+                "-" +
+                (i + 1) +
+                ".png",
               await (await canvasPNG(output)).arrayBuffer(),
             );
           }
           downloadCardBlob(
             await zip.generateAsync({ type: "blob" }),
-            "firstrep-workout-" + date + ".zip",
+            "firstrep-" +
+              (style === "log" ? "workout" : style) +
+              "-" +
+              date +
+              ".zip",
           );
         }
       }
@@ -320,6 +345,34 @@ function ShareCardEditor({
               void exportCard();
             }}
           >
+            {kind === "workout" && (
+              <fieldset className="share-card-styles">
+                <legend>Card design</legend>
+                {workoutCardStyles.map((option) => (
+                  <label
+                    key={option.id}
+                    className={style === option.id ? "selected" : ""}
+                  >
+                    <input
+                      type="radio"
+                      name="card-design"
+                      value={option.id}
+                      checked={style === option.id}
+                      disabled={busy}
+                      onChange={() => {
+                        setStyle(option.id);
+                        setPage(0);
+                        setReady(false);
+                      }}
+                    />
+                    <span>
+                      <strong>{option.name}</strong>
+                      <small>{option.description}</small>
+                    </span>
+                  </label>
+                ))}
+              </fieldset>
+            )}
             <Field label="Card date">
               {kind === "workout" ? (
                 <select
@@ -443,6 +496,7 @@ function ShareCardEditor({
                     if (weight.trim()) setWeight(convert(weight));
                     if (previous.trim()) setPrevious(convert(previous));
                   }
+                  setPage(0);
                   setUnit(next);
                 }}
               >
@@ -490,7 +544,7 @@ function ShareCardEditor({
             <p className="muted share-card-note">
               1080 × 2160 PNG · Generated on your device.{" "}
               {kind === "workout"
-                ? "Every recorded set is included. Longer workouts download as a ZIP of numbered cards."
+                ? "All exercises contribute to the totals. Longer workouts download as a ZIP of numbered cards."
                 : "Use a weight and rep count you completed. No saved history is changed."}
             </p>
           </form>
