@@ -118,9 +118,16 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     try {
       const clean = rows.map((row) => validateEntry(kind, row));
       const next = { ...logs, [kind]: clean };
-      if (status.user)
-        await api(`logs/${kind}`, { rows: clean, previous: logs[kind] }, "PUT");
-      else {
+      if (status.user) {
+        const saved = await api<{ rows: Entry[] }>(
+          `logs/${kind}`,
+          { rows: clean, previous: logs[kind] },
+          "PUT",
+        );
+        // The next save must compare against the server's persisted metadata,
+        // including defaults added when a workout is first finished.
+        next[kind] = saved.rows.map((row) => validateEntry(kind, row));
+      } else {
         sessionStorage.setItem(guestKey, JSON.stringify(next));
         setGuest(next);
       }

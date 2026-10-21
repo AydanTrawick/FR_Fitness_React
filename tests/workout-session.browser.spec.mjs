@@ -3,10 +3,166 @@ import { randomUUID } from "node:crypto";
 import { hashPassword } from "better-auth/crypto";
 import postgres from "postgres";
 import sharp from "sharp";
+import { readSessionNote } from "../lib/workout-session.ts";
 const origin = process.env.AUTH_TEST_BASE_URL || "http://localhost:3026";
 const expect = baseExpect.configure({ timeout: 20000 });
 test.use({ viewport: { width: 390, height: 844 }, reducedMotion: "reduce" });
 test.setTimeout(150000);
+test("feelings save immediately after finishing and stay with each session", async ({
+  page,
+}) => {
+  const sql = postgres(process.env.NEON_DATABASE_URL, {
+    ssl: "require",
+    max: 1,
+  });
+  const userId = randomUUID();
+  const email = "firstrep-test-" + randomUUID() + "@example.invalid";
+  const password = "A!7" + randomUUID() + "z9";
+  const sessionIds = [randomUUID(), randomUUID()];
+  try {
+    const hash = await hashPassword(password);
+    await sql.begin(async (tx) => {
+      await tx`INSERT INTO "user"(id,name,email,email_verified,onboarded,terms_version_accepted,terms_accepted_at) VALUES (${userId},'Feeling fixture',${email},true,true,'2026-10-02',NOW())`;
+      await tx`INSERT INTO firstrep_users(id,email,display_name,password_hash,password_salt,role) VALUES (${userId},${email},'Feeling fixture','','','customer')`;
+      await tx`INSERT INTO firstrep_user_settings(user_id) VALUES (${userId})`;
+      await tx`INSERT INTO account(id,account_id,provider_id,user_id,password,updated_at) VALUES (${randomUUID()},${userId},'credential',${userId},${hash},NOW())`;
+    });
+    await page.request.get(origin + "/api/auth/get-session");
+    expect(
+      (
+        await page.request.post(origin + "/api/auth/sign-in/email", {
+          headers: { origin },
+          data: { email, password },
+        })
+      ).ok(),
+    ).toBe(true);
+    await page.goto(origin + "/#workout");
+    const { exercises } = await (
+      await page.request.get(origin + "/api/exercises?limit=1000")
+    ).json();
+    const exercise = exercises.find((e) => !e.metadata?.timed);
+    expect(exercise).toBeTruthy();
+    for (const [index, id] of sessionIds.entries()) {
+      const startedAt = new Date().toISOString();
+      await page.evaluate(
+        ({ userId, draft }) => {
+          sessionStorage.setItem(
+            "firstrep.live-workout.v1." + userId,
+            JSON.stringify(draft),
+          );
+        },
+        {
+          userId,
+          draft: {
+            id,
+            name: `Feeling session ${index + 1}`,
+            date: startedAt.slice(0, 10),
+            unit: "kg",
+            startedAt,
+            current: 0,
+            selected: 0,
+            restEndsAt: null,
+            restLength: 90,
+            exercises: [
+              {
+                id: exercise.id,
+                key: exercise.id,
+                name: exercise.name,
+                muscle: "Chest",
+                bodyweight: false,
+                rest: 90,
+                sets: [0, 1].map(() => ({
+                  id: randomUUID(),
+                  weightKg: 20,
+                  reps: 8,
+                  rpe: 7,
+                  done: true,
+                  completedAt: startedAt,
+                })),
+              },
+            ],
+          },
+        },
+      );
+      await page.reload();
+      await page
+        .getByRole("button", { name: "Resume workout", exact: true })
+        .click();
+      const live = page.getByRole("dialog", { name: "Live workout session" });
+      await live
+        .getByRole("button", { name: "Finish workout", exact: true })
+        .first()
+        .click();
+      const recap = page.getByRole("dialog", { name: "Workout session recap" });
+      await expect(recap).toBeVisible();
+      const feeling = index === 0 ? "Solid" : "Rough";
+      const saving = page.waitForResponse(
+        (r) =>
+          r.url().endsWith("/api/logs/workout") &&
+          r.request().method() === "PUT",
+      );
+      await recap.getByRole("button", { name: feeling, exact: true }).click();
+      const response = await saving;
+      expect(response.status(), await response.text()).toBe(200);
+      await expect(
+        recap.getByRole("button", { name: feeling, exact: true }),
+      ).toHaveAttribute("aria-pressed", "true");
+      if (index === 0) {
+        // A failed update must leave the saved feeling intact and allow retry.
+        await page.route(
+          "**/api/logs/workout",
+          (route) =>
+            route.fulfill({
+              status: 503,
+              json: { error: "Temporary save failure" },
+            }),
+          { times: 1 },
+        );
+        await recap
+          .getByRole("button", { name: "Strong", exact: true })
+          .click();
+        await expect(recap.getByRole("alert")).toContainText(
+          "Your feeling could not be saved",
+        );
+        await expect(
+          recap.getByRole("button", { name: "Solid", exact: true }),
+        ).toHaveAttribute("aria-pressed", "true");
+        await recap
+          .getByRole("button", { name: "Strong", exact: true })
+          .click();
+        await expect(
+          recap.getByText("Saved to session notes: Strong", { exact: true }),
+        ).toBeVisible();
+      }
+      await recap.getByRole("button", { name: "Done", exact: true }).click();
+    }
+    const rows =
+      await sql`SELECT notes FROM firstrep_workout_entries WHERE user_id=${userId}`;
+    expect(rows).toHaveLength(4);
+    for (const [index, id] of sessionIds.entries()) {
+      const notes = rows
+        .map((row) => readSessionNote(row.notes))
+        .filter((note) => note.id === id);
+      expect(notes).toHaveLength(2);
+      expect(
+        notes.every(
+          (note) => note.feeling === (index === 0 ? "Strong" : "Rough"),
+        ),
+      ).toBe(true);
+    }
+    await page.reload();
+    await expect(
+      page.getByText("Feeling session 1 · Felt Strong", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByText("Feeling session 2 · Felt Rough", { exact: true }),
+    ).toBeVisible();
+  } finally {
+    await sql`DELETE FROM "user" WHERE id=${userId}`;
+    await sql`DELETE FROM firstrep_users WHERE id=${userId}`;
+    await sql.end();
+  }
+});
 test("grouped units, live draft, save recovery, recap, PR, feeling and weekly goal persist", async ({
   page,
 }) => {
