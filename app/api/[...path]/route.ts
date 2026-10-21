@@ -1,3 +1,4 @@
+import { sessionApi } from "@/lib/session/server";
 import { readSessionNote } from "@/lib/workout-session";
 import { targetMuscles } from "@/lib/exercise-taxonomy";
 import { limits } from "@/lib/ratelimit/limiters";
@@ -59,6 +60,24 @@ async function handle(
     const { path } = await context.params;
     const route = path.join("/");
     if (request.method !== "GET") checkOrigin(request);
+    if (
+      ["lobby", "sessions", "saved-workouts"].includes(path[0]) ||
+      (path[0] === "exercises" &&
+        ["counts", "last-performance", "suggestions"].includes(path[1]))
+    ) {
+      let result;
+      try {
+        result = await sessionApi(request, path);
+      } catch (error) {
+        if (!(error instanceof HttpError) && !(error instanceof z.ZodError))
+          console.error(
+            "Session builder request failed",
+            error instanceof Error ? error.message : String(error),
+          );
+        throw error;
+      }
+      return response(result);
+    }
     if (path[0] === "library") {
       const result = await exerciseApi(request, path);
       if (request.method !== "GET") {

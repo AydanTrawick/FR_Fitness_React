@@ -1,4 +1,5 @@
 "use client";
+import type { LiveWorkout } from "@/lib/workout-session";
 import { BrandLogo } from "./brand-logo";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -67,20 +68,27 @@ const pages = new Set([
   ...navigation.flatMap((g) => g.items.map((i) => i.id)),
   "assistant",
 ]);
-function Shell() {
+function Shell({
+  initialLive,
+  onSessionEnded,
+}: {
+  initialLive?: LiveWorkout;
+  onSessionEnded: () => void;
+}) {
   const router = useRouter();
   const { status, ready, error, notice, setError, refresh, busy } = useStore();
-  const [page, setPage] = useState("home");
+  const [page, setPage] = useState(initialLive ? "workout" : "home");
   const [mobile, setMobile] = useState(false);
   useEffect(() => {
     const sync = () => {
-      const next = window.location.hash.slice(1);
+      const next =
+        window.location.hash.slice(1) || (initialLive ? "workout" : "home");
       setPage(pages.has(next) ? next : "home");
     };
     sync();
     window.addEventListener("hashchange", sync);
     return () => window.removeEventListener("hashchange", sync);
-  }, []);
+  }, [initialLive]);
   function go(id: string) {
     if (["analysis", "progress", "coach", "playbook"].includes(id)) {
       router.push(`/${id}`);
@@ -263,7 +271,12 @@ function Shell() {
               )}
               {page === "home" && <Dashboard go={go} />}{" "}
               {page === "bmi" && <BmiTracker />}
-              {page === "workout" && <WorkoutTracker />}
+              {page === "workout" && (
+                <WorkoutTracker
+                  initialLive={initialLive}
+                  onSessionEnded={onSessionEnded}
+                />
+              )}
               {page === "food" && <FoodTracker />}
               {page === "programs" && <Programs />}
               {page === "guides" && <Guides />}
@@ -296,10 +309,16 @@ function Shell() {
     </div>
   );
 }
-export default function FirstRep() {
+export default function FirstRep({
+  initialLive,
+}: { initialLive?: LiveWorkout } = {}) {
+  const [entryLive, setEntryLive] = useState(initialLive);
   return (
     <StoreProvider>
-      <Shell />
+      <Shell
+        initialLive={entryLive}
+        onSessionEnded={() => setEntryLive(undefined)}
+      />
     </StoreProvider>
   );
 }

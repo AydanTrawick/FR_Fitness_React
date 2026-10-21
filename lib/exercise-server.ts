@@ -87,7 +87,7 @@ export async function exerciseApi(request: Request, path: string[]) {
               "This workout changed in another session. Reopen it before saving.",
               409,
             );
-          await tx`UPDATE firstrep_saved_workouts SET name=${body.name},description=${body.description},updated_at=date_trunc('milliseconds',clock_timestamp()) WHERE id=${id} AND user_id=${user.id}`;
+          await tx`UPDATE firstrep_saved_workouts SET name=${body.name},description=${body.description},session_plan=NULL,split='custom',updated_at=date_trunc('milliseconds',clock_timestamp()) WHERE id=${id} AND user_id=${user.id}`;
           await tx`DELETE FROM firstrep_saved_workout_exercises WHERE workout_id=${id}`;
         } else
           await tx`INSERT INTO firstrep_saved_workouts(id,user_id,name,description) VALUES(${nextId},${user.id},${body.name},${body.description})`;

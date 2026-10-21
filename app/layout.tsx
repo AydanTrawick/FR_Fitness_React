@@ -2,6 +2,7 @@ import "./exercises.css";
 import "./programs.css";
 import type { Metadata } from "next";
 import "./globals.css";
+import "./session-builder.css";
 import { ConsentAnalytics } from "@/components/account/consent-analytics";
 import SplashScreen from "@/components/SplashScreen";
 export const metadata: Metadata = {

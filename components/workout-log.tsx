@@ -452,7 +452,10 @@ function SessionRecap({
     </WorkoutFullscreen>
   );
 }
-export function WorkoutLog() {
+export function WorkoutLog({
+  initialLive,
+  onSessionEnded,
+}: { initialLive?: LiveWorkout; onSessionEnded?: () => void } = {}) {
   const { logs, status, save, busy, reload } = useStore();
   const [catalog, setCatalog] = useState<CatalogLift[]>([]),
     [catalogError, setCatalogError] = useState("");
@@ -469,12 +472,13 @@ export function WorkoutLog() {
     [quick, setQuick] = useState(false),
     [manage, setManage] = useState(false),
     [setup, setSetup] = useState(false),
-    [live, setLive] = useState<LiveWorkout | null>(null),
-    [liveOpen, setLiveOpen] = useState(false),
+    [live, setLive] = useState<LiveWorkout | null>(initialLive ?? null),
+    [liveOpen, setLiveOpen] = useState(!!initialLive),
     [recap, setRecap] = useState<Recap | null>(null),
     [activePR, setActivePR] = useState<PRCardData | null>(null),
     [pendingPR, setPendingPR] = useState<PRCardData | null>(null),
     [sessionError, setSessionError] = useState("");
+  const [liveHydrated, setLiveHydrated] = useState(false);
   const [goal, setGoal] = useState(3),
     [goalDraft, setGoalDraft] = useState("3"),
     [goalEdit, setGoalEdit] = useState(false),
@@ -528,7 +532,11 @@ export function WorkoutLog() {
         const raw = sessionStorage.getItem(draftKey);
         if (raw) {
           const parsed = JSON.parse(raw);
-          if (validLive(parsed)) setLive(parsed);
+          if (
+            validLive(parsed) &&
+            (!initialLive || parsed.id === initialLive.id)
+          )
+            setLive(parsed);
           else sessionStorage.removeItem(draftKey);
         }
       } catch {
@@ -536,13 +544,14 @@ export function WorkoutLog() {
           "The previous draft could not be restored. Your saved workout log is unchanged.",
         );
       }
+      setLiveHydrated(true);
     });
     return () => {
       active = false;
     };
-  }, [draftKey, status.user]);
+  }, [draftKey, status.user, initialLive]);
   useEffect(() => {
-    if (!live) return;
+    if (!live || !liveHydrated) return;
     try {
       sessionStorage.setItem(draftKey, JSON.stringify(live));
     } catch {
@@ -552,7 +561,7 @@ export function WorkoutLog() {
         ),
       );
     }
-  }, [live, draftKey]);
+  }, [live, draftKey, liveHydrated]);
   useEffect(() => {
     if (!live) return;
     const handler = (event: BeforeUnloadEvent) => {
@@ -590,6 +599,8 @@ export function WorkoutLog() {
         !additions.length ||
         (await save("workout", [...logs.workout, ...additions]))
       ) {
+        if (live.serverPlan)
+          await api("sessions/" + live.id, { action: "finish" }, "PATCH");
         try {
           sessionStorage.removeItem(draftKey);
         } catch {}
@@ -603,6 +614,8 @@ export function WorkoutLog() {
         setUnit(live.unit);
         setLive(null);
         setLiveOpen(false);
+        onSessionEnded?.();
+        if (live.serverPlan) window.history.replaceState(null, "", "/#workout");
         const pr = awards.find((r) => r.badge === "PR");
         if (pr) setPendingPR(prData(pr, live.unit));
       } else {
@@ -1063,6 +1076,9 @@ export function WorkoutLog() {
             sessionStorage.removeItem(draftKey);
             setLive(null);
             setLiveOpen(false);
+            onSessionEnded?.();
+            if (live.serverPlan)
+              window.history.replaceState(null, "", "/#workout");
             setSessionError("");
           }}
           onFinish={() => void finish()}

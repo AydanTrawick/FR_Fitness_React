@@ -25,12 +25,16 @@
     "test:progress": "node --env-file=.env --env-file=.env.local node_modules/@playwright/test/cli.js test tests/progress.browser.spec.mjs --workers=1",
     "test:ratelimit-routes": "node --experimental-strip-types --experimental-vm-modules tests/ratelimit-routes.integration.mjs",
     "test:ratelimit-redis": "node --experimental-strip-types tests/ratelimit.redis.integration.mjs",
-    "test:usage-redis": "node --experimental-strip-types tests/usage.redis.integration.mjs"
+    "test:usage-redis": "node --experimental-strip-types tests/usage.redis.integration.mjs",
+    "db:session-builder": "node --env-file=.env --env-file=.env.local --experimental-strip-types scripts/migrate-session-builder.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.132.0",
     "@aws-sdk/client-s3": "^3.1136.0",
     "@better-auth/passkey": "^1.7.7",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@hookform/resolvers": "^5.9.1",
     "@neondatabase/serverless": "^1.2.0",
     "@plexapro/react-body-highlighter": "^1.0.0",

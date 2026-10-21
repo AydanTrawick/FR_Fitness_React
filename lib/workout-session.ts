@@ -83,6 +83,10 @@ export type CatalogLift = {
   id: string;
   name: string;
   primary_muscle?: string | null;
+  primary_muscles?: string[];
+  secondary_muscles?: string[];
+  images?: string[];
+  media_url?: string | null;
   aliases?: string[];
   equipment?: string | null;
   category?: string | null;
@@ -349,8 +353,9 @@ export type LiveSet = {
   done: boolean;
   completedAt?: string;
 };
-export type LiveExercise = LiftInfo & { sets: LiveSet[]; rest: number };
+export type LiveExercise = LiftInfo & { sets: LiveSet[]; rest: number; supersetGroup?: string | null };
 export type LiveWorkout = {
+  serverPlan?: boolean;
   id: string;
   name: string;
   date: string;
