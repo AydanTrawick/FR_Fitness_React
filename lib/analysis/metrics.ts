@@ -246,8 +246,32 @@ export function computeMetrics(
           : used.length === 0,
     };
   });
+  const workingSets = selected
+    .flatMap((s) => s.sets)
+    .filter((s) => !s.warmup && s.reps !== null && s.count > 0);
+  const setCount = workingSets.reduce((sum, s) => sum + s.count, 0);
+  const common = [...exercise.values()].sort(
+    (a, b) => b.count - a.count || a.name.localeCompare(b.name),
+  )[0];
+  const currentSnapshot = snapshot(selected, 0, n);
+  // Include idle days and partial weeks in the selected date range.
+  const spanDays = Number.isFinite(n)
+    ? n
+    : selected.length
+      ? today - day(date(selected[0])) + 1
+      : 0;
   return {
-    snapshot: snapshot(selected, 0, n),
+    mostCommonExercise: common
+      ? { name: common.name, sessions: common.count }
+      : null,
+    weeklyVolumeAverage:
+      currentSnapshot.volume !== null && spanDays > 0
+        ? currentSnapshot.volume / (spanDays / 7)
+        : null,
+    averageRepsPerSet: setCount
+      ? workingSets.reduce((sum, s) => sum + s.reps! * s.count, 0) / setCount
+      : null,
+    snapshot: currentSnapshot,
     previous: Number.isFinite(n)
       ? snapshot(
           completed.filter((s) => age(s) >= n && age(s) < n * 2),

@@ -121,6 +121,20 @@ test("session builder persists plans, filters, supersets, cancel and idempotent 
     });
     await setup.getByRole("button", { name: /Next: order lifts/ }).click();
     await expect(setup.locator(".sb-stack-list li")).toHaveCount(3);
+    for (const row of await setup.locator(".sb-stack-list li").all()) {
+      await expect(
+        row.getByRole("button", { name: /^Edit reps for/ }),
+      ).toHaveText(/^1 × /);
+      await expect(
+        row.getByRole("button", { name: /^Fewer sets for/ }),
+      ).toBeDisabled();
+    }
+    const firstRow = setup.locator(".sb-stack-list li").first();
+    await firstRow.getByRole("button", { name: /^More sets for/ }).click();
+    await expect(
+      firstRow.getByRole("button", { name: /^Edit reps for/ }),
+    ).toHaveText(/^2 × /);
+    await firstRow.getByRole("button", { name: /^Fewer sets for/ }).click();
     const names = await setup
       .locator(".sb-stack-name strong")
       .allTextContents();

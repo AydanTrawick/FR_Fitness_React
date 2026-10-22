@@ -7,48 +7,61 @@ export default function SnapshotCards({
   unit: "kg" | "lb";
 }) {
   const factor = unit === "lb" ? 1 / 0.45359237 : 1;
+  const number = (value: number | null) =>
+    value === null
+      ? "—"
+      : value.toLocaleString(undefined, { maximumFractionDigits: 1 });
+  const duration = m.snapshot.duration;
+  const prior = m.previous?.duration;
+  const delta =
+    duration !== null && prior != null && prior > 0
+      ? ((duration - prior) / prior) * 100
+      : null;
+  const cards = [
+    {
+      label: "Most common exercise",
+      value: m.mostCommonExercise?.name ?? "—",
+      suffix: "",
+      detail: m.mostCommonExercise
+        ? `Logged in ${m.mostCommonExercise.sessions} ${m.mostCommonExercise.sessions === 1 ? "session" : "sessions"} in this range`
+        : "Log a working set to get started",
+    },
+    {
+      label: "Weekly volume average",
+      value: number(
+        m.weeklyVolumeAverage === null ? null : m.weeklyVolumeAverage * factor,
+      ),
+      suffix: `${unit}/week`,
+      detail: "Working-set volume ÷ weeks in this range",
+    },
+    {
+      label: "Avg duration",
+      value: number(duration),
+      suffix: duration === null ? "" : "min",
+      detail:
+        delta === null
+          ? "No comparable prior data"
+          : `${delta >= 0 ? "↑" : "↓"} ${Math.abs(delta).toFixed(1)}% vs. prior period`,
+    },
+    {
+      label: "Average rep/set ratio",
+      value: number(m.averageRepsPerSet),
+      suffix: m.averageRepsPerSet === null ? "" : "reps/set",
+      detail: "Total working reps ÷ working sets",
+    },
+  ];
   return (
     <div className="analysis-snapshot">
-      {(
-        [
-          ["sessions", m.legacy ? "Training days / sessions" : "Sessions", ""],
-          ["volume", "Total volume", unit],
-          ["duration", "Avg duration", "min"],
-          ["consistency", "Consistency", "%"],
-        ] as const
-      ).map(([key, label, suffix]) => {
-        const value = m.snapshot[key],
-          prior = m.previous?.[key];
-        const delta =
-          value !== null && prior != null && prior !== 0
-            ? ((value - prior) / prior) * 100
-            : null;
-        return (
-          <section className="analysis-card" key={key}>
-            <p className="analysis-muted">{label}</p>
-            <p className="analysis-number">
-              {value === null
-                ? "—"
-                : (key === "volume" ? value * factor : value).toLocaleString(
-                    undefined,
-                    { maximumFractionDigits: key === "sessions" ? 0 : 1 },
-                  )}
-              <small> {value !== null ? suffix : ""}</small>
-            </p>
-            <span
-              className={
-                delta !== null && Math.abs(delta) >= 5
-                  ? "analysis-delta"
-                  : "analysis-muted"
-              }
-            >
-              {delta === null
-                ? "No comparable prior data"
-                : `${delta >= 0 ? "↑" : "↓"} ${Math.abs(delta).toFixed(1)}% vs. prior period`}
-            </span>
-          </section>
-        );
-      })}
+      {cards.map((card) => (
+        <section className="analysis-card" key={card.label}>
+          <p className="analysis-muted">{card.label}</p>
+          <p className="analysis-number" style={{ overflowWrap: "anywhere" }}>
+            {card.value}
+            <small> {card.suffix}</small>
+          </p>
+          <span className="analysis-muted">{card.detail}</span>
+        </section>
+      ))}
     </div>
   );
 }

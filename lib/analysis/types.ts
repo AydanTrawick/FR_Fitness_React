@@ -59,6 +59,9 @@ export type Snapshot = {
   consistency: number | null;
 };
 export type Metrics = {
+  mostCommonExercise: { name: string; sessions: number } | null;
+  weeklyVolumeAverage: number | null;
+  averageRepsPerSet: number | null;
   snapshot: Snapshot;
   previous: Snapshot | null;
   totalSessions: number;

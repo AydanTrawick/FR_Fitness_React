@@ -26,7 +26,8 @@
     "test:ratelimit-routes": "node --experimental-strip-types --experimental-vm-modules tests/ratelimit-routes.integration.mjs",
     "test:ratelimit-redis": "node --experimental-strip-types tests/ratelimit.redis.integration.mjs",
     "test:usage-redis": "node --experimental-strip-types tests/usage.redis.integration.mjs",
-    "db:session-builder": "node --env-file=.env --env-file=.env.local --experimental-strip-types scripts/migrate-session-builder.mjs"
+    "db:session-builder": "node --env-file=.env --env-file=.env.local --experimental-strip-types scripts/migrate-session-builder.mjs",
+    "db:achievements": "node --env-file=.env --env-file=.env.local scripts/migrate-achievements.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.132.0",

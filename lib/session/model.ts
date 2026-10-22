@@ -131,7 +131,7 @@ export function makeExercise(
     muscleGroup: primary,
     secondaryGroups: secondary,
     equipment: e.equipment ?? "body only",
-    targetSets: last ? Math.min(SESSION.maxSets, last.sets) : defaults.sets,
+    targetSets: SESSION.defaultSets,
     repMin: last ? Math.min(SESSION.maxReps, last.repMin) : defaults.min,
     repMax: last ? Math.min(SESSION.maxReps, last.repMax) : defaults.max,
     restOverrideSec: defaults.rest,

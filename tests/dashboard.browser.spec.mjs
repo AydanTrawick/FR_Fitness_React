@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { dashboardDate, shiftDate } from "../lib/dashboard.ts";
+import { evaluateAchievements } from "../lib/achievements/model.ts";
 test.use({ channel: "chrome", viewport: { width: 1440, height: 1000 } });
 test.setTimeout(60000);
 test.afterEach(async ({ page }, info) => {
@@ -9,7 +10,7 @@ test.afterEach(async ({ page }, info) => {
       fullPage: true,
     });
 });
-const origin = "http://localhost:3027";
+const origin = process.env.AUTH_TEST_BASE_URL || "http://localhost:3027";
 const date = dashboardDate(new Date(), "America/New_York");
 const row = (id, exercise, weight_kg, sets = 2, d = date) => ({
   id,
@@ -60,6 +61,19 @@ async function fixture(page, empty = false) {
     }),
   );
   await page.route("**/api/logs", (r) => r.fulfill({ json: { logs } }));
+  await page.route("**/api/achievements", (r) =>
+    r.fulfill({
+      json: evaluateAchievements({
+        today: date,
+        facts: [...new Set(logs.workout.map((r) => r.date))].map((d) => ({
+          date: d,
+          session: d,
+          values: { workouts_logged: 1, active: 1 },
+        })),
+      }),
+    }),
+  );
+
   await page.route("**/api/exercises?*", (r) =>
     r.fulfill({
       json: {
@@ -174,7 +188,7 @@ test("new account shows honest empty states and a working log action", async ({
     .getByRole("navigation", { name: "Dashboard views" })
     .getByRole("button", { name: "Quests" })
     .click();
-  await expect(page.getByText("0 of 6 earned")).toBeVisible();
+  await expect(page.getByText("0 of 50 earned")).toBeVisible();
   await page
     .getByRole("navigation", { name: "Dashboard views" })
     .getByRole("button", { name: "Today" })

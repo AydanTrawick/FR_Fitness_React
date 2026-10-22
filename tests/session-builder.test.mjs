@@ -45,14 +45,14 @@ test("muscle matching includes secondary muscles and full-body spans, glutes sta
   );
   assert.equal(e("hip", "glutes").muscleGroup, "Glutes");
 });
-test("defaults prioritize history and distinguish compound, core and isolation", () => {
-  assert.equal(e("press", "chest", ["triceps"]).targetSets, 4);
+test("new exercises start at one set while preserving rep and weight history", () => {
+  assert.equal(e("press", "chest", ["triceps"]).targetSets, 1);
   assert.equal(e("crunch", "abdominals").repMin, 12);
   assert.equal(e("curl", "biceps").repMin, 10);
   assert.equal(
     makeExercise(lift("press"), { sets: 2, repMin: 5, repMax: 7, weightKg: 40 })
       .targetSets,
-    2,
+    1,
   );
 });
 test("draft toggles duplicates, clamps targets and dissolves broken supersets", () => {

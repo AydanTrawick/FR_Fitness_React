@@ -12,12 +12,11 @@ import {
   Mic,
   Plus,
   Sparkles,
-  Star,
   Trophy,
   Utensils,
-  Zap,
 } from "lucide-react";
 import { useStore } from "./store";
+import Achievements, { useAchievements } from "./achievements";
 import { WorkoutCardButton, PRCardEditor } from "./workout-share-cards";
 import { api } from "@/lib/client";
 import {
@@ -293,7 +292,8 @@ export default function Dashboard({ go }: { go: (page: string) => void }) {
   );
   const closed = [stats.sets > 0, stats.food.length > 0, todayCheckin],
     rings = closed.filter(Boolean).length;
-  const xp = stats.totalSets * 10,
+  const achievements = useAchievements(date);
+  const xp = stats.totalSets * 10 + (achievements.state?.questXP ?? 0),
     level = Math.floor(xp / 500) + 1,
     titles = [
       "First Rep",
@@ -316,99 +316,6 @@ export default function Dashboard({ go }: { go: (page: string) => void }) {
         : "smooth",
     });
   };
-  const quests = [
-    {
-      title: "Move 10,000 kg in one day",
-      value: stats.weekMaxVolume,
-      max: 10000,
-      xp: 50,
-      action: "workout",
-    },
-    {
-      title: "Train 4 days this week",
-      value: stats.weekTraining,
-      max: 4,
-      xp: 100,
-      action: "workout",
-    },
-    {
-      title: "Log food on 3 days this week",
-      value: stats.fuelDays,
-      max: 3,
-      xp: 75,
-      action: "food",
-    },
-    {
-      title: "Log a check-in this week",
-      value: Number(
-        stats.checkins.some(
-          (r) =>
-            stats.week.includes(
-              dashboardDate(
-                new Date(String(r.recorded_at)),
-                status.user?.timezone,
-              ),
-            ) &&
-            dashboardDate(
-              new Date(String(r.recorded_at)),
-              status.user?.timezone,
-            ) <= date,
-        ),
-      ),
-      max: 1,
-      xp: 25,
-      action: "bmi",
-    },
-  ];
-  const posterior = groupSessions(
-    logs.workout.filter((r) => String(r.date) <= date),
-    catalog,
-  ).some((s) => {
-    const names = s.groups.map((g) => g.name).join(" ");
-    return (
-      /deadlift|hamstring|leg curl/i.test(names) &&
-      /glute|hip thrust|deadlift/i.test(names) &&
-      s.groups.some((g) => g.muscle === "Back")
-    );
-  });
-  const badges = [
-    {
-      name: "First Rep",
-      text: "Logged your first set",
-      earned: xp > 0,
-      Icon: Check,
-    },
-    {
-      name: "Back to Back",
-      text: "Trained 2 days in a row",
-      earned: stats.bestStreak,
-      Icon: Flame,
-    },
-    {
-      name: "Ton Club",
-      text: "10,000 kg moved in one day",
-      earned: stats.allMaxVolume >= 10000,
-      Icon: Dumbbell,
-    },
-    {
-      name: "Posterior Chain",
-      text: "Hamstrings, glutes and back in one day",
-      earned: posterior,
-      Icon: Zap,
-    },
-    {
-      name: "Week Warrior",
-      text: "Trained 4 days in a week",
-      earned: stats.weekWarrior,
-      Icon: Star,
-    },
-    {
-      name: "Fuel Streak",
-      text: "Logged food 3 days running",
-      earned: stats.fuelStreak,
-      Icon: Utensils,
-    },
-  ];
   const ringActions = ["workout", "food", "bmi"];
   const nextRing = closed.findIndex((c) => !c);
   const knownProtein = stats.food
@@ -950,67 +857,11 @@ export default function Dashboard({ go }: { go: (page: string) => void }) {
       {view === "Quests" && (
         <div className="dh-layout">
           <div className="dh-column">
-            <section className="dh-card dh-quests">
-              <div className="dh-row">
-                <h3>This week’s quests</h3>
-                <span className="dh-muted">Resets Monday</span>
-              </div>
-              {quests.map((q) => (
-                <button
-                  key={q.title}
-                  className="dh-quest"
-                  onClick={() => go(q.action)}
-                >
-                  <span
-                    className={`dh-quest-count ${q.value >= q.max ? "done" : ""}`}
-                  >
-                    {q.value >= q.max ? (
-                      <Check size={24} />
-                    ) : q.max === 10000 ? (
-                      `${Math.floor(q.value / 1000)}k`
-                    ) : (
-                      Math.min(q.value, q.max) + "/" + q.max
-                    )}
-                  </span>
-                  <div>
-                    <div className="dh-row">
-                      <strong>{q.title}</strong>
-                      <b>+{q.xp} XP</b>
-                    </div>
-                    <Meter value={q.value} max={q.max} label={q.title} />
-                  </div>
-                </button>
-              ))}
-              <p className="dh-fine">
-                {quests
-                  .filter((q) => q.value >= q.max)
-                  .reduce((s, q) => s + q.xp, 0)}{" "}
-                challenge XP earned this week · Training levels use set XP.
-              </p>
-            </section>
-            <section className="dh-badges">
-              <div className="dh-row">
-                <h3>Badges</h3>
-                <span className="dh-muted">
-                  {badges.filter((b) => b.earned).length} of 6 earned
-                </span>
-              </div>
-              <div>
-                {badges.map(({ name, text, earned, Icon }) => (
-                  <article
-                    key={name}
-                    className={`dh-badge ${earned ? "earned" : ""}`}
-                  >
-                    <span>
-                      <Icon size={27} />
-                    </span>
-                    <h4>{name}</h4>
-                    <p>{text}</p>
-                    <small>{earned ? "Earned" : "Not yet earned"}</small>
-                  </article>
-                ))}
-              </div>
-            </section>
+            <Achievements
+              key={status.user?.id ?? "guest"}
+              date={date}
+              resource={achievements}
+            />
           </div>
           <div className="dh-column">
             <ProgramQuiz go={go} />

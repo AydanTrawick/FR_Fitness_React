@@ -106,3 +106,49 @@ test("future and incomplete sessions do not count", () => {
   raw.sessions[1].startedAt = "2027-01-01T12:00:00Z";
   assert.equal(metrics(raw).snapshot.sessions, 1);
 });
+
+test("snapshot replacements use session frequency, full-range weeks, and weighted reps per set", () => {
+  const raw = seedHistory(2);
+  const set = raw.sessions[0].sets[0];
+  raw.sessions[0].sets = [
+    {
+      ...set,
+      name: "Frequent lift",
+      exerciseId: "common",
+      count: 3,
+      reps: 10,
+      weight: 20,
+    },
+    {
+      ...set,
+      name: "Other",
+      exerciseId: "other",
+      count: 1,
+      reps: 4,
+      weight: 30,
+    },
+  ];
+  raw.sessions[1].sets = [
+    {
+      ...set,
+      name: "Frequent lift",
+      exerciseId: "common",
+      count: 1,
+      reps: 8,
+      weight: 20,
+    },
+    { ...set, name: "Warmup", count: 99, reps: 100, warmup: true },
+  ];
+  const m = metrics(raw, "7d");
+  assert.deepEqual(m.mostCommonExercise, {
+    name: "Frequent lift",
+    sessions: 2,
+  });
+  assert.equal(m.averageRepsPerSet, 42 / 5);
+  assert.equal(m.weeklyVolumeAverage, 880);
+  assert.equal(metrics(raw, "30d").weeklyVolumeAverage, 880 / (30 / 7));
+  const empty = metrics(seedHistory(0));
+  assert.equal(empty.mostCommonExercise, null);
+  assert.equal(empty.weeklyVolumeAverage, null);
+  assert.equal(empty.averageRepsPerSet, null);
+});
